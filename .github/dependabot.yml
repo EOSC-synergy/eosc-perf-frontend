@@ -2,8 +2,6 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
-    labels:
-      - "frontend dependencies"
     target-branch: "master"
     schedule:
       interval: "daily"
