@@ -4,6 +4,6 @@ updates:
     directory: "/"
     target-branch: "master"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     reviewers:
       - "thechristophe"
