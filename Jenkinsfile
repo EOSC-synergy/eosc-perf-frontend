@@ -27,36 +27,12 @@ pipeline {
             }
             post {
                 always {
-                    // BE: publish stylecheck (flake8) report:
-                    recordIssues(
-                        enabledForFailure: true, aggregatingResults: true,
-                        tool: pyLint(pattern: 'service_backend/tmp/flake8.log',
-                                     reportEncoding:'UTF-8',
-                                     name: 'BE - CheckStyle')
-                    )
-
-                    // BE: publish coverage report (only BE, works??):
-                    cobertura(
-                        coberturaReportFile: 'service_backend/tmp/be-coverage.xml',
-                        enableNewApi: true,
-                        failUnhealthy: false, failUnstable: false, onlyStable: false
-                    )
-
-                    // BE: publish bandit report:
-                    // according to https://vdwaa.nl/openstack-bandit-jenkins-integration.html
-                    // XML output of bandit can be parsed as JUnit
-                    recordIssues(
-                        enabledForFailure: true, aggregatingResults: true,
-                        tool: junitParser(pattern: 'service_backend/tmp/bandit.xml',
-                                           reportEncoding:'UTF-8',
-                                           name: 'BE - Bandit')
-                    )
                     // FE: publish codestyle:
                     // replace path in the docker container with relative path
-                    sh "sed -i 's/\\/perf-testing/./gi' service_frontend/eslint-codestyle.xml"
+                    sh "sed -i 's/\\/perf-testing-frontend/./gi' eslint-codestyle.xml"
                     recordIssues(
                         enabledForFailure: true, aggregatingResults: true,
-                        tool: checkStyle(pattern: 'service_frontend/eslint-codestyle.xml',
+                        tool: checkStyle(pattern: 'eslint-codestyle.xml',
                                          reportEncoding:'UTF-8',
                                          name: 'FE - CheckStyle')
                     )
@@ -64,7 +40,7 @@ pipeline {
                     // publish BE+FE coverage reports:
                     // service_backend/tmp/be-coverage.xml +
                     // service_frontend/coverage/fe-cobertura-coverage.xml:
-                    sh "cd service_frontend/coverage && mv cobertura-coverage.xml fe-cobertura-coverage.xml && cd -"
+                    sh "cd coverage && mv cobertura-coverage.xml fe-cobertura-coverage.xml && cd -"
                     publishCoverage(adapters: [coberturaAdapter(path: '**/*-coverage.xml')],
                                     tag: 'Coverage', 
                                     failUnhealthy: false, failUnstable: false
@@ -72,7 +48,7 @@ pipeline {
                     // FE: publish the output of npm audit:
                     recordIssues(
                         enabledForFailure: true, aggregatingResults: true,
-                        tool: issues(name: 'FE - NPM Audit', pattern:'service_frontend/npm-audit.json'),
+                        tool: issues(name: 'FE - NPM Audit', pattern:'npm-audit.json'),
                     )
                 }
                 cleanup {

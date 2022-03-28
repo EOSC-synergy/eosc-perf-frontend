@@ -1,3 +1,0 @@
-0 0 * * * /backup.sh
-#* * * * * /backup.sh
-# remember to end this file with an empty new line

@@ -1,21 +1,11 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/service_frontend"
+    directory: "/"
     labels:
       - "frontend dependencies"
-    target-branch: "frontend"
+    target-branch: "master"
     schedule:
       interval: "daily"
     reviewers:
       - "thechristophe"
-
-  - package-ecosystem: "pip"
-    directory: "/service_backend"
-    labels:
-      - "backend dependencies"
-    target-branch: "backend"
-    schedule:
-      interval: "daily"
-    reviewers:
-      - "borjaest"

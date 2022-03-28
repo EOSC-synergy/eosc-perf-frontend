@@ -1,30 +1,9 @@
 version: "3.7"
 
 services:
-
-  perf-backend-testing:
-    build:
-      context: ./service_backend
-      target: production
-      dockerfile: Dockerfile.cicd
-      args:
-        INSTALL_PYTHON_VERSION: 3.8
-        USER_ID: ${jenkins_user_id}
-        USER_GROUP: ${jenkins_user_group}
-    environment:
-      FLASK_ENV: production
-      BACKEND_URL: /api/v1
-      FLASK_APP: autoapp.py
-    volumes:
-     - type: bind
-       source: ./service_backend
-       target: /app
-    # to avoid shutting down the container
-    command: ["tail","-f","/dev/null"]
-    
   perf-frontend-testing:
     build:
-      context: ./service_frontend
+      context: .
       dockerfile: Dockerfile.cicd
       args:
         USER_ID: ${jenkins_user_id}
@@ -39,6 +18,6 @@ services:
 
   perf-frontend:
      build:
-        context: "./service_frontend"
+       context: "."
         dockerfile: "Dockerfile"
      image: "perf/perf-frontend"
