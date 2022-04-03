@@ -341,6 +341,9 @@ function ResultSearch(): ReactElement {
                                     })}
                                 </Stack>
                                 <Row>
+                                    <Col xs="auto" className="my-auto">
+                                       <h4 className="ms-2 my-0">Results</h4>
+                                    </Col>
                                     <Col />
                                     <Col md="auto">
                                         <Stack direction="horizontal" gap={2}>
