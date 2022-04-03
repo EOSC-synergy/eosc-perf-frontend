@@ -342,7 +342,14 @@ function ResultSearch(): ReactElement {
                                 </Stack>
                                 <Row>
                                     <Col xs="auto" className="my-auto">
-                                       <h4 className="ms-2 my-0">Results</h4>
+                                        <h4 className="ms-2 my-0">
+                                            {filters.size > 0 ||
+                                            benchmark !== undefined ||
+                                            site !== undefined ||
+                                            flavor !== undefined
+                                                ? 'Results'
+                                                : 'Recently uploaded results'}
+                                        </h4>
                                     </Col>
                                     <Col />
                                     <Col md="auto">
