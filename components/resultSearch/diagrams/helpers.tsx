@@ -55,7 +55,7 @@ export function XAxis(props: {
         <Form.Group className="mb-1">
             <Form.Label>X Axis:</Form.Label>
             <InputWithSuggestions
-                placeholder="machine.cpu.count"
+                placeholder="Enter a JSON path (e.g. machine.cpu.count)"
                 setInput={(i) => props.setXAxis(i)}
                 suggestions={props.suggestions}
             />
@@ -71,7 +71,7 @@ export function YAxis(props: {
         <Form.Group>
             <Form.Label>Y Axis:</Form.Label>
             <InputWithSuggestions
-                placeholder="result.score"
+                placeholder="Enter a JSON path (e.g. result.score)"
                 setInput={(i) => props.setYAxis(i)}
                 suggestions={props.suggestions}
             />
