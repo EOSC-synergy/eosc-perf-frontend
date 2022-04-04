@@ -3,7 +3,14 @@ import { Benchmark, Result, Site } from 'model';
 import { Alert, Badge, Col, Form, Row } from 'react-bootstrap';
 import { Ordered } from 'components/ordered';
 import { Suggestion } from '../jsonSchema';
-import { DataPoint, DataPointCollection, generateDataPoints, RejectedResult, XAxis, YAxis } from './helpers';
+import {
+    DataPoint,
+    DataPointCollection,
+    generateDataPoints,
+    RejectedResult,
+    XAxis,
+    YAxis,
+} from './helpers';
 
 import ReactEChartsCore from 'echarts-for-react/lib/core';
 import * as echarts from 'echarts/core';
@@ -260,7 +267,6 @@ function EChartsDiagram({
         encode: { label: 2, tooltip: 1 },
     };
 
-    // TODO: BUG: cannot deselect regression (will also apply if disabled because more sites
     const enableRegression = regressionMode !== Regression.None && siteCount === 1;
     if (enableRegression) {
         datasets.push(regressionDataset);
@@ -336,13 +342,25 @@ function EChartsDiagram({
                 </div>
             )}
             {xAxis.length > 0 && yAxis.length > 0 && datasets.length > 0 && (
-                <div style={{ resize: 'vertical', overflow: 'auto', height: '20em' }}>
-                    <ReactEChartsCore
-                        echarts={echarts}
-                        option={options}
-                        style={{ height: '100%' }}
-                    />
-                </div>
+                <>
+                    <div
+                        style={{
+                            resize: 'both',
+                            height: '30em',
+                            maxWidth: '100%',
+                            minWidth: '500px',
+                            minHeight: '200px',
+                        }}
+                        className="overflow-hidden mt-2"
+                    >
+                        <ReactEChartsCore
+                            echarts={echarts}
+                            option={options}
+                            style={{ height: '100%' }}
+                            notMerge={true}
+                        />
+                    </div>
+                </>
             )}
         </>
     );
