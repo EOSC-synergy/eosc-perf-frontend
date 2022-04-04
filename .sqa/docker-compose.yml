@@ -19,5 +19,5 @@ services:
   perf-frontend:
      build:
        context: "."
-        dockerfile: "Dockerfile"
-     image: "perf/perf-frontend"
+       dockerfile: "Dockerfile"
+     image: "perfbench/frontend"
