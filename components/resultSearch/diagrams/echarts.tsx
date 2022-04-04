@@ -1,6 +1,6 @@
 import React, { ChangeEvent, ReactElement, useState } from 'react';
 import { Benchmark, Result, Site } from 'model';
-import { Alert, Badge, Col, Form, Row } from 'react-bootstrap';
+import { Alert, Badge, Button, Col, Form, Row } from 'react-bootstrap';
 import { Ordered } from 'components/ordered';
 import { Suggestion } from '../jsonSchema';
 import {
@@ -22,6 +22,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 // @ts-ignore
 import { transform } from 'echarts-stat';
 import { getSubkeyName } from '../jsonKeyHelpers';
+import { Save } from 'react-bootstrap-icons';
 
 echarts.use([
     TooltipComponent,
@@ -201,6 +202,40 @@ function EChartsDiagram({
     suggestions?: Suggestion[];
     benchmark?: Benchmark;
 }): ReactElement {
+    function saveDiagramAsPng(transparent: boolean = false) {
+        const elements = document.getElementsByClassName('echarts-for-react');
+        if (elements.length <= 0) {
+            console.error('Could not find echarts-for-react div!');
+            return;
+        }
+        const echartsWrapper = elements[0];
+        const chartWrapper = echartsWrapper.children[0];
+        const canvas = chartWrapper.children[0] as HTMLCanvasElement;
+        if (transparent) {
+            let download = document.createElement('a');
+            download.href = canvas.toDataURL('image/png');
+            download.download = 'diagram.png';
+            download.click();
+        } else {
+            const whiteCanvas = document.createElement('canvas');
+            whiteCanvas.width = canvas.width;
+            whiteCanvas.height = canvas.height;
+            const context = whiteCanvas.getContext('2d');
+            if (context) {
+                context.fillStyle = 'white';
+                context.fillRect(0, 0, whiteCanvas.width, whiteCanvas.height);
+                context.drawImage(canvas, 0, 0);
+                let download = document.createElement('a');
+                download.href = whiteCanvas.toDataURL('image/png');
+                download.download = 'diagram.png';
+                download.click();
+            } else {
+                console.error('Could not create 2d canvas context!!');
+                return;
+            }
+        }
+    }
+
     const [xAxisMode, setXAxisMode] = useState(Scale.Linear);
     const [yAxisMode, setYAxisMode] = useState(Scale.Linear);
 
@@ -360,6 +395,18 @@ function EChartsDiagram({
                             notMerge={true}
                         />
                     </div>
+                    <Row className="align-items-center w-100 justify-content-center">
+                        <Col xs="auto">
+                            <Button variant="secondary" onClick={() => saveDiagramAsPng(false)}>
+                                <Save /> Save as PNG
+                            </Button>
+                        </Col>
+                        <Col xs="auto">
+                            <Button variant="secondary" onClick={() => saveDiagramAsPng(true)}>
+                                <Save /> Save as PNG (transparent)
+                            </Button>
+                        </Col>
+                    </Row>
                 </>
             )}
         </>
