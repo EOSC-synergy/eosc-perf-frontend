@@ -12,7 +12,7 @@ services:
     volumes:
      - type: bind
        source: ./
-       target: /perf-testing
+       target: /perf-testing-frontend
     # to avoid shutting down the container
     command: ["tail","-f","/dev/null"]
 
