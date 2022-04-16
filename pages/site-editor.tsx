@@ -1,27 +1,15 @@
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import { Col, Container, ListGroup, Row } from 'react-bootstrap';
-import { Site, Sites } from 'model';
-import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
-import { LoadingOverlay } from 'components/loadingOverlay';
-import { SiteEditor } from 'components/siteEditor/siteEditor';
-import { Paginator } from '../components/pagination';
+import React, {ReactElement, useContext, useEffect, useState} from 'react';
+import {Col, Container, ListGroup, Row} from 'react-bootstrap';
+import {Site, Sites} from 'model';
+import {useQuery} from 'react-query';
+import {getHelper} from 'components/api-helpers';
+import {LoadingOverlay} from 'components/loadingOverlay';
+import {SiteEditor} from 'components/siteEditor/siteEditor';
+import {Paginator} from '../components/pagination';
 import Head from 'next/head';
-import { UserContext } from '../components/userContext';
-import { useRouter } from 'next/router';
-
-function SiteSelect(props: { site: Site; setActiveSite: (site: Site) => void }): ReactElement {
-    return (
-        <ListGroup.Item onClick={() => props.setActiveSite(props.site)} action>
-            <div className="d-flex w-100 justify-content-between">
-                <h5 className="mb-1">{props.site.name}</h5>
-                <small>{props.site.id}</small>
-            </div>
-            <p className="mb-1">{props.site.description}</p>
-            <small>{props.site.address}</small>
-        </ListGroup.Item>
-    );
-}
+import {UserContext} from '../components/userContext';
+import {useRouter} from 'next/router';
+import {SiteSelect} from "../components/siteEditor/siteSelect";
 
 /**
  * Admin-only page to edit sites in the database and add flavors.

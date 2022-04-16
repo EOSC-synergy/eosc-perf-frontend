@@ -1,88 +1,14 @@
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import { Col, Container, ListGroup, Row } from 'react-bootstrap';
-import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
-import { Claim, Claims, Submit, Submits } from 'model';
-
-import actionable from 'styles/actionable.module.css';
-import { BenchmarkInfo } from 'components/reportView/benchmarkInfo';
-import { SiteInfo } from 'components/reportView/siteInfo';
-import { FlavorInfo } from 'components/reportView/flavorInfo';
-import { UserContext } from 'components/userContext';
-import { ClaimInteraction } from 'components/reportView/claimInteraction';
-import { SubmitInteraction } from 'components/reportView/submitInteraction';
-import { ClaimInfo } from 'components/reportView/claimInfo';
-import { Paginator } from '../components/pagination';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-
-function SubmitView(props: { submit: Submit; refetch: () => void }) {
-    const [opened, setOpened] = useState(false);
-
-    return (
-        <ListGroup.Item>
-            <div
-                className={actionable.actionable}
-                onClick={() => {
-                    setOpened(!opened);
-                }}
-            >
-                <div className="w-100 d-flex justify-content-between">
-                    <h5 className="mb-1">{props.submit.resource_type}</h5>
-                    <small>{props.submit.upload_datetime}</small>
-                </div>
-                <small className="text-muted">Submitted by {props.submit.uploader.email}</small>
-            </div>
-            {opened && (
-                <>
-                    <hr />
-                    {props.submit.resource_type === 'site' && (
-                        <SiteInfo id={props.submit.resource_id} />
-                    )}
-                    {props.submit.resource_type === 'flavor' && (
-                        <FlavorInfo id={props.submit.resource_id} />
-                    )}
-                    {props.submit.resource_type === 'benchmark' && (
-                        <BenchmarkInfo id={props.submit.resource_id} />
-                    )}
-                    {/*props.submit.resource_type === 'claim' && (
-                        <ClaimInfo id={props.submit.resource_id} />
-                    )*/}
-                    <SubmitInteraction submit={props.submit} refetch={props.refetch} />
-                </>
-            )}
-        </ListGroup.Item>
-    );
-}
-
-function ClaimView(props: { claim: Claim; refetch: () => void }) {
-    const [opened, setOpened] = useState(false);
-
-    return (
-        <ListGroup.Item>
-            <div
-                className={actionable.actionable}
-                onClick={() => {
-                    setOpened(!opened);
-                }}
-            >
-                <div className="w-100 d-flex justify-content-between">
-                    <h5 className="mb-1">{props.claim.resource_type}</h5>
-                    <small>{props.claim.upload_datetime}</small>
-                </div>
-                <p className="mb-1">{props.claim.message}</p>
-                <small className="text-muted">For {props.claim.resource_id}</small>
-            </div>
-            {opened && (
-                <>
-                    <hr />
-                    <ClaimInfo claim={props.claim} />
-                    <ClaimInteraction claim={props.claim} refetch={props.refetch} />
-                </>
-            )}
-        </ListGroup.Item>
-    );
-}
+import React, {ReactElement, useContext, useEffect, useState} from 'react';
+import {UserContext} from "../components/userContext";
+import {useRouter} from "next/router";
+import {useQuery} from "react-query";
+import {getHelper} from "../components/api-helpers";
+import {Claims, Submits} from "../model";
+import {Col, Container, ListGroup, Row} from "react-bootstrap";
+import {SubmitView} from "../components/reportView/submitView";
+import {Paginator} from "../components/pagination";
+import {ClaimView} from "../components/reportView/claimView";
+import Head from "next/head";
 
 /**
  * Admin-only page to view pending reports and submissions.
@@ -107,7 +33,7 @@ function ReportsView(): ReactElement {
     const submits = useQuery(
         ['submits', submitsPage],
         () => {
-            return getHelper<Submits>('/reports/submits', auth.token, { page: submitsPage });
+            return getHelper<Submits>('/reports/submits', auth.token, {page: submitsPage});
         },
         {
             enabled: !!auth.token,
@@ -117,7 +43,7 @@ function ReportsView(): ReactElement {
     const claims = useQuery(
         ['claims', claimsPage],
         () => {
-            return getHelper<Claims>('/reports/claims', auth.token, { page: claimsPage });
+            return getHelper<Claims>('/reports/claims', auth.token, {page: claimsPage});
         },
         {
             enabled: !!auth.token,
@@ -194,11 +120,11 @@ function ReportsView(): ReactElement {
                         <Row className="my-3">
                             <Col>
                                 <h1>Submits</h1>
-                                <SubmitsList />
+                                <SubmitsList/>
                             </Col>
                             <Col>
                                 <h1>Claims</h1>
-                                <ClaimsList />
+                                <ClaimsList/>
                             </Col>
                         </Row>
                     </>
