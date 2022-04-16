@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { Form, Table } from 'react-bootstrap';
+import { Button, Form, Table } from 'react-bootstrap';
 import { Result } from 'model';
 import {
     ActionColumn,
@@ -133,9 +133,10 @@ export function ResultTable(props: {
                             />
                         ))}
                         <th>
-                            <a href="#" onClick={() => setShowColumnSelection(true)}>
-                                <Pencil className={actionable.actionable} />
-                            </a>
+                            {/* TODO: move this to hotbar above table? */ }
+                            <Button size="sm" variant="secondary" onClick={() => setShowColumnSelection(true)}>
+                                <Pencil /> Columns
+                            </Button>
                         </th>
                     </tr>
                 </thead>
