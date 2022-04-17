@@ -32,6 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <>
             <Head>
+                <title>EOSC Performance</title>
                 <link rel="shortcut icon" href="/images/eosc-perf-logo.5.png" />
             </Head>
             <SSRProvider>
