@@ -25,7 +25,7 @@ export function SiteSubmitForm(props: {
 
     const [errorMessage, setErrorMessage] = useState<ReactNode | undefined>(undefined);
 
-    const { handleSubmit, control } = useForm<FormContents>();
+    const { handleSubmit, control, formState } = useForm<FormContents>();
 
     useEffect(() => {
         setErrorMessage(undefined);
@@ -92,6 +92,9 @@ export function SiteSubmitForm(props: {
                         value={nameInput.field.value}
                         isInvalid={nameInput.fieldState.invalid}
                     />
+                    <Form.Control.Feedback type="invalid">
+                        {formState.errors.name?.message}
+                    </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group controlId="siteAddress" className="mb-3">
@@ -104,6 +107,9 @@ export function SiteSubmitForm(props: {
                         value={addressInput.field.value}
                         isInvalid={addressInput.fieldState.invalid}
                     />
+                    <Form.Control.Feedback type="invalid">
+                        {formState.errors.address?.message}
+                    </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group controlId="siteDescription" className="mb-1">
@@ -117,6 +123,9 @@ export function SiteSubmitForm(props: {
                         value={descriptionInput.field.value}
                         isInvalid={descriptionInput.fieldState.invalid}
                     />
+                    <Form.Control.Feedback type="invalid">
+                        {formState.errors.description?.message}
+                    </Form.Control.Feedback>
                 </Form.Group>
 
                 <Button variant="success" type="submit" disabled={!auth.loggedIn}>
