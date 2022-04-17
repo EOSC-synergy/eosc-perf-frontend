@@ -13,9 +13,6 @@ import { LoadingWrapper } from '../loadingOverlay';
 import { LoginCheck } from '../loginCheck';
 import { SubmitHandler, useForm, useController } from 'react-hook-form';
 
-// TODO: do not show invalid on first load
-//       use default state valid?
-
 type FormContents = {
     dockerName: string;
     dockerTag: string;
