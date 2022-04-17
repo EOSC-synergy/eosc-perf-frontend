@@ -50,7 +50,7 @@ function CodeGuidelines(): ReactElement {
                     <code>&quot;suggestToUser&quot;: true</code> to the property in JSON Schema,
                     like in the example below.
                 </p>
-                <p>Example template:</p>
+                <p id="json">Example template:</p>
                 <div className="m-2">
                     <JsonHighlight>{JSON.stringify(template, null, 4)}</JsonHighlight>
                 </div>
