@@ -9,9 +9,13 @@ import { getErrorMessage } from 'components/forms/getErrorMessage';
 import { RegistrationCheck } from 'components/registrationCheck';
 import { LoadingWrapper } from '../loadingOverlay';
 import { LoginCheck } from '../loginCheck';
+import { SubmitHandler, useController, useForm } from 'react-hook-form';
 
-// TODO: do not show invalid on first load
-//       use default state valid?
+type FormContents = {
+    name: string;
+    address: string;
+    description: string;
+};
 
 export function SiteSubmitForm(props: {
     onSuccess: () => void;
@@ -19,11 +23,9 @@ export function SiteSubmitForm(props: {
 }): ReactElement {
     const auth = useContext(UserContext);
 
-    const [name, setName] = useState('');
-    const [address, setAddress] = useState('');
-    const [description, setDescription] = useState('');
-
     const [errorMessage, setErrorMessage] = useState<ReactNode | undefined>(undefined);
+
+    const { handleSubmit, control } = useForm<FormContents>();
 
     useEffect(() => {
         setErrorMessage(undefined);
@@ -42,68 +44,82 @@ export function SiteSubmitForm(props: {
         }
     );
 
-    function isNameValid() {
-        return name.length > 0;
-    }
+    const nameInput = useController({
+        name: 'name',
+        control,
+        rules: {
+            required: 'A site must have a name!',
+        },
+        defaultValue: '',
+    });
 
-    function isAddressValid() {
-        return address.length > 0;
-    }
+    const addressInput = useController({
+        name: 'address',
+        control,
+        rules: {
+            required: 'Please provide a link with more information about the site!',
+        },
+        defaultValue: '',
+    });
 
-    function isFormValid() {
-        return isNameValid() && isAddressValid() && auth.token !== undefined;
-    }
+    const descriptionInput = useController({
+        name: 'description',
+        control,
+        defaultValue: '',
+    });
 
-    function onSubmit() {
-        if (!isFormValid()) {
-            return;
-        }
+    const onSubmit: SubmitHandler<FormContents> = (data) => {
         mutate({
-            name,
-            address,
-            description: description.length ? description : null,
+            name: data.name,
+            address: data.address,
+            description: data.description.length ? data.description : undefined,
         });
-    }
+    };
 
     return (
         <LoadingWrapper isLoading={auth.loading}>
             {errorMessage !== undefined && <Alert variant="danger">Error: {errorMessage}</Alert>}
             <LoginCheck message="You must be logged in to submit new sites!" />
             <RegistrationCheck />
-            <Form>
-                <Form.Group>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+                <Form.Group controlId="siteName" className="mb-3">
                     <Form.Label>Name:</Form.Label>
                     <Form.Control
                         placeholder="KIT SCC"
-                        onChange={(e) => setName(e.target.value)}
-                        isInvalid={!isNameValid()}
+                        onBlur={nameInput.field.onBlur}
+                        onChange={nameInput.field.onChange}
+                        ref={nameInput.field.ref}
+                        value={nameInput.field.value}
+                        isInvalid={nameInput.fieldState.invalid}
                     />
                 </Form.Group>
 
-                <Form.Group className="mt-3">
+                <Form.Group controlId="siteAddress" className="mb-3">
                     <Form.Label>Address</Form.Label>
                     <Form.Control
                         placeholder="https://www.scc.kit.edu/"
-                        onChange={(e) => setAddress(e.target.value)}
-                        isInvalid={!isAddressValid()}
+                        onBlur={addressInput.field.onBlur}
+                        onChange={addressInput.field.onChange}
+                        ref={addressInput.field.ref}
+                        value={addressInput.field.value}
+                        isInvalid={addressInput.fieldState.invalid}
                     />
                 </Form.Group>
 
-                <Form.Group className="mt-3">
+                <Form.Group controlId="siteDescription" className="mb-1">
                     <Form.Label>Description (optional):</Form.Label>
                     <Form.Control
                         placeholder="Add a description here."
-                        onChange={(e) => setDescription(e.target.value)}
                         as="textarea"
+                        onBlur={descriptionInput.field.onBlur}
+                        onChange={descriptionInput.field.onChange}
+                        ref={descriptionInput.field.ref}
+                        value={descriptionInput.field.value}
+                        isInvalid={descriptionInput.fieldState.invalid}
                     />
                 </Form.Group>
 
-                <Button
-                    variant="success"
-                    onClick={onSubmit}
-                    disabled={!isFormValid()}
-                    className="mt-1"
-                >
+                <Button variant="success" type="submit" disabled={!auth.loggedIn}>
                     Submit
                 </Button>
             </Form>
