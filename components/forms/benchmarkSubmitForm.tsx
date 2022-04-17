@@ -1,4 +1,4 @@
-import { Alert, Button, Form, InputGroup } from 'react-bootstrap';
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
@@ -11,9 +11,17 @@ import { RegistrationCheck } from 'components/registrationCheck';
 import Link from 'next/link';
 import { LoadingWrapper } from '../loadingOverlay';
 import { LoginCheck } from '../loginCheck';
+import { SubmitHandler, useForm, useController } from 'react-hook-form';
 
 // TODO: do not show invalid on first load
 //       use default state valid?
+
+type FormContents = {
+    dockerName: string;
+    dockerTag: string;
+    description: string;
+    template: string;
+};
 
 export function BenchmarkSubmitForm(props: {
     onSuccess: () => void;
@@ -21,10 +29,46 @@ export function BenchmarkSubmitForm(props: {
 }): ReactElement {
     const auth = useContext(UserContext);
 
-    const [dockerName, setDockerName] = useState('');
-    const [dockerTag, setDockerTag] = useState('');
-    const [template, setTemplate] = useState('');
-    const [description, setDescription] = useState('');
+    const { register, handleSubmit, formState, control } = useForm<FormContents>();
+
+    function validateTemplate(template: string) {
+        if (template.length === 0) {
+            return false;
+        }
+        try {
+            JSON.parse(template);
+            return true;
+        } catch (SyntaxError) {
+            return false;
+        }
+    }
+
+    const dockerNameInput = useController({
+        name: 'dockerName',
+        control,
+        rules: {
+            required: 'Must be a valid docker image name',
+            pattern: /[^/]+\/[^/]+/,
+        },
+        defaultValue: '',
+    });
+    const dockerTagInput = useController({
+        name: 'dockerTag',
+        control,
+        rules: {
+            required: 'Must be a valid docker tag',
+        },
+        defaultValue: 'latest',
+    });
+    const templateInput = useController({
+        name: 'template',
+        control,
+        rules: {
+            required: 'Must be a valid JSON schema',
+            validate: validateTemplate,
+        },
+        defaultValue: '',
+    });
 
     const [errorMessage, setErrorMessage] = useState<ReactNode | undefined>(undefined);
 
@@ -46,77 +90,65 @@ export function BenchmarkSubmitForm(props: {
         }
     );
 
-    function isDockerNameValid() {
-        // match pattern (...)/(...)
-        return dockerName.match(/[^/]+\/[^/]+/);
-    }
-
-    function isDockerTagValid() {
-        return dockerTag.length >= 1;
-    }
-
-    function isTemplateValid() {
-        if (template.length === 0) {
-            return false;
-        }
-        try {
-            JSON.parse(template);
-            return true;
-        } catch (SyntaxError) {
-            return false;
-        }
-    }
-
-    function isFormValid() {
-        return isDockerNameValid() && isDockerTagValid() && isTemplateValid() && auth.loggedIn;
-    }
-
-    function onSubmit() {
-        if (!isFormValid()) {
-            return;
-        }
-        const description_ = description && description.length ? description : null;
-        const template_ = template && template.length ? template : undefined;
+    const onSubmit: SubmitHandler<FormContents> = (data) => {
+        const templateJson = data.template ? data.template : undefined;
         mutate({
-            docker_image: dockerName,
-            docker_tag: dockerTag,
-            description: description_,
-            json_schema: template_ ? JSON.parse(template_) : undefined,
+            docker_image: data.dockerName,
+            docker_tag: data.dockerTag,
+            description: data.description.length ? data.description : null,
+            json_schema: templateJson ? JSON.parse(templateJson) : undefined,
         });
-    }
+    };
 
     return (
         <LoadingWrapper isLoading={auth.loading}>
             {errorMessage !== undefined && <Alert variant="danger">Error: {errorMessage}</Alert>}
             <LoginCheck message="You must be logged in to submit new benchmarks!" />
             <RegistrationCheck />
-            <Form>
-                <Form.Group className="mb-3" controlId="benchmark">
-                    <Form.Label>Benchmark:</Form.Label>
-                    <InputGroup>
-                        <Form.Control
-                            placeholder="user/image"
-                            onChange={(e) => setDockerName(e.target.value)}
-                            isInvalid={!isDockerNameValid()}
-                            aria-label="Docker image name including username"
-                        />
-                        <InputGroup.Text>:</InputGroup.Text>
-                        <Form.Control
-                            placeholder="tag"
-                            onChange={(e) => setDockerTag(e.target.value)}
-                            isInvalid={!isDockerTagValid()}
-                            aria-label="Tag or version of the docker image to use"
-                            defaultValue="latest"
-                        />
-                    </InputGroup>
-                </Form.Group>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+                <Row>
+                    <Col md={6}>
+                        <Form.Group className="mb-3" controlId="dockerName">
+                            <Form.Label>Docker image:</Form.Label>
+                            <Form.Control
+                                placeholder="user/image"
+                                aria-label="Docker image name including username"
+                                onBlur={dockerNameInput.field.onBlur}
+                                onChange={dockerNameInput.field.onChange}
+                                ref={dockerNameInput.field.ref}
+                                value={dockerNameInput.field.value}
+                                isInvalid={dockerNameInput.fieldState.invalid}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {formState.errors.dockerName?.message}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                        <Form.Group className="mb-3" controlId="dockerTag">
+                            <Form.Label>Image version:</Form.Label>
+                            <Form.Control
+                                placeholder="tag"
+                                aria-label="Tag or version of the docker image to use"
+                                onBlur={dockerTagInput.field.onBlur}
+                                onChange={dockerTagInput.field.onChange}
+                                ref={dockerTagInput.field.ref}
+                                value={dockerTagInput.field.value}
+                                isInvalid={dockerTagInput.fieldState.invalid}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {formState.errors.dockerTag?.message}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                </Row>
 
                 <Form.Group className="mb-3" controlId="description">
                     <Form.Label>Benchmark description (optional):</Form.Label>
                     <Form.Control
                         placeholder="Enter a description of the new benchmark here."
-                        onChange={(e) => setDescription(e.target.value)}
                         as="textarea"
+                        {...register('description')}
                     />
                 </Form.Group>
 
@@ -128,18 +160,19 @@ export function BenchmarkSubmitForm(props: {
                     </Form.Label>
                     <Form.Control
                         placeholder={JSON.stringify(benchmarkJsonSchema, null, 4)}
-                        onChange={(e) => setTemplate(e.target.value)}
                         as="textarea"
-                        isInvalid={!isTemplateValid()}
+                        onBlur={templateInput.field.onBlur}
+                        onChange={templateInput.field.onChange}
+                        ref={templateInput.field.ref}
+                        value={templateInput.field.value}
+                        isInvalid={templateInput.fieldState.invalid}
                     />
+                    <Form.Control.Feedback type="invalid">
+                        {formState.errors.template?.message}
+                    </Form.Control.Feedback>
                 </Form.Group>
 
-                <Button
-                    variant="success"
-                    onClick={onSubmit}
-                    disabled={!isFormValid()}
-                    className="mt-1"
-                >
+                <Button variant="success" type="submit" className="mt-1" disabled={!auth.loggedIn}>
                     Submit
                 </Button>
             </Form>
