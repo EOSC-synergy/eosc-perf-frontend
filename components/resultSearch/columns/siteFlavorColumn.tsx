@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Result } from 'model';
-import { Ordered } from 'components/ordered';
+import { Result } from '@eosc-perf-automation/eosc-perf-client';
 
 /**
  * Column to display execution site machine flavor
@@ -8,6 +7,6 @@ import { Ordered } from 'components/ordered';
  * @returns {React.ReactElement}
  * @constructor
  */
-export function SiteFlavorColumn({ result }: { result: Ordered<Result> }): ReactElement {
+export function SiteFlavorColumn({ result }: { result: Result }): ReactElement {
     return <>{result.flavor.name}</>;
 }

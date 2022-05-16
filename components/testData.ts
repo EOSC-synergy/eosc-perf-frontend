@@ -1,6 +1,6 @@
-import { Benchmark, Tag, Tags } from '../model';
+import { Benchmark, Tag, Tags } from '@eosc-perf-automation/eosc-perf-client';
 
-export const tag: Tag = { id: 'test', name: 'testTag', description: null };
+export const tag: Tag = { id: 'test', name: 'testTag' };
 export const tags: Tags = {
     has_next: true,
     has_prev: false,
@@ -14,10 +14,9 @@ export const tags: Tags = {
 };
 
 export const benchmark: Benchmark = {
-    description: null,
     docker_image: '__bench_image__',
     docker_tag: '__bench_tag__',
     id: '42069',
-    json_schema: undefined,
+    json_schema: {},
     upload_datetime: '',
 };

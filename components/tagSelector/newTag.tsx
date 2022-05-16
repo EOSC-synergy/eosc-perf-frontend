@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../userContext';
 import { useMutation } from 'react-query';
-import { CreateTag } from '../../model';
-import { postHelper } from '../api-helpers';
 import { Button, Form, InputGroup } from 'react-bootstrap';
+import useApi from '../../utils/useApi';
+import { CreateTag } from '@eosc-perf-automation/eosc-perf-client';
 
 /**
  * Form component to submit new tags
@@ -13,15 +13,13 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 export function NewTag(props: { onSubmit: () => void }) {
     const [customTagName, setCustomTagName] = useState('');
     const auth = useContext(UserContext);
+    const api = useApi(auth.token);
 
-    const { mutate } = useMutation(
-        (data: CreateTag) => postHelper<CreateTag>('/tags', data, auth.token),
-        {
-            onSuccess: () => {
-                props.onSubmit();
-            },
-        }
-    );
+    const { mutate } = useMutation((data: CreateTag) => api.tags.createTag(data), {
+        onSuccess: () => {
+            props.onSubmit();
+        },
+    });
 
     function addTag() {
         mutate({

@@ -1,21 +1,21 @@
-import { Flavor, Flavors, Site } from 'model';
 import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
 import { Card, Col, Form, ListGroup, Row } from 'react-bootstrap';
 import { LoadingOverlay } from 'components/loadingOverlay';
 import { FlavorEditor } from 'components/siteEditor/flavorEditor';
 import React, { ReactElement, useState } from 'react';
 import { NewFlavor } from 'components/siteEditor/newFlavor';
 import { Paginator } from '../pagination';
+import useApi from '../../utils/useApi';
+import { Flavor, Site } from '@eosc-perf-automation/eosc-perf-client';
 
 export function FlavorList(props: { site: Site }): ReactElement {
+    const api = useApi();
     const [page, setPage] = useState(1);
 
     const flavors = useQuery(
         ['flavors', props.site.id],
-        () => {
-            return getHelper<Flavors>('/sites/' + props.site.id + '/flavors', undefined, { page });
-        },
+        () =>
+            api.sites.listFlavors(props.site.id, undefined, undefined, undefined, undefined, page),
         {
             refetchOnWindowFocus: false, // do not spam queries
             refetchOnMount: 'always',

@@ -1,20 +1,29 @@
-import { Benchmark } from 'model';
 import React, { ReactElement, useState } from 'react';
 import { BenchmarkSubmissionModal } from 'components/submissionModals/benchmarkSubmissionModal';
-import { SearchingSelector } from 'components/searchSelectors/index';
+import { SearchingSelector } from './index';
 import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
+import { Benchmark } from '@eosc-perf-automation/eosc-perf-client';
+import useApi from '../../utils/useApi';
 
-export function BenchmarkSearchSelect(props: {
+type BenchmarkSearchSelectProps = {
     benchmark?: Benchmark;
+    initialBenchmarkId?: string;
     initBenchmark?: (benchmark?: Benchmark) => void;
     setBenchmark: (benchmark?: Benchmark) => void;
-    initialBenchmarkId?: string;
-}): ReactElement {
+};
+
+export const BenchmarkSearchSelect: React.FC<BenchmarkSearchSelectProps> = (
+    props
+): ReactElement => {
+    const api = useApi();
+
     useQuery(
         ['initial-benchmark', props.initialBenchmarkId],
         () => {
-            return getHelper<Benchmark>('/benchmarks/' + props.initialBenchmarkId);
+            if (props.initialBenchmarkId) {
+                return api.benchmarks.getBenchmark(props.initialBenchmarkId);
+            }
+            throw 'tried to get benchmark without id';
         },
         {
             enabled: props.initialBenchmarkId !== undefined,
@@ -65,7 +74,7 @@ export function BenchmarkSearchSelect(props: {
             <SearchingSelector<Benchmark>
                 queryKeyPrefix="benchmark"
                 tableName="Benchmark"
-                endpoint="/benchmarks:search"
+                queryCallback={(terms) => api.benchmarks.searchBenchmarks(terms)}
                 item={props.benchmark}
                 setItem={props.setBenchmark}
                 display={display}
@@ -78,4 +87,4 @@ export function BenchmarkSearchSelect(props: {
             />
         </>
     );
-}
+};

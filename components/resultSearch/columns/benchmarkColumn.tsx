@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Result } from 'model';
-import { Ordered } from 'components/ordered';
+import { Result } from '@eosc-perf-automation/eosc-perf-client';
 
 /**
  * Column to display benchmark docker image and version tag
@@ -8,6 +7,6 @@ import { Ordered } from 'components/ordered';
  * @returns {React.ReactElement}
  * @constructor
  */
-export function BenchmarkColumn({ result }: { result: Ordered<Result> }): ReactElement {
+export function BenchmarkColumn({ result }: { result: Result }): ReactElement {
     return <>{result.benchmark.docker_image + ':' + result.benchmark.docker_tag}</>;
 }

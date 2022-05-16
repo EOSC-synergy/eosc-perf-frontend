@@ -1,9 +1,9 @@
-import {Claim} from "../../model";
-import React, {useState} from "react";
-import {ListGroup} from "react-bootstrap";
-import actionable from "../../styles/actionable.module.css";
-import {ClaimInfo} from "./claimInfo";
-import {ClaimInteraction} from "./claimInteraction";
+import React, { useState } from 'react';
+import { ListGroup } from 'react-bootstrap';
+import actionable from '../../styles/actionable.module.css';
+import { ClaimInfo } from './claimInfo';
+import { ClaimInteraction } from './claimInteraction';
+import { Claim } from '@eosc-perf-automation/eosc-perf-client';
 
 export function ClaimView(props: { claim: Claim; refetch: () => void }) {
     const [opened, setOpened] = useState(false);
@@ -25,9 +25,9 @@ export function ClaimView(props: { claim: Claim; refetch: () => void }) {
             </div>
             {opened && (
                 <>
-                    <hr/>
-                    <ClaimInfo claim={props.claim}/>
-                    <ClaimInteraction claim={props.claim} refetch={props.refetch}/>
+                    <hr />
+                    <ClaimInfo claim={props.claim} id={undefined} />
+                    <ClaimInteraction claim={props.claim} refetch={props.refetch} />
                 </>
             )}
         </ListGroup.Item>

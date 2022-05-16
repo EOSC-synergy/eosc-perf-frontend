@@ -1,22 +1,29 @@
-import { Flavor, Site } from 'model';
 import React, { ReactElement, useState } from 'react';
 import { FlavorSubmissionModal } from 'components/submissionModals/flavorSubmissionModal';
-import { SearchingSelector } from 'components/searchSelectors/index';
+import { SearchingSelector } from './index';
 import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
 import { truthyOrNoneTag } from '../utility';
+import { Flavor, Site } from '@eosc-perf-automation/eosc-perf-client';
+import useApi from '../../utils/useApi';
 
-export function FlavorSearchSelect(props: {
-    site?: Site;
+type FlavorSearchSelectProps = {
     flavor?: Flavor;
+    initialFlavorId?: string;
+    site?: Site;
     initFlavor?: (flavor?: Flavor) => void;
     setFlavor: (flavor?: Flavor) => void;
-    initialFlavorId?: string;
-}): ReactElement {
+};
+
+export const FlavorSearchSelect: React.FC<FlavorSearchSelectProps> = (props): ReactElement => {
+    const api = useApi();
+
     useQuery(
         ['initial-flavor', props.initialFlavorId],
         () => {
-            return getHelper<Flavor>('/flavors/' + props.initialFlavorId);
+            if (props.initialFlavorId) {
+                return api.flavors.getFlavor(props.initialFlavorId);
+            }
+            throw 'tried to get flavor without id';
         },
         {
             enabled: props.initialFlavorId !== undefined,
@@ -62,7 +69,12 @@ export function FlavorSearchSelect(props: {
             <SearchingSelector<Flavor>
                 queryKeyPrefix={'flavor-for-' + props.site?.id}
                 tableName="Flavor"
-                endpoint={'/sites/' + props.site?.id + '/flavors:search'}
+                queryCallback={(terms) => {
+                    if (props.site?.id) {
+                        return api.sites.searchFlavor(props.site?.id, terms);
+                    }
+                    return undefined;
+                }}
                 item={props.flavor}
                 setItem={props.setFlavor}
                 display={display}
@@ -79,4 +91,4 @@ export function FlavorSearchSelect(props: {
             )}
         </>
     );
-}
+};

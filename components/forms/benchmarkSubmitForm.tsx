@@ -2,8 +2,6 @@ import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
-import { CreateBenchmark } from 'model';
-import { postHelper } from 'components/api-helpers';
 import { AxiosError } from 'axios';
 import { getErrorMessage } from 'components/forms/getErrorMessage';
 import benchmarkJsonSchema from 'components/benchmarkJsonSchemaExample.json';
@@ -12,6 +10,8 @@ import Link from 'next/link';
 import { LoadingWrapper } from '../loadingOverlay';
 import { LoginCheck } from '../loginCheck';
 import { SubmitHandler, useForm, useController } from 'react-hook-form';
+import useApi from '../../utils/useApi';
+import { CreateBenchmark } from '@eosc-perf-automation/eosc-perf-client';
 
 type FormContents = {
     dockerName: string;
@@ -25,7 +25,7 @@ export function BenchmarkSubmitForm(props: {
     onError: () => void;
 }): ReactElement {
     const auth = useContext(UserContext);
-
+    const api = useApi(auth.token);
     const { register, handleSubmit, formState, control } = useForm<FormContents>();
 
     function validateTemplate(template: string) {
@@ -75,7 +75,7 @@ export function BenchmarkSubmitForm(props: {
     }, []);
 
     const { mutate } = useMutation(
-        (data: CreateBenchmark) => postHelper<CreateBenchmark>('/benchmarks', data, auth.token),
+        (data: CreateBenchmark) => api.benchmarks.createBenchmark(data),
         {
             onSuccess: () => {
                 props.onSuccess();
@@ -92,7 +92,7 @@ export function BenchmarkSubmitForm(props: {
         mutate({
             docker_image: data.dockerName,
             docker_tag: data.dockerTag,
-            description: data.description.length ? data.description : null,
+            description: data.description.length ? data.description : undefined,
             json_schema: templateJson ? JSON.parse(templateJson) : undefined,
         });
     };

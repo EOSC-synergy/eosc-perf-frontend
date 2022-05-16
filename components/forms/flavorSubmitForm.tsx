@@ -1,8 +1,6 @@
 import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
-import { CreateFlavor, Site } from 'model';
-import { postHelper } from 'components/api-helpers';
 import { AxiosError } from 'axios';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { getErrorMessage } from 'components/forms/getErrorMessage';
@@ -10,6 +8,8 @@ import { RegistrationCheck } from 'components/registrationCheck';
 import { LoadingWrapper } from '../loadingOverlay';
 import { LoginCheck } from '../loginCheck';
 import { SubmitHandler, useController, useForm } from 'react-hook-form';
+import { CreateFlavor, Site } from '@eosc-perf-automation/eosc-perf-client';
+import useApi from '../../utils/useApi';
 
 type FormContents = {
     name: string;
@@ -22,6 +22,7 @@ export function FlavorSubmitForm(props: {
     onError: () => void;
 }): ReactElement {
     const auth = useContext(UserContext);
+    const api = useApi(auth.token);
 
     const { handleSubmit, control, formState } = useForm<FormContents>();
 
@@ -48,8 +49,7 @@ export function FlavorSubmitForm(props: {
     }, []);
 
     const { mutate } = useMutation(
-        (data: CreateFlavor) =>
-            postHelper<CreateFlavor>('/sites/' + props.site.id + '/flavors', data, auth.token),
+        (data: CreateFlavor) => api.sites.addFlavor(props.site.id, data),
         {
             onSuccess: () => {
                 props.onSuccess();

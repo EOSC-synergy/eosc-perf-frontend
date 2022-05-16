@@ -3,15 +3,16 @@ import { useQuery } from 'react-query';
 import { SearchForm } from 'components/searchSelectors/searchForm';
 import { Table } from 'components/searchSelectors/table';
 import { LoadingOverlay } from 'components/loadingOverlay';
-import { getHelper } from 'components/api-helpers';
 import { Paginated, Paginator } from 'components/pagination';
 import { Button, Col, OverlayTrigger, Popover, Row } from 'react-bootstrap';
 import { Identifiable } from 'components/identifiable';
+import useApi from '../../utils/useApi';
+import { AxiosResponse } from 'axios';
 
 export function SearchingSelector<Item extends Identifiable>(props: {
     queryKeyPrefix: string;
     tableName: string;
-    endpoint: string;
+    queryCallback: (terms: string[]) => Promise<AxiosResponse<Paginated<Item>>> | undefined;
     item?: Item;
     setItem: (item?: Item) => void;
     display: (item?: Item) => ReactNode;
@@ -19,6 +20,7 @@ export function SearchingSelector<Item extends Identifiable>(props: {
     submitNew?: () => void;
     disabled?: boolean;
 }): ReactElement {
+    const api = useApi();
     //const [resultsPerPage, setResultsPerPage] = useState(10);
     const [page, setPage] = useState(0);
 
@@ -29,10 +31,11 @@ export function SearchingSelector<Item extends Identifiable>(props: {
     const items = useQuery(
         [props.queryKeyPrefix, page, searchString],
         () => {
-            return getHelper<Paginated<Item>>(props.endpoint, undefined, {
-                // split here so we can add searchString to key to fetch automatically
-                terms: searchString.split(' '),
-            });
+            const response = props.queryCallback(searchString.split(' '));
+            if (response !== undefined) {
+                return response;
+            }
+            throw 'no data';
         },
         {
             enabled: !props.disabled,

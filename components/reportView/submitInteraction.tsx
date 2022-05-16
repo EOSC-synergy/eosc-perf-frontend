@@ -1,9 +1,11 @@
 import React, { ReactElement, useContext } from 'react';
-import { Submit } from 'model';
 import { useMutation } from 'react-query';
-import { postHelper } from 'components/api-helpers';
 import { Button } from 'react-bootstrap';
 import { UserContext } from 'components/userContext';
+import { Submit } from '@eosc-perf-automation/eosc-perf-client';
+import useApi from '../../utils/useApi';
+import { SubmitResourceTypeEnum } from '@eosc-perf-automation/eosc-perf-client';
+import ensureUnreachable from '../../utils/ensureUnreachable';
 
 export function SubmitInteraction(props: {
     submit: Submit;
@@ -12,23 +14,22 @@ export function SubmitInteraction(props: {
     rejectText?: string;
 }): ReactElement {
     const auth = useContext(UserContext);
-
-    const endpoints = new Map<string, string>([
-        [Submit.resource_type.BENCHMARK, '/benchmarks/'],
-        [Submit.resource_type.SITE, '/sites/'],
-        [Submit.resource_type.FLAVOR, '/flavors/'],
-        [Submit.resource_type.CLAIM, '/reports/claims/'],
-    ]);
+    const api = useApi(auth.token);
 
     const { mutate: approve } = useMutation(
-        () =>
-            postHelper<never>(
-                (endpoints.get(props.submit.resource_type) ?? '/reports/claims') +
-                    props.submit.resource_id +
-                    ':approve',
-                undefined,
-                auth.token
-            ),
+        () => {
+            switch (props.submit.resource_type) {
+                case SubmitResourceTypeEnum.Flavor:
+                    return api.flavors.approveFlavor(props.submit.resource_id);
+                case SubmitResourceTypeEnum.Claim:
+                    return api.reports.approveClaim(props.submit.resource_id);
+                case SubmitResourceTypeEnum.Site:
+                    return api.sites.approveSite(props.submit.resource_id);
+                case SubmitResourceTypeEnum.Benchmark:
+                    return api.benchmarks.approveBenchmark(props.submit.resource_id);
+            }
+            ensureUnreachable(props.submit.resource_type);
+        },
         {
             onSuccess: () => {
                 props.refetch();
@@ -37,14 +38,19 @@ export function SubmitInteraction(props: {
     );
 
     const { mutate: reject } = useMutation(
-        () =>
-            postHelper<never>(
-                (endpoints.get(props.submit.resource_type) ?? '/reports/claims') +
-                    props.submit.resource_id +
-                    ':reject',
-                undefined,
-                auth.token
-            ),
+        () => {
+            switch (props.submit.resource_type) {
+                case SubmitResourceTypeEnum.Flavor:
+                    return api.flavors.rejectFlavor(props.submit.resource_id);
+                case SubmitResourceTypeEnum.Claim:
+                    return api.reports.rejectClaim(props.submit.resource_id);
+                case SubmitResourceTypeEnum.Site:
+                    return api.sites.rejectSite(props.submit.resource_id);
+                case SubmitResourceTypeEnum.Benchmark:
+                    return api.benchmarks.rejectBenchmark(props.submit.resource_id);
+            }
+            ensureUnreachable(props.submit.resource_type);
+        },
         {
             onSuccess: () => {
                 props.refetch();

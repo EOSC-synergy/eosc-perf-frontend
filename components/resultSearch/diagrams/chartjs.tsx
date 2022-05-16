@@ -1,8 +1,6 @@
 import React, { ChangeEvent, ReactElement, useState } from 'react';
-import { Benchmark, Result, Site } from 'model';
 import { Alert, Form } from 'react-bootstrap';
 import { Line } from 'react-chartjs-2';
-import { Ordered } from 'components/ordered';
 import {
     CategoryScale,
     Chart as ChartJS,
@@ -14,10 +12,18 @@ import {
     PointElement,
     Title,
     Tooltip,
-    TooltipItem
+    TooltipItem,
 } from 'chart.js';
 import { Suggestion } from '../jsonSchema';
-import { DataPoint, DataPointCollection, generateDataPoints, RejectedResult, XAxis, YAxis } from './helpers';
+import {
+    DataPoint,
+    DataPointCollection,
+    generateDataPoints,
+    RejectedResult,
+    XAxis,
+    YAxis,
+} from './helpers';
+import { Benchmark, Result, Site } from '@eosc-perf-automation/eosc-perf-client';
 
 ChartJS.register(
     CategoryScale,
@@ -57,7 +63,7 @@ const BACKGROUND_COLORS = [
 
 /**
  * Chart displaying a line diagram following the results' ordering
- * @param {Ordered<Result>[]} results
+ * @param {Result[]} results
  * @param {string[]} suggestions List of diagram keys to suggest to user for axes
  * @param {Benchmark} benchmark
  * @returns {React.ReactElement}
@@ -68,7 +74,7 @@ function ChartJSDiagram({
     suggestions,
     benchmark,
 }: {
-    results: Ordered<Result>[];
+    results: Result[];
     suggestions?: Suggestion[];
     benchmark?: Benchmark;
 }): ReactElement {

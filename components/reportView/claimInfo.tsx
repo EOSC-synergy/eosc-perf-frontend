@@ -1,21 +1,27 @@
 import React, { ReactElement, useContext } from 'react';
 import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
-import { Claim } from 'model';
 import { LoadingOverlay } from 'components/loadingOverlay';
 import { ResultInfo } from 'components/reportView/resultInfo';
 import { UserContext } from 'components/userContext';
 import { truthyOrNoneTag } from 'components/utility';
 import { Badge } from 'react-bootstrap';
+import useApi from '../../utils/useApi';
+import { Claim } from '@eosc-perf-automation/eosc-perf-client';
 
-export function ClaimInfo(props: { id?: string; claim?: Claim }): ReactElement {
+type ClaimInfoProps =
+    | {
+          id: string;
+          claim: undefined;
+      }
+    | { id: undefined; claim: Claim };
+
+export const ClaimInfo: React.FC<ClaimInfoProps> = (props): ReactElement => {
     const auth = useContext(UserContext);
+    const api = useApi(auth.token);
 
     const claim = useQuery(
         ['claim', props.id],
-        () => {
-            return getHelper<Claim>('/reports/claims/' + props.id, auth.token);
-        },
+        () => api.reports.getClaim(props.id ?? props.claim.id),
         {
             refetchOnWindowFocus: false, // do not spam queries
             enabled: props.claim === undefined,
@@ -47,4 +53,4 @@ export function ClaimInfo(props: { id?: string; claim?: Claim }): ReactElement {
             )}
         </>
     );
-}
+};

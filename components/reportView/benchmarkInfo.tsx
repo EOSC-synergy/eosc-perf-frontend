@@ -1,16 +1,15 @@
 import React, { ReactElement } from 'react';
-import { Benchmark } from 'model';
 import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
 import { LoadingOverlay } from 'components/loadingOverlay';
 import { benchmarkLinkDisplay, truthyOrNoneTag } from 'components/utility';
+import useApi from '../../utils/useApi';
 
 export function BenchmarkInfo(props: { id: string }): ReactElement {
+    const api = useApi();
+
     const benchmark = useQuery(
         ['benchmark', props.id],
-        () => {
-            return getHelper<Benchmark>('/benchmarks/' + props.id);
-        },
+        () => api.benchmarks.getBenchmark(props.id),
         {
             refetchOnWindowFocus: false, // do not spam queries
         }

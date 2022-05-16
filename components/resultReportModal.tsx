@@ -1,25 +1,23 @@
 import React, { useContext, useState } from 'react';
-import { CreateClaim, Result } from 'model';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useMutation } from 'react-query';
-import { postHelper } from 'components/api-helpers';
 import { UserContext } from 'components/userContext';
 import { JsonHighlight } from 'components/jsonHighlight';
+import useApi from '../utils/useApi';
+import { CreateClaim, Result } from '@eosc-perf-automation/eosc-perf-client';
 
 export function ResultReportModal(props: {
-    result: Result | null;
+    result: Result;
     show: boolean;
     closeModal: () => void;
 }) {
+    const auth = useContext(UserContext);
+    const api = useApi(auth.token);
+
     const [message, setMessage] = useState('');
 
-    const auth = useContext(UserContext);
-
     const { mutate } = useMutation(
-        (data: CreateClaim) =>
-            postHelper<CreateClaim>('/results/' + props.result?.id + ':claim', data, auth.token, {
-                result_id: props.result?.id,
-            }),
+        (data: CreateClaim) => api.results.claimReport(props.result.id, data),
         {
             onSuccess: () => {
                 props.closeModal();

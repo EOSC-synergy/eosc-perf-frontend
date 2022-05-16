@@ -1,20 +1,21 @@
-import { Flavor } from 'model';
 import React, { ReactElement, useContext, useState } from 'react';
 import { useMutation } from 'react-query';
-import { putHelper } from 'components/api-helpers';
 import { Button, Form, InputGroup, ListGroup } from 'react-bootstrap';
 import { Check, PencilSquare } from 'react-bootstrap-icons';
 import { UserContext } from 'components/userContext';
+import useApi from '../../utils/useApi';
+import { Flavor } from '@eosc-perf-automation/eosc-perf-client';
 
 export function FlavorEditor(props: { flavor: Flavor; refetch: () => void }): ReactElement {
+    const auth = useContext(UserContext);
+    const api = useApi(auth.token);
+
     const [name, setName] = useState<string>(props.flavor.name);
     const [desc, setDesc] = useState<string>(
         props.flavor.description ? props.flavor.description : ''
     );
 
     const [editing, setEditing] = useState(false);
-
-    const auth = useContext(UserContext);
 
     function updateEditing(editing: boolean) {
         if (editing) {
@@ -25,10 +26,7 @@ export function FlavorEditor(props: { flavor: Flavor; refetch: () => void }): Re
     }
 
     const { mutate } = useMutation(
-        (data: Flavor) =>
-            putHelper<Flavor>('/sites/flavors/' + props.flavor.id, data, auth.token, {
-                flavor_id: props.flavor.id,
-            }),
+        (data: Flavor) => api.flavors.updateFlavor(props.flavor.id, data),
         {
             onSuccess: () => {
                 setEditing(false);
@@ -49,7 +47,7 @@ export function FlavorEditor(props: { flavor: Flavor; refetch: () => void }): Re
                     onClick={() => {
                         mutate({
                             name,
-                            description: desc.length ? desc : null,
+                            description: desc.length ? desc : undefined,
                             id: props.flavor.id,
                             upload_datetime: props.flavor.upload_datetime,
                         });

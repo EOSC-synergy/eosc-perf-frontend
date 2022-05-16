@@ -1,23 +1,20 @@
 import React, { ReactElement, useContext, useState } from 'react';
-import { Result } from 'model';
 import { Button, Dropdown, Modal, SplitButton } from 'react-bootstrap';
 import { ResultCallbacks } from 'components/resultSearch/resultCallbacks';
 import { UserContext } from 'components/userContext';
-import { Ordered } from 'components/ordered';
 import { useMutation } from 'react-query';
-import { deleteHelper } from 'components/api-helpers';
+import { Result } from '@eosc-perf-automation/eosc-perf-client';
+import useApi from '../../../utils/useApi';
 
 function ResultDeleter({ result, onDelete }: { result: Result; onDelete: () => void }) {
     const auth = useContext(UserContext);
+    const api = useApi(auth.token);
 
     const [showModal, setShowModal] = useState(false);
 
-    const { mutate: deleteResult } = useMutation(
-        () => deleteHelper('/results/' + result.id, auth.token),
-        {
-            onSuccess: onDelete,
-        }
-    );
+    const { mutate: deleteResult } = useMutation(() => api.results.deleteResult(result.id), {
+        onSuccess: onDelete,
+    });
 
     return (
         <>
@@ -58,7 +55,7 @@ function ResultDeleter({ result, onDelete }: { result: Result; onDelete: () => v
 
 /**
  * Column with buttons to interact with result
- * @param {Result & {orderIndex: number}} result
+ * @param {Result} result
  * @param {ResultCallbacks} callbacks Callbacks for the operations
  * @returns {React.ReactElement}
  * @constructor
@@ -67,7 +64,7 @@ export function ActionColumn({
     result,
     callbacks,
 }: {
-    result: Ordered<Result>;
+    result: Result;
     callbacks: ResultCallbacks;
 }): ReactElement {
     // TODO: CSS: figure out why button group taller than it should be

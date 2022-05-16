@@ -1,4 +1,4 @@
-import { Benchmark } from 'model';
+import { Benchmark } from '@eosc-perf-automation/eosc-perf-client';
 
 export interface SchemaField {
     type?: string;

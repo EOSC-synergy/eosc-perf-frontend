@@ -2,14 +2,14 @@ import { Alert, Button, Form } from 'react-bootstrap';
 import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
-import { CreateSite } from 'model';
-import { postHelper } from 'components/api-helpers';
 import { AxiosError } from 'axios';
 import { getErrorMessage } from 'components/forms/getErrorMessage';
 import { RegistrationCheck } from 'components/registrationCheck';
 import { LoadingWrapper } from '../loadingOverlay';
 import { LoginCheck } from '../loginCheck';
 import { SubmitHandler, useController, useForm } from 'react-hook-form';
+import { CreateSite } from '@eosc-perf-automation/eosc-perf-client';
+import useApi from '../../utils/useApi';
 
 type FormContents = {
     name: string;
@@ -22,6 +22,7 @@ export function SiteSubmitForm(props: {
     onError: () => void;
 }): ReactElement {
     const auth = useContext(UserContext);
+    const api = useApi(auth.token);
 
     const [errorMessage, setErrorMessage] = useState<ReactNode | undefined>(undefined);
 
@@ -31,18 +32,15 @@ export function SiteSubmitForm(props: {
         setErrorMessage(undefined);
     }, []);
 
-    const { mutate } = useMutation(
-        (data: CreateSite) => postHelper<CreateSite>('/sites', data, auth.token),
-        {
-            onSuccess: () => {
-                props.onSuccess();
-            },
-            onError: (error: Error | AxiosError) => {
-                setErrorMessage(getErrorMessage(error));
-                props.onError();
-            },
-        }
-    );
+    const { mutate } = useMutation((data: CreateSite) => api.sites.createSite(data), {
+        onSuccess: () => {
+            props.onSuccess();
+        },
+        onError: (error: Error | AxiosError) => {
+            setErrorMessage(getErrorMessage(error));
+            props.onError();
+        },
+    });
 
     const nameInput = useController({
         name: 'name',

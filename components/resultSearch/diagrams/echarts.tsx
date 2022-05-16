@@ -1,7 +1,5 @@
 import React, { ChangeEvent, ReactElement, useState } from 'react';
-import { Benchmark, Result, Site } from 'model';
 import { Alert, Badge, Button, Col, Form, Row } from 'react-bootstrap';
-import { Ordered } from 'components/ordered';
 import { Suggestion } from '../jsonSchema';
 import {
     DataPoint,
@@ -23,6 +21,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 import { transform } from 'echarts-stat';
 import { getSubkeyName } from '../jsonKeyHelpers';
 import { Save } from 'react-bootstrap-icons';
+import { Benchmark, Result, Site } from '@eosc-perf-automation/eosc-perf-client';
 
 echarts.use([
     TooltipComponent,
@@ -187,7 +186,7 @@ function YAxisModeSelect(props: { setYAxisMode: (value: Scale) => void; yAxisMod
 
 /**
  * Chart displaying a line diagram following the results' ordering
- * @param {Ordered<Result>[]} results
+ * @param {Result[]} results
  * @param {string[]} suggestions List of diagram keys to suggest to user for axes
  * @param {Benchmark} benchmark
  * @returns {React.ReactElement}
@@ -198,7 +197,7 @@ function EChartsDiagram({
     suggestions,
     benchmark,
 }: {
-    results: Ordered<Result>[];
+    results: Result[];
     suggestions?: Suggestion[];
     benchmark?: Benchmark;
 }): ReactElement {

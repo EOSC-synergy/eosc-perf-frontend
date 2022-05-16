@@ -1,12 +1,11 @@
 import React, { ChangeEvent, ReactElement, useState } from 'react';
-import { Benchmark, Result } from 'model';
 import { Badge, Card, Col, Form, Row } from 'react-bootstrap';
 import charts from 'components/resultSearch/diagrams';
-import { Ordered } from 'components/ordered';
 import { Suggestion } from './jsonSchema';
+import { Benchmark, Result } from '@eosc-perf-automation/eosc-perf-client';
 
 export function DiagramCard(props: {
-    results: Ordered<Result>[];
+    results: Result[];
     benchmark?: Benchmark;
     suggestions?: Suggestion[];
 }): ReactElement {

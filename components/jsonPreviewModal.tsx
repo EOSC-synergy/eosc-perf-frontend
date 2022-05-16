@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { Result } from 'model';
 import { JsonHighlight } from 'components/jsonHighlight';
+import { Result } from '@eosc-perf-automation/eosc-perf-client';
 
 /**
  * Modal to view the JSON data of a result

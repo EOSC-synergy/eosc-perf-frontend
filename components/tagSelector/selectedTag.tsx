@@ -1,7 +1,7 @@
-import { Tag } from '../../model';
 import style from 'styles/tagSelector.module.css';
 import { InlineCloseButton } from '../inlineCloseButton';
 import React from 'react';
+import { Tag } from '@eosc-perf-automation/eosc-perf-client';
 
 /**
  * Represents a selected tag

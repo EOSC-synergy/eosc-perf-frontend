@@ -1,13 +1,12 @@
 import React, { ReactElement } from 'react';
-import { Result } from 'model';
-import { Ordered } from 'components/ordered';
+import { Result } from '@eosc-perf-automation/eosc-perf-client';
 
 /**
  * Column to display execution site
- * @param {Result & {orderIndex: number}} result
+ * @param {Result} result
  * @returns {React.ReactElement}
  * @constructor
  */
-export function SiteColumn({ result }: { result: Ordered<Result> }): ReactElement {
+export function SiteColumn({ result }: { result: Result }): ReactElement {
     return <>{result.site.name}</>;
 }

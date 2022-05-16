@@ -3,9 +3,17 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import { Tags } from 'model';
+
+const API_ROUTE = '/api/v1';
+
+jest.mock('../configuration', () => ({
+    API_HOST: '',
+    API_ROUTE: API_ROUTE,
+    API_BASE_PATH: API_ROUTE,
+}));
+
 import TagSelector from 'components/tagSelector';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { API_BASE_ROUTE } from 'components/configuration';
 
 import { tag, tags } from '../testData';
 
@@ -19,11 +27,12 @@ const queryClient = new QueryClient();
 
 test('select', async () => {
     server.use(
-        rest.get(API_BASE_ROUTE + '/tags:search', (req, res, ctx) => {
+        rest.get(API_ROUTE + '/tags:search', (req, res, ctx) => {
             return res(ctx.json<Tags>(tags));
         })
     );
     const setSelected = jest.fn();
+
     render(
         <QueryClientProvider client={queryClient}>
             <TagSelector selected={[]} setSelected={setSelected} />
@@ -37,7 +46,7 @@ test('select', async () => {
 
 test('unselect', async () => {
     server.use(
-        rest.get(API_BASE_ROUTE + '/tags:search', (req, res, ctx) => {
+        rest.get(API_ROUTE + '/tags:search', (req, res, ctx) => {
             return res(ctx.json<Tags>(tags));
         })
     );

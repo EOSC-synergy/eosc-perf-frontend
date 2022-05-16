@@ -1,32 +1,31 @@
-import { Ordered } from '../../ordered';
-import { Result, Site } from '../../../model';
-import { fetchSubkey } from '../jsonKeyHelpers';
+import { fetchSubkey, Json } from '../jsonKeyHelpers';
 import { Suggestion } from '../jsonSchema';
 import { Form } from 'react-bootstrap';
 import { InputWithSuggestions } from '../../inputWithSuggestions';
 import React from 'react';
+import { Result, Site } from '@eosc-perf-automation/eosc-perf-client';
 
-export type DataPoint = { x: number; y: number; result: Ordered<Result> };
+export type DataPoint = { x: number; y: number; result: Result };
 export type DataPointCollection = Map<string, { site: Site; data: DataPoint[] }>;
-export type RejectedResult = { result: Ordered<Result>; reason: string };
+export type RejectedResult = { result: Result; reason: string };
 
 export function generateDataPoints(
-    results: Ordered<Result>[],
+    results: Result[],
     xAxis: string,
     yAxis: string
 ): [DataPointCollection, RejectedResult[]] {
-    let rejected: { result: Ordered<Result>; reason: string }[] = [];
+    let rejected: { result: Result; reason: string }[] = [];
     const collection: DataPointCollection = new Map<string, { site: Site; data: DataPoint[] }>();
 
     for (const result of results) {
-        const x = fetchSubkey(result.json, xAxis);
-        const y = fetchSubkey(result.json, yAxis);
+        const x = fetchSubkey(result.json as Json, xAxis);
+        const y = fetchSubkey(result.json as Json, yAxis);
 
-        if (typeof fetchSubkey(result.json, xAxis) !== 'number') {
+        if (typeof fetchSubkey(result.json as Json, xAxis) !== 'number') {
             rejected.push({ result, reason: 'X axis value not numeric' });
             continue;
         }
-        if (typeof fetchSubkey(result.json, yAxis) !== 'number') {
+        if (typeof fetchSubkey(result.json as Json, yAxis) !== 'number') {
             rejected.push({ result, reason: 'Y axis value not numeric' });
             continue;
         }

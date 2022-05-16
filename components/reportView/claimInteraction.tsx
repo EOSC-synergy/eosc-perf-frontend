@@ -1,9 +1,9 @@
 import React, { ReactElement, useContext } from 'react';
-import { Claim, Submit } from 'model';
 import { useMutation } from 'react-query';
-import { deleteHelper } from 'components/api-helpers';
 import { Button } from 'react-bootstrap';
 import { UserContext } from 'components/userContext';
+import { Claim } from '@eosc-perf-automation/eosc-perf-client';
+import useApi from '../../utils/useApi';
 
 export function ClaimInteraction(props: {
     claim: Claim;
@@ -11,34 +11,20 @@ export function ClaimInteraction(props: {
     deleteText?: string;
 }): ReactElement {
     const auth = useContext(UserContext);
+    const api = useApi(auth.token);
 
-    const endpoints = new Map<string, string>([
-        [Submit.resource_type.BENCHMARK, '/benchmarks/'],
-        [Submit.resource_type.SITE, '/sites/'],
-        [Submit.resource_type.FLAVOR, '/flavors/'],
-        [Submit.resource_type.CLAIM, '/reports/claims/'],
-    ]);
-
-    const { mutate: deleteClaim } = useMutation(
-        () =>
-            deleteHelper(
-                (endpoints.get(props.claim.resource_type) ?? '/reports/claims') +
-                    props.claim.resource_id,
-                auth.token
-            ),
-        {
-            onSuccess: () => {
-                props.refetch();
-            },
-        }
-    );
+    const { mutate: deleteClaim } = useMutation((id: string) => api.reports.rejectClaim(id), {
+        onSuccess: () => {
+            props.refetch();
+        },
+    });
 
     return (
         <div className="mt-2">
             <Button
                 variant="danger"
                 onClick={() => {
-                    deleteClaim();
+                    deleteClaim(props.claim.id);
                 }}
             >
                 {props.deleteText || 'Delete'}

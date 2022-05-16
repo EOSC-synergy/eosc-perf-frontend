@@ -1,20 +1,27 @@
-import { Site } from 'model';
 import React, { ReactElement, useState } from 'react';
 import { SiteSubmissionModal } from 'components/submissionModals/siteSubmissionModal';
-import { SearchingSelector } from 'components/searchSelectors/index';
+import { SearchingSelector } from './index';
 import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
+import useApi from '../../utils/useApi';
+import { Site } from '@eosc-perf-automation/eosc-perf-client';
 
-export function SiteSearchPopover(props: {
+type SiteSearchPopoverProps = {
     site?: Site;
+    initialSiteId?: string;
     initSite?: (site?: Site) => void;
     setSite: (site?: Site) => void;
-    initialSiteId?: string;
-}): ReactElement {
+};
+
+export const SiteSearchPopover: React.FC<SiteSearchPopoverProps> = (props): ReactElement => {
+    const api = useApi();
+
     useQuery(
         ['initial-site', props.initialSiteId],
         () => {
-            return getHelper<Site>('/sites/' + props.initialSiteId);
+            if (props.initialSiteId) {
+                return api.sites.getSite(props.initialSiteId);
+            }
+            throw 'tried to get side with no id';
         },
         {
             enabled: props.initialSiteId !== undefined,
@@ -63,7 +70,7 @@ export function SiteSearchPopover(props: {
             <SearchingSelector<Site>
                 queryKeyPrefix="site"
                 tableName="Site"
-                endpoint="/sites:search"
+                queryCallback={(terms) => api.sites.searchSites(terms)}
                 item={props.site}
                 setItem={props.setSite}
                 display={display}
@@ -73,4 +80,4 @@ export function SiteSearchPopover(props: {
             <SiteSubmissionModal show={showSubmitModal} onHide={() => setShowSubmitModal(false)} />
         </>
     );
-}
+};

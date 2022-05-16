@@ -1,14 +1,13 @@
-import React, {ReactElement, useContext, useEffect, useState} from 'react';
-import {UserContext} from "../components/userContext";
-import {useRouter} from "next/router";
-import {useQuery} from "react-query";
-import {getHelper} from "../components/api-helpers";
-import {Claims, Submits} from "../model";
-import {Col, Container, ListGroup, Row} from "react-bootstrap";
-import {SubmitView} from "../components/reportView/submitView";
-import {Paginator} from "../components/pagination";
-import {ClaimView} from "../components/reportView/claimView";
-import Head from "next/head";
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import { UserContext } from '../components/userContext';
+import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
+import { Col, Container, ListGroup, Row } from 'react-bootstrap';
+import { SubmitView } from '../components/reportView/submitView';
+import { Paginator } from '../components/pagination';
+import { ClaimView } from '../components/reportView/claimView';
+import Head from 'next/head';
+import useApi from '../utils/useApi';
 
 /**
  * Admin-only page to view pending reports and submissions.
@@ -17,8 +16,10 @@ import Head from "next/head";
  * @constructor
  */
 function ReportsView(): ReactElement {
-    const auth = useContext(UserContext);
     const router = useRouter();
+
+    const auth = useContext(UserContext);
+    const api = useApi(auth.token);
 
     const [submitsPage, setSubmitsPage] = useState(1);
     const [claimsPage, setClaimsPage] = useState(1);
@@ -32,9 +33,7 @@ function ReportsView(): ReactElement {
 
     const submits = useQuery(
         ['submits', submitsPage],
-        () => {
-            return getHelper<Submits>('/reports/submits', auth.token, {page: submitsPage});
-        },
+        () => api.reports.listSubmits(undefined, undefined, undefined, submitsPage),
         {
             enabled: !!auth.token,
             refetchOnWindowFocus: false, // do not spam queries
@@ -42,9 +41,7 @@ function ReportsView(): ReactElement {
     );
     const claims = useQuery(
         ['claims', claimsPage],
-        () => {
-            return getHelper<Claims>('/reports/claims', auth.token, {page: claimsPage});
-        },
+        () => api.reports.listClaims(undefined, undefined, undefined, undefined, claimsPage),
         {
             enabled: !!auth.token,
             refetchOnWindowFocus: false, // do not spam queries
@@ -120,11 +117,11 @@ function ReportsView(): ReactElement {
                         <Row className="my-3">
                             <Col>
                                 <h1>Submits</h1>
-                                <SubmitsList/>
+                                <SubmitsList />
                             </Col>
                             <Col>
                                 <h1>Claims</h1>
-                                <ClaimsList/>
+                                <ClaimsList />
                             </Col>
                         </Row>
                     </>

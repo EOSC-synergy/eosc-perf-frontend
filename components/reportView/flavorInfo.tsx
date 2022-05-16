@@ -1,32 +1,21 @@
 import React, { ReactElement } from 'react';
-import { Flavor } from 'model';
 import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
 import { LoadingOverlay } from 'components/loadingOverlay';
 import { SiteInfo } from 'components/reportView/siteInfo';
 import { truthyOrNoneTag } from 'components/utility';
+import useApi from '../../utils/useApi';
 
 export function FlavorInfo(props: { id: string }): ReactElement {
-    const flavor = useQuery(
-        ['flavor', props.id],
-        () => {
-            return getHelper<Flavor>('/flavors/' + props.id);
-        },
-        {
-            refetchOnWindowFocus: false, // do not spam queries
-        }
-    );
+    const api = useApi();
 
-    const site = useQuery(
-        ['site-for', props.id],
-        () => {
-            return getHelper<Flavor>('/flavors/' + props.id + '/site');
-        },
-        {
-            refetchOnWindowFocus: false, // do not spam queries,
-            enabled: flavor.isSuccess,
-        }
-    );
+    const flavor = useQuery(['flavor', props.id], () => api.flavors.getFlavor(props.id), {
+        refetchOnWindowFocus: false, // do not spam queries
+    });
+
+    const site = useQuery(['site-for', props.id], () => api.flavors.getFlavorSite(props.id), {
+        refetchOnWindowFocus: false, // do not spam queries,
+        enabled: flavor.isSuccess,
+    });
 
     return (
         <>

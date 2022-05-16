@@ -3,8 +3,6 @@ import { JsonSelection } from 'components/jsonSelection';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
-import { Benchmark, Flavor, Result, Site, Tag } from 'model';
-import { postHelper } from 'components/api-helpers';
 import { AxiosError } from 'axios';
 import { SiteSearchPopover } from 'components/searchSelectors/siteSearchPopover';
 import { BenchmarkSearchSelect } from 'components/searchSelectors/benchmarkSearchSelect';
@@ -17,33 +15,41 @@ import { RegistrationCheck } from 'components/registrationCheck';
 import TagSelector from 'components/tagSelector';
 import { LoginCheck } from '../loginCheck';
 import { LoadingWrapper } from '../loadingOverlay';
+import useApi from '../../utils/useApi';
+import { Benchmark, Flavor, Site, Tag } from '@eosc-perf-automation/eosc-perf-client';
 
 export function ResultSubmitForm(props: {
     onSuccess: () => void;
     onError: () => void;
 }): ReactElement {
     const auth = useContext(UserContext);
+    const api = useApi(auth.token);
 
-    const [benchmark, setBenchmark] = useState<Benchmark | undefined>(undefined);
-    const [site, setSite] = useState<Site | undefined>(undefined);
-    const [flavor, setFlavor] = useState<Flavor | undefined>(undefined);
+    const [benchmark, setBenchmark] = useState<Benchmark>();
+    const [site, setSite] = useState<Site>();
+    const [flavor, setFlavor] = useState<Flavor>();
     const [tags, setTags] = useState<Tag[]>([]);
 
-    const [fileContents, setFileContents] = useState<string | undefined>(undefined);
+    const [fileContents, setFileContents] = useState<string>();
 
-    const [execDate, setExecDate] = useState<Date | null>(new Date());
+    const [execDate, setExecDate] = useState<Date | undefined>(new Date());
 
-    const [errorMessage, setErrorMessage] = useState<ReactNode | undefined>(undefined);
+    const [errorMessage, setErrorMessage] = useState<ReactNode>();
 
     const { mutate } = useMutation(
-        (data: Result) =>
-            postHelper<Result>('/results', data, auth.token, {
-                execution_datetime: execDate?.toISOString(),
-                benchmark_id: benchmark?.id,
-                //site_id: site?.id,
-                flavor_id: flavor?.id,
-                tags_ids: tags.map((tag) => tag.id),
-            }),
+        [],
+        (data: any) => {
+            if (benchmark && flavor && execDate) {
+                return api.results.createResult(
+                    execDate.toISOString(),
+                    benchmark.id,
+                    flavor.id,
+                    data,
+                    tags.map((tag) => tag.id)
+                );
+            }
+            throw 'unexpectedly missing benchmark, flavor or date';
+        },
         {
             onSuccess: () => {
                 props.onSuccess();
@@ -109,7 +115,7 @@ export function ResultSubmitForm(props: {
                                     <DatePicker
                                         selected={execDate}
                                         onChange={(date: Date | null) =>
-                                            setExecDate(date as Date | null)
+                                            setExecDate(date ?? undefined)
                                         }
                                         showTimeSelect
                                         timeIntervals={15}

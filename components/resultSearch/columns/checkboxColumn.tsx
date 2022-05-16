@@ -1,12 +1,11 @@
 import React, { ReactElement } from 'react';
-import { Result } from 'model';
 import { Form } from 'react-bootstrap';
 import { ResultCallbacks } from 'components/resultSearch/resultCallbacks';
-import { Ordered } from 'components/ordered';
+import { Result } from '@eosc-perf-automation/eosc-perf-client';
 
 /**
  * Column to select result
- * @param {Result & {orderIndex: number}} result
+ * @param {Result} result
  * @param {ResultCallbacks} callbacks
  * @returns {React.ReactElement}
  * @constructor
@@ -15,7 +14,7 @@ export function CheckboxColumn({
     result,
     callbacks,
 }: {
-    result: Ordered<Result>;
+    result: Result;
     callbacks: ResultCallbacks;
 }): ReactElement {
     // TODO: "switch" => "checkbox" once it's fixed in react-bootstrap

@@ -5,9 +5,7 @@ import { useQuery } from 'react-query';
 import { JsonPreviewModal } from 'components/jsonPreviewModal';
 import { ResultsPerPageSelection } from 'components/resultsPerPageSelection';
 import Head from 'next/head';
-import { getHelper } from 'components/api-helpers';
 import { ResultTable } from 'components/resultSearch/resultTable';
-import { Benchmark, Flavor, Result, Results, Site } from 'model';
 import { Paginator } from 'components/pagination';
 import { DiagramCard } from 'components/resultSearch/diagramCard';
 import { ResultReportModal } from 'components/resultReportModal';
@@ -16,7 +14,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { Filter } from 'components/resultSearch/filter';
 import { FilterEdit } from 'components/resultSearch/filterEdit';
 
-import { Ordered, orderedComparator } from 'components/ordered';
 import { parseSuggestions } from 'components/resultSearch/jsonSchema';
 import { SiteSearchPopover } from 'components/searchSelectors/siteSearchPopover';
 import { BenchmarkSearchSelect } from 'components/searchSelectors/benchmarkSearchSelect';
@@ -24,7 +21,9 @@ import { FlavorSearchSelect } from 'components/searchSelectors/flavorSearchSelec
 import { Sorting, SortMode } from 'components/resultSearch/sorting';
 import { useRouter } from 'next/router';
 import { Funnel, Save2 } from 'react-bootstrap-icons';
-import { fetchSubkey } from '../../components/resultSearch/jsonKeyHelpers';
+import { fetchSubkey, Json } from '../../components/resultSearch/jsonKeyHelpers';
+import { Benchmark, Flavor, Result, Site } from '@eosc-perf-automation/eosc-perf-client';
+import useApi from '../../utils/useApi';
 
 function saveFile(contents: string, filename: string = 'export.csv') {
     const blob = new Blob([contents], { type: 'text/plain;charset=utf-8' });
@@ -47,10 +46,11 @@ function saveFile(contents: string, filename: string = 'export.csv') {
  */
 function ResultSearch(): ReactElement {
     const router = useRouter();
+    const api = useApi();
 
-    const [benchmark, setBenchmark] = useState<Benchmark | undefined>(undefined);
-    const [site, setSite] = useState<Site | undefined>(undefined);
-    const [flavor, setFlavor] = useState<Flavor | undefined>(undefined);
+    const [benchmark, setBenchmark] = useState<Benchmark>();
+    const [site, setSite] = useState<Site>();
+    const [flavor, setFlavor] = useState<Flavor>();
 
     const [filters, setFilters] = useState<Map<string, Filter>>(new Map());
 
@@ -104,11 +104,11 @@ function ResultSearch(): ReactElement {
     const [showReportModal, setShowReportModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
 
-    const [selectedResults, setSelectedResults] = useState<Ordered<Result>[]>([]);
+    const [selectedResults, setSelectedResults] = useState<Result[]>([]);
 
-    const [previewResult, setPreviewResult] = useState<Result | null>(null);
-    const [reportedResult, setReportedResult] = useState<Result | null>(null);
-    const [editedResult, setEditedResult] = useState<Result | null>(null);
+    const [previewResult, setPreviewResult] = useState<Result>();
+    const [reportedResult, setReportedResult] = useState<Result>();
+    const [editedResult, setEditedResult] = useState<Result>();
 
     //
     const [customColumns, setCustomColumns] = useState<string[]>([]);
@@ -120,19 +120,19 @@ function ResultSearch(): ReactElement {
 
     // helpers for subelements
     const resultOps = {
-        select: function (result: Ordered<Result>) {
+        select: function (result: Result) {
             if (!this.isSelected(result)) {
                 // cannot call setSelectedResults directly, need to put in variable first
-                const arr = [...selectedResults, result].sort(orderedComparator);
+                const arr = [...selectedResults, result];
                 setSelectedResults(arr);
             }
         },
-        selectMultiple: function (results: Ordered<Result>[]) {
+        selectMultiple: function (results: Result[]) {
             const newResults = results.filter((r) => !resultOps.isSelected(r));
             if (newResults.length === 0) {
                 return;
             }
-            const combined = [...selectedResults, ...newResults].sort(orderedComparator);
+            const combined = [...selectedResults, ...newResults];
             setSelectedResults(combined);
         },
         unselect: function (result: Result) {
@@ -180,14 +180,19 @@ function ResultSearch(): ReactElement {
                 ? '-' + sorting.key
                 : undefined,
         ],
-        () => {
-            return getHelper<Results>('/results', undefined, {
-                per_page: resultsPerPage,
+        () =>
+            api.results.listResults(
+                undefined,
+                undefined,
+                resultsPerPage,
                 page,
-                benchmark_id: benchmark?.id,
-                site_id: site?.id,
-                flavor_id: site !== undefined ? flavor?.id : undefined,
-                filters: [...filters.keys()].flatMap((k) => {
+                undefined,
+                undefined,
+                benchmark?.id,
+                site?.id,
+                site !== undefined ? flavor?.id : undefined,
+                undefined,
+                [...filters.keys()].flatMap((k) => {
                     const filter = filters.get(k);
                     if (
                         filter === undefined ||
@@ -198,14 +203,12 @@ function ResultSearch(): ReactElement {
                     }
                     return [filter.key + ' ' + filter.mode + ' ' + filter.value];
                 }),
-                sort_by:
-                    sorting.mode === SortMode.Ascending
-                        ? '+' + sorting.key
-                        : sorting.mode === SortMode.Descending
-                        ? '-' + sorting.key
-                        : undefined,
-            });
-        },
+                sorting.mode === SortMode.Ascending
+                    ? '+' + sorting.key
+                    : sorting.mode === SortMode.Descending
+                    ? '-' + sorting.key
+                    : undefined
+            ),
         {
             refetchOnWindowFocus: false, // do not spam queries
         }
@@ -271,7 +274,7 @@ function ResultSearch(): ReactElement {
             }`;
             for (const column of customColumns) {
                 // .map.join?
-                entry = entry.concat(',' + fetchSubkey(result.json, column));
+                entry = entry.concat(',' + fetchSubkey(result.json as Json, column));
             }
             lines.push(entry);
         }

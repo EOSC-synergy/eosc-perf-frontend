@@ -1,9 +1,8 @@
-import { Result } from 'model';
-import { Ordered } from 'components/ordered';
+import { Result } from '@eosc-perf-automation/eosc-perf-client';
 
 export interface ResultCallbacks {
-    select: (result: Ordered<Result>) => void;
-    selectMultiple: (result: Ordered<Result>[]) => void;
+    select: (result: Result) => void;
+    selectMultiple: (result: Result[]) => void;
     unselect: (result: Result) => void;
     unselectMultiple: (result: Result[]) => void;
     isSelected: (result: Result) => boolean;

@@ -1,37 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Result, Tag, TagsIds } from 'model';
 import { Button, Modal } from 'react-bootstrap';
 import { useMutation } from 'react-query';
-import { putHelper } from 'components/api-helpers';
 import { UserContext } from 'components/userContext';
 import { JsonHighlight } from 'components/jsonHighlight';
 import TagSelector from './tagSelector';
+import { Result, Tag, TagsIds } from '@eosc-perf-automation/eosc-perf-client';
+import useApi from '../utils/useApi';
 
 export function ResultEditModal({
     result,
     show,
     closeModal,
 }: {
-    result: Result | null;
+    result: Result;
     show: boolean;
     closeModal: () => void;
 }) {
+    const auth = useContext(UserContext);
+    const api = useApi(auth.token);
+
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
     useEffect(() => {
         setSelectedTags(result?.tags ?? []);
     }, [result]);
 
-    const auth = useContext(UserContext);
-
-    const { mutate } = useMutation(
-        (data: TagsIds) => putHelper<TagsIds>('/results/' + result?.id + '/tags', data, auth.token),
-        {
-            onSuccess: () => {
-                closeModal();
-            },
-        }
-    );
+    const { mutate } = useMutation((data: TagsIds) => api.results.updateResult(result.id, data), {
+        onSuccess: () => {
+            closeModal();
+        },
+    });
 
     function submitEdit() {
         mutate({ tags_ids: selectedTags.map((tag) => tag.id) });

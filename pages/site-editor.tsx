@@ -1,15 +1,15 @@
-import React, {ReactElement, useContext, useEffect, useState} from 'react';
-import {Col, Container, ListGroup, Row} from 'react-bootstrap';
-import {Site, Sites} from 'model';
-import {useQuery} from 'react-query';
-import {getHelper} from 'components/api-helpers';
-import {LoadingOverlay} from 'components/loadingOverlay';
-import {SiteEditor} from 'components/siteEditor/siteEditor';
-import {Paginator} from '../components/pagination';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import { Col, Container, ListGroup, Row } from 'react-bootstrap';
+import { useQuery } from 'react-query';
+import { LoadingOverlay } from 'components/loadingOverlay';
+import { SiteEditor } from 'components/siteEditor/siteEditor';
+import { Paginator } from '../components/pagination';
 import Head from 'next/head';
-import {UserContext} from '../components/userContext';
-import {useRouter} from 'next/router';
-import {SiteSelect} from "../components/siteEditor/siteSelect";
+import { UserContext } from '../components/userContext';
+import { useRouter } from 'next/router';
+import { SiteSelect } from '../components/siteEditor/siteSelect';
+import useApi from '../utils/useApi';
+import { Site } from '@eosc-perf-automation/eosc-perf-client';
 
 /**
  * Admin-only page to edit sites in the database and add flavors.
@@ -18,9 +18,12 @@ import {SiteSelect} from "../components/siteEditor/siteSelect";
  * @constructor
  */
 function SitesEditor(): ReactElement {
-    const [page, setPage] = useState(1);
-    const auth = useContext(UserContext);
     const router = useRouter();
+
+    const auth = useContext(UserContext);
+    const api = useApi(auth.token);
+
+    const [page, setPage] = useState(1);
 
     // if user is not admin, redirect them away
     useEffect(() => {
@@ -31,11 +34,8 @@ function SitesEditor(): ReactElement {
 
     const sites = useQuery(
         'sites',
-        () => {
-            return getHelper<Sites>('/sites', undefined, {
-                page,
-            });
-        },
+        () => api.sites.listSites(undefined, undefined, undefined, undefined, page),
+
         {
             refetchOnWindowFocus: false, // do not spam queries
         }

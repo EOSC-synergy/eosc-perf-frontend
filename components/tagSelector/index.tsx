@@ -1,22 +1,20 @@
 import React, { ReactElement, useState } from 'react';
 import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
-import { Tag, Tags } from 'model';
 import { Card, Col, Form, Row } from 'react-bootstrap';
 import { PlaceholderTag } from './placeholderTag';
 import { UnselectedTag } from './unselectedTag';
 import { SelectedTag } from './selectedTag';
 import { NewTag } from './newTag';
+import { Tag } from '@eosc-perf-automation/eosc-perf-client';
+import useApi from '../../utils/useApi';
 
 function Index(props: { selected: Tag[]; setSelected: (tags: Tag[]) => void }): ReactElement {
+    const api = useApi();
+
     const [searchString, setSearchString] = useState<string>('');
     const tags = useQuery(
         ['tags', searchString],
-        () => {
-            return getHelper<Tags>('/tags:search', undefined, {
-                terms: searchString.split(' '),
-            });
-        },
+        () => api.tags.searchTag(searchString.split(' ')),
         {
             refetchOnWindowFocus: false, // do not spam queries
             keepPreviousData: true,

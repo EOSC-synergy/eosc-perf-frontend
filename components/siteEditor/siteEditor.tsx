@@ -1,26 +1,21 @@
-import { Site } from 'model';
 import { useMutation } from 'react-query';
-import { putHelper } from 'components/api-helpers';
 import React, { ReactElement, useContext, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Description, NetAddress, SiteId, SiteName } from 'components/siteEditor/siteFields';
 import { FlavorList } from 'components/siteEditor/flavorList';
 import { UserContext } from 'components/userContext';
+import useApi from '../../utils/useApi';
+import { Site } from '@eosc-perf-automation/eosc-perf-client';
 
 export function SiteEditor(props: { site: Site; refetch: () => void }): ReactElement {
     const auth = useContext(UserContext);
+    const api = useApi(auth.token);
 
-    const { mutate } = useMutation(
-        (data: Site) =>
-            putHelper<Site>('/sites/' + props.site.id, data, auth.token, {
-                site_id: props.site.id,
-            }),
-        {
-            onSuccess: () => {
-                props.refetch();
-            },
-        }
-    );
+    const { mutate } = useMutation((data: Site) => api.sites.updateSite(props.site.id, data), {
+        onSuccess: () => {
+            props.refetch();
+        },
+    });
 
     const [name, setName] = useState(props.site.name);
     const [description, setDescription] = useState<string>(
@@ -43,7 +38,7 @@ export function SiteEditor(props: { site: Site; refetch: () => void }): ReactEle
                     onClick={() => {
                         mutate({
                             name,
-                            description: description.length ? description : null,
+                            description: description.length ? description : undefined,
                             address,
                             id: props.site.id,
                             upload_datetime: props.site.upload_datetime,

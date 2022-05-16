@@ -1,11 +1,11 @@
 import React, { ReactElement, useContext, useState } from 'react';
 import { Alert, Button, Container } from 'react-bootstrap';
 import { useMutation } from 'react-query';
-import { postHelper } from 'components/api-helpers';
 import { UserContext } from 'components/userContext';
 import { JsonHighlight } from 'components/jsonHighlight';
 import Head from 'next/head';
 import { TermsOfServiceCheck } from '../components/termsOfServiceCheck';
+import useApi from '../utils/useApi';
 
 /**
  * Page handling first-time user registration.
@@ -18,11 +18,12 @@ import { TermsOfServiceCheck } from '../components/termsOfServiceCheck';
  */
 function Registration(): ReactElement {
     const auth = useContext(UserContext);
+    const api = useApi(auth.token);
 
     const [error, setError] = useState<unknown | undefined>(undefined);
     const [termsOfServiceAccepted, setTermsOfServiceAccepted] = useState(false);
 
-    const registration = useMutation(() => postHelper('/users:register', undefined, auth.token), {
+    const registration = useMutation(() => api.users.registerSelf(), {
         onSuccess: () => {
             // reset-redirect to refresh react-query from outside
             window.location.href = '/';

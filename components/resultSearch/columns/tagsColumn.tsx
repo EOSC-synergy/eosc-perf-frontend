@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
-import { Result } from 'model';
-import { Ordered } from 'components/ordered';
 import { truthyOrNoneTag } from 'components/utility';
+import { Result } from '@eosc-perf-automation/eosc-perf-client';
 
 /**
  * Column to display a list of tags associated to result
@@ -9,6 +8,6 @@ import { truthyOrNoneTag } from 'components/utility';
  * @returns {React.ReactElement}
  * @constructor
  */
-export function TagsColumn({ result }: { result: Ordered<Result> }): ReactElement {
+export function TagsColumn({ result }: { result: Result }): ReactElement {
     return <>{truthyOrNoneTag(result.tags.map((tag) => tag.name).join(', '))}</>;
 }

@@ -1,22 +1,17 @@
 import React, { ReactElement, useState } from 'react';
-import { Result } from 'model';
 import { useQuery } from 'react-query';
-import { getHelper } from 'components/api-helpers';
 import { LoadingOverlay } from 'components/loadingOverlay';
 import { Button } from 'react-bootstrap';
 import { JsonPreviewModal } from 'components/jsonPreviewModal';
 import { benchmarkLinkDisplay, truthyOrNoneTag } from 'components/utility';
+import useApi from '../../utils/useApi';
 
 export function ResultInfo(props: { id: string }): ReactElement {
-    const result = useQuery(
-        ['result', props.id],
-        () => {
-            return getHelper<Result>('/results/' + props.id);
-        },
-        {
-            refetchOnWindowFocus: false, // do not spam queries
-        }
-    );
+    const api = useApi();
+
+    const result = useQuery(['result', props.id], () => api.results.getResult(props.id), {
+        refetchOnWindowFocus: false, // do not spam queries
+    });
 
     const [showPreview, setShowPreview] = useState(false);
 

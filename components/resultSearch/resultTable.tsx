@@ -1,6 +1,5 @@
 import React, { ReactElement, useState } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
-import { Result } from 'model';
 import {
     ActionColumn,
     BenchmarkColumn,
@@ -8,15 +7,14 @@ import {
     CustomColumn,
     SiteColumn,
     SiteFlavorColumn,
-    TagsColumn
+    TagsColumn,
 } from 'components/resultSearch/columns';
 import { ResultCallbacks } from 'components/resultSearch/resultCallbacks';
 import { ChevronDown, ChevronUp, Pencil } from 'react-bootstrap-icons';
 import { ColumnSelectModal } from 'components/resultSearch/columnSelectModal';
-import actionable from 'styles/actionable.module.css';
-import { Ordered } from 'components/ordered';
 import { Sorting, SortMode } from 'components/resultSearch/sorting';
 import { Suggestion } from './jsonSchema';
+import { Result } from '@eosc-perf-automation/eosc-perf-client';
 
 function SortingTableHeader(props: {
     label: string;
@@ -133,8 +131,12 @@ export function ResultTable(props: {
                             />
                         ))}
                         <th>
-                            {/* TODO: move this to hotbar above table? */ }
-                            <Button size="sm" variant="secondary" onClick={() => setShowColumnSelection(true)}>
+                            {/* TODO: move this to hotbar above table? */}
+                            <Button
+                                size="sm"
+                                variant="secondary"
+                                onClick={() => setShowColumnSelection(true)}
+                            >
                                 <Pencil /> Columns
                             </Button>
                         </th>
@@ -143,42 +145,38 @@ export function ResultTable(props: {
 
                 <tbody>
                     {props.results.map((result, index) => {
-                        const r: Ordered<Result> = {
-                            ...result,
-                            orderIndex: index + props.pageOffset,
-                        };
                         return (
-                            <tr key={r.id}>
+                            <tr key={result.id}>
                                 <td>
-                                    <CheckboxColumn result={r} callbacks={props.ops} />
+                                    <CheckboxColumn result={result} callbacks={props.ops} />
                                 </td>
                                 {benchmarkColumnEnabled && (
                                     <td>
-                                        <BenchmarkColumn result={r} />
+                                        <BenchmarkColumn result={result} />
                                     </td>
                                 )}
                                 {siteColumnEnabled && (
                                     <td>
-                                        <SiteColumn result={r} />
+                                        <SiteColumn result={result} />
                                     </td>
                                 )}
                                 {siteFlavorColumnEnabled && (
                                     <td>
-                                        <SiteFlavorColumn result={r} />
+                                        <SiteFlavorColumn result={result} />
                                     </td>
                                 )}
                                 {tagsColumnEnabled && (
                                     <td>
-                                        <TagsColumn result={r} />
+                                        <TagsColumn result={result} />
                                     </td>
                                 )}
                                 {props.customColumns.map((column) => (
                                     <td key={column}>
-                                        <CustomColumn result={r} jsonKey={column} />
+                                        <CustomColumn result={result} jsonKey={column} />
                                     </td>
                                 ))}
                                 <td>
-                                    <ActionColumn result={r} callbacks={props.ops} />
+                                    <ActionColumn result={result} callbacks={props.ops} />
                                 </td>
                             </tr>
                         );
