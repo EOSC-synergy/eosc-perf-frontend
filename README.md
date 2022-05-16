@@ -1,6 +1,6 @@
 # EOSC-Performance Frontend
 
-[![Build Status](https://jenkins.eosc-synergy.eu/job/eosc-synergy-org/job/eosc-perf-frontend/job/master/badge/icon)](https://jenkins.eosc-synergy.eu/job/eosc-synergy-org/job/eosc-perf-frontend/job/master/)
+[![Build Status](https://jenkins.eosc-synergy.eu/job/eosc-synergy-org/job/eosc-perf-frontend/job/main/badge/icon)](https://jenkins.eosc-synergy.eu/job/eosc-synergy-org/job/eosc-perf-frontend/job/main/)
 
 ## Intro
 
