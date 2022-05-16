@@ -65,7 +65,7 @@ export function NavHeader(): ReactElement {
                             id="base-login-dropdown"
                             title={
                                 <>
-                                    {auth.email ?? 'Not logged in'}{' '}
+                                    {auth.loading ? 'Loading...' : auth.email ?? 'Not logged in'}{' '}
                                     {auth.admin && (
                                         <div title="Administrator" style={{ display: 'inline' }}>
                                             <Wrench style={{ color: 'red' }} />
@@ -75,7 +75,7 @@ export function NavHeader(): ReactElement {
                             }
                             className="justify-content-end"
                         >
-                            {auth.loggedIn ? (
+                            {!auth.loading && auth.loggedIn && (
                                 <>
                                     <NavDropdown.Item onClick={() => authentication.removeUser()}>
                                         Logout
@@ -86,7 +86,18 @@ export function NavHeader(): ReactElement {
                                         </NavDropdown.Item>
                                     )}
                                 </>
-                            ) : (
+                            )}
+                            {auth.loading && (
+                                <NavDropdown.Item
+                                    onClick={() => authentication.signinRedirect()}
+                                    className="text-muted"
+                                    disabled
+                                >
+                                    Loading...
+                                </NavDropdown.Item>
+                            )}
+
+                            {!auth.loading && !auth.loggedIn && (
                                 <NavDropdown.Item onClick={() => authentication.signinRedirect()}>
                                     Login
                                 </NavDropdown.Item>
