@@ -2,20 +2,13 @@ import React from 'react';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
-import { Tags } from 'model';
-
-const API_ROUTE = '/api/v1';
-
-jest.mock('../configuration', () => ({
-    API_HOST: '',
-    API_ROUTE: API_ROUTE,
-    API_BASE_PATH: API_ROUTE,
-}));
 
 import TagSelector from 'components/tagSelector';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { tag, tags } from '../testData';
+import { Tags } from '@eosc-perf-automation/eosc-perf-client';
+import getApiRoute from '../../utils/getApiRoute';
 
 const server = setupServer();
 
@@ -27,7 +20,7 @@ const queryClient = new QueryClient();
 
 test('select', async () => {
     server.use(
-        rest.get(API_ROUTE + '/tags:search', (req, res, ctx) => {
+        rest.get(getApiRoute() + '/tags:search', (req, res, ctx) => {
             return res(ctx.json<Tags>(tags));
         })
     );
@@ -46,7 +39,7 @@ test('select', async () => {
 
 test('unselect', async () => {
     server.use(
-        rest.get(API_ROUTE + '/tags:search', (req, res, ctx) => {
+        rest.get(getApiRoute() + '/tags:search', (req, res, ctx) => {
             return res(ctx.json<Tags>(tags));
         })
     );
