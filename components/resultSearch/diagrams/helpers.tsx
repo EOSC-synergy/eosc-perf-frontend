@@ -3,7 +3,7 @@ import { Suggestion } from '../jsonSchema';
 import { Form } from 'react-bootstrap';
 import { InputWithSuggestions } from '../../inputWithSuggestions';
 import React from 'react';
-import { Result, Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Result, Site } from '@eosc-perf/eosc-perf-client';
 
 export type DataPoint = { x: number; y: number; result: Result };
 export type DataPointCollection = Map<string, { site: Site; data: DataPoint[] }>;

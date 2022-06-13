@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { truthyOrNoneTag } from 'components/utility';
-import { Result } from '@eosc-perf-automation/eosc-perf-client';
+import { Result } from '@eosc-perf/eosc-perf-client';
 
 /**
  * Column to display a list of tags associated to result

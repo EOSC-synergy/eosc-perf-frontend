@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { fetchSubkey, Json } from 'components/resultSearch/jsonKeyHelpers';
 import { truthyOrNoneTag } from 'components/utility';
-import { Result } from '@eosc-perf-automation/eosc-perf-client';
+import { Result } from '@eosc-perf/eosc-perf-client';
 
 /**
  * Column to display specified JSON-value

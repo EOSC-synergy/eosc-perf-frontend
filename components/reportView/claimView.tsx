@@ -3,7 +3,7 @@ import { ListGroup } from 'react-bootstrap';
 import actionable from '../../styles/actionable.module.css';
 import { ClaimInfo } from './claimInfo';
 import { ClaimInteraction } from './claimInteraction';
-import { Claim } from '@eosc-perf-automation/eosc-perf-client';
+import { Claim } from '@eosc-perf/eosc-perf-client';
 
 export function ClaimView(props: { claim: Claim; refetch: () => void }) {
     const [opened, setOpened] = useState(false);

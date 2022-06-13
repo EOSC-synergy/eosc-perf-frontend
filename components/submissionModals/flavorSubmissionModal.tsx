@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { Modal, Toast } from 'react-bootstrap';
 import { FlavorSubmitForm } from 'components/forms/flavorSubmitForm';
-import { Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Site } from '@eosc-perf/eosc-perf-client';
 
 export function FlavorSubmissionModal(props: {
     show: boolean;

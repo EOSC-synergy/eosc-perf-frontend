@@ -23,7 +23,7 @@ import {
     XAxis,
     YAxis,
 } from './helpers';
-import { Benchmark, Result, Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Benchmark, Result, Site } from '@eosc-perf/eosc-perf-client';
 
 ChartJS.register(
     CategoryScale,

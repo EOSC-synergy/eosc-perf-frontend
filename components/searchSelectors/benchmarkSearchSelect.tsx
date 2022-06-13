@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { BenchmarkSubmissionModal } from 'components/submissionModals/benchmarkSubmissionModal';
 import { SearchingSelector } from './index';
 import { useQuery } from 'react-query';
-import { Benchmark } from '@eosc-perf-automation/eosc-perf-client';
+import { Benchmark } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
 
 type BenchmarkSearchSelectProps = {

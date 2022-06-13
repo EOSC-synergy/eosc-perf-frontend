@@ -2,7 +2,7 @@ import React, { ReactElement, useContext } from 'react';
 import { useMutation } from 'react-query';
 import { Button } from 'react-bootstrap';
 import { UserContext } from 'components/userContext';
-import { Claim } from '@eosc-perf-automation/eosc-perf-client';
+import { Claim } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
 
 export function ClaimInteraction(props: {

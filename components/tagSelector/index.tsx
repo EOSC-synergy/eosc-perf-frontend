@@ -5,7 +5,7 @@ import { PlaceholderTag } from './placeholderTag';
 import { UnselectedTag } from './unselectedTag';
 import { SelectedTag } from './selectedTag';
 import { NewTag } from './newTag';
-import { Tag } from '@eosc-perf-automation/eosc-perf-client';
+import { Tag } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
 
 function Index(props: { selected: Tag[]; setSelected: (tags: Tag[]) => void }): ReactElement {

@@ -6,7 +6,7 @@ import { UserContext } from 'components/userContext';
 import { truthyOrNoneTag } from 'components/utility';
 import { Badge } from 'react-bootstrap';
 import useApi from '../../utils/useApi';
-import { Claim } from '@eosc-perf-automation/eosc-perf-client';
+import { Claim } from '@eosc-perf/eosc-perf-client';
 
 type ClaimInfoProps =
     | {

@@ -5,7 +5,7 @@ import { Description, NetAddress, SiteId, SiteName } from 'components/siteEditor
 import { FlavorList } from 'components/siteEditor/flavorList';
 import { UserContext } from 'components/userContext';
 import useApi from '../../utils/useApi';
-import { Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Site } from '@eosc-perf/eosc-perf-client';
 
 export function SiteEditor(props: { site: Site; refetch: () => void }): ReactElement {
     const auth = useContext(UserContext);

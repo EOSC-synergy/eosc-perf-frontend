@@ -8,7 +8,7 @@ import { RegistrationCheck } from 'components/registrationCheck';
 import { LoadingWrapper } from '../loadingOverlay';
 import { LoginCheck } from '../loginCheck';
 import { SubmitHandler, useController, useForm } from 'react-hook-form';
-import { CreateFlavor, Site } from '@eosc-perf-automation/eosc-perf-client';
+import { CreateFlavor, Site } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
 
 type FormContents = {

@@ -3,7 +3,7 @@ import { FlavorSubmissionModal } from 'components/submissionModals/flavorSubmiss
 import { SearchingSelector } from './index';
 import { useQuery } from 'react-query';
 import { truthyOrNoneTag } from '../utility';
-import { Flavor, Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Flavor, Site } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
 
 type FlavorSearchSelectProps = {

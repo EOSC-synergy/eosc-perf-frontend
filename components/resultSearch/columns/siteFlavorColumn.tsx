@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Result } from '@eosc-perf-automation/eosc-perf-client';
+import { Result } from '@eosc-perf/eosc-perf-client';
 
 /**
  * Column to display execution site machine flavor

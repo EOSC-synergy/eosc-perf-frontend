@@ -3,7 +3,7 @@ import { Button, Dropdown, Modal, SplitButton } from 'react-bootstrap';
 import { ResultCallbacks } from 'components/resultSearch/resultCallbacks';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
-import { Result } from '@eosc-perf-automation/eosc-perf-client';
+import { Result } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../../utils/useApi';
 
 function ResultDeleter({ result, onDelete }: { result: Result; onDelete: () => void }) {

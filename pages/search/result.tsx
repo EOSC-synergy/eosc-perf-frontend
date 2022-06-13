@@ -22,7 +22,7 @@ import { Sorting, SortMode } from 'components/resultSearch/sorting';
 import { useRouter } from 'next/router';
 import { Funnel, Save2 } from 'react-bootstrap-icons';
 import { fetchSubkey, Json } from '../../components/resultSearch/jsonKeyHelpers';
-import { Benchmark, Flavor, Result, Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Benchmark, Flavor, Result, Site } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
 
 function saveFile(contents: string, filename: string = 'export.csv') {

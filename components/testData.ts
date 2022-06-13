@@ -1,4 +1,4 @@
-import { Benchmark, Tag, Tags } from '@eosc-perf-automation/eosc-perf-client';
+import { Benchmark, Tag, Tags } from '@eosc-perf/eosc-perf-client';
 
 export const tag: Tag = { id: 'test', name: 'testTag' };
 export const tags: Tags = {

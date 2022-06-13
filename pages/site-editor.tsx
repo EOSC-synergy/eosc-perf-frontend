@@ -9,7 +9,7 @@ import { UserContext } from '../components/userContext';
 import { useRouter } from 'next/router';
 import { SiteSelect } from '../components/siteEditor/siteSelect';
 import useApi from '../utils/useApi';
-import { Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Site } from '@eosc-perf/eosc-perf-client';
 
 /**
  * Admin-only page to edit sites in the database and add flavors.

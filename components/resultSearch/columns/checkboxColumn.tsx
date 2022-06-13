@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Form } from 'react-bootstrap';
 import { ResultCallbacks } from 'components/resultSearch/resultCallbacks';
-import { Result } from '@eosc-perf-automation/eosc-perf-client';
+import { Result } from '@eosc-perf/eosc-perf-client';
 
 /**
  * Column to select result

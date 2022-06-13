@@ -4,7 +4,7 @@ import { Button, Form, InputGroup, ListGroup } from 'react-bootstrap';
 import { Check, PencilSquare } from 'react-bootstrap-icons';
 import { UserContext } from 'components/userContext';
 import useApi from '../../utils/useApi';
-import { Flavor } from '@eosc-perf-automation/eosc-perf-client';
+import { Flavor } from '@eosc-perf/eosc-perf-client';
 
 export function FlavorEditor(props: { flavor: Flavor; refetch: () => void }): ReactElement {
     const auth = useContext(UserContext);

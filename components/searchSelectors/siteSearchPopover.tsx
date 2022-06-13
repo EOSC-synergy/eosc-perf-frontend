@@ -3,7 +3,7 @@ import { SiteSubmissionModal } from 'components/submissionModals/siteSubmissionM
 import { SearchingSelector } from './index';
 import { useQuery } from 'react-query';
 import useApi from '../../utils/useApi';
-import { Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Site } from '@eosc-perf/eosc-perf-client';
 
 type SiteSearchPopoverProps = {
     site?: Site;

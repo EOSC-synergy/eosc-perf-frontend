@@ -5,7 +5,7 @@ import { SiteInfo } from './siteInfo';
 import { FlavorInfo } from './flavorInfo';
 import { BenchmarkInfo } from './benchmarkInfo';
 import { SubmitInteraction } from './submitInteraction';
-import { Submit } from '@eosc-perf-automation/eosc-perf-client';
+import { Submit } from '@eosc-perf/eosc-perf-client';
 
 export function SubmitView(props: { submit: Submit; refetch: () => void }) {
     const [opened, setOpened] = useState(false);

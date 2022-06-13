@@ -2,9 +2,9 @@ import React, { ReactElement, useContext } from 'react';
 import { useMutation } from 'react-query';
 import { Button } from 'react-bootstrap';
 import { UserContext } from 'components/userContext';
-import { Submit } from '@eosc-perf-automation/eosc-perf-client';
+import { Submit } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
-import { SubmitResourceTypeEnum } from '@eosc-perf-automation/eosc-perf-client';
+import { SubmitResourceTypeEnum } from '@eosc-perf/eosc-perf-client';
 import ensureUnreachable from '../../utils/ensureUnreachable';
 
 export function SubmitInteraction(props: {

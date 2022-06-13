@@ -1,5 +1,5 @@
 import React from 'react';
-import { Benchmark } from '@eosc-perf-automation/eosc-perf-client';
+import { Benchmark } from '@eosc-perf/eosc-perf-client';
 
 /**
  * If a specified string is falsy, replace it with a muted gray "None" text or similar

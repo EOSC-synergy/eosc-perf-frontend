@@ -6,7 +6,7 @@ import React, { ReactElement, useState } from 'react';
 import { NewFlavor } from 'components/siteEditor/newFlavor';
 import { Paginator } from '../pagination';
 import useApi from '../../utils/useApi';
-import { Flavor, Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Flavor, Site } from '@eosc-perf/eosc-perf-client';
 
 export function FlavorList(props: { site: Site }): ReactElement {
     const api = useApi();

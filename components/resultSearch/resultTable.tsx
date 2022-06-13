@@ -14,7 +14,7 @@ import { ChevronDown, ChevronUp, Pencil } from 'react-bootstrap-icons';
 import { ColumnSelectModal } from 'components/resultSearch/columnSelectModal';
 import { Sorting, SortMode } from 'components/resultSearch/sorting';
 import { Suggestion } from './jsonSchema';
-import { Result } from '@eosc-perf-automation/eosc-perf-client';
+import { Result } from '@eosc-perf/eosc-perf-client';
 
 function SortingTableHeader(props: {
     label: string;

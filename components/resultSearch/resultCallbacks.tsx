@@ -1,4 +1,4 @@
-import { Result } from '@eosc-perf-automation/eosc-perf-client';
+import { Result } from '@eosc-perf/eosc-perf-client';
 
 export interface ResultCallbacks {
     select: (result: Result) => void;

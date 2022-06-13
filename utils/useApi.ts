@@ -7,7 +7,7 @@ import {
     SitesApi,
     TagsApi,
     UsersApi,
-} from '@eosc-perf-automation/eosc-perf-client';
+} from '@eosc-perf/eosc-perf-client';
 import getApiRoute from './getApiRoute';
 import { useMemo } from 'react';
 import qs from 'qs';

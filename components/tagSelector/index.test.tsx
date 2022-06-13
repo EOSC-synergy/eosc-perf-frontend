@@ -7,7 +7,7 @@ import TagSelector from 'components/tagSelector';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { tag, tags } from '../testData';
-import { Tags } from '@eosc-perf-automation/eosc-perf-client';
+import { Tags } from '@eosc-perf/eosc-perf-client';
 import getApiRoute from '../../utils/getApiRoute';
 
 const server = setupServer();

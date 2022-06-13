@@ -21,7 +21,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 import { transform } from 'echarts-stat';
 import { getSubkeyName } from '../jsonKeyHelpers';
 import { Save } from 'react-bootstrap-icons';
-import { Benchmark, Result, Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Benchmark, Result, Site } from '@eosc-perf/eosc-perf-client';
 
 echarts.use([
     TooltipComponent,

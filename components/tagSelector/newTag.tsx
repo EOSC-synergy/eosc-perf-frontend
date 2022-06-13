@@ -3,7 +3,7 @@ import { UserContext } from '../userContext';
 import { useMutation } from 'react-query';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import useApi from '../../utils/useApi';
-import { CreateTag } from '@eosc-perf-automation/eosc-perf-client';
+import { CreateTag } from '@eosc-perf/eosc-perf-client';
 
 /**
  * Form component to submit new tags

@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import { UserContext } from 'components/userContext';
 import { JsonHighlight } from 'components/jsonHighlight';
 import useApi from '../utils/useApi';
-import { CreateClaim, Result } from '@eosc-perf-automation/eosc-perf-client';
+import { CreateClaim, Result } from '@eosc-perf/eosc-perf-client';
 
 export function ResultReportModal(props: {
     result: Result;

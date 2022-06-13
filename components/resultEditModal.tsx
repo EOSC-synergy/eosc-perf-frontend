@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import { UserContext } from 'components/userContext';
 import { JsonHighlight } from 'components/jsonHighlight';
 import TagSelector from './tagSelector';
-import { Result, Tag, TagsIds } from '@eosc-perf-automation/eosc-perf-client';
+import { Result, Tag, TagsIds } from '@eosc-perf/eosc-perf-client';
 import useApi from '../utils/useApi';
 
 export function ResultEditModal({

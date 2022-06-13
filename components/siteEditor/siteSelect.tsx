@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { ListGroup } from 'react-bootstrap';
-import { Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Site } from '@eosc-perf/eosc-perf-client';
 
 export function SiteSelect(props: {
     site: Site;

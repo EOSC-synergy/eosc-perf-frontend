@@ -1,6 +1,6 @@
 import { Form } from 'react-bootstrap';
 import React, { ReactElement, useState } from 'react';
-import { Site } from '@eosc-perf-automation/eosc-perf-client';
+import { Site } from '@eosc-perf/eosc-perf-client';
 
 export function SiteId(props: { site: Site }): ReactElement {
     return (

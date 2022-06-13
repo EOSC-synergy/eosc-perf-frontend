@@ -11,7 +11,7 @@ import { LoadingWrapper } from '../loadingOverlay';
 import { LoginCheck } from '../loginCheck';
 import { SubmitHandler, useForm, useController } from 'react-hook-form';
 import useApi from '../../utils/useApi';
-import { CreateBenchmark } from '@eosc-perf-automation/eosc-perf-client';
+import { CreateBenchmark } from '@eosc-perf/eosc-perf-client';
 
 type FormContents = {
     dockerName: string;

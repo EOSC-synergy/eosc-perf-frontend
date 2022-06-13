@@ -16,7 +16,7 @@ import TagSelector from 'components/tagSelector';
 import { LoginCheck } from '../loginCheck';
 import { LoadingWrapper } from '../loadingOverlay';
 import useApi from '../../utils/useApi';
-import { Benchmark, Flavor, Site, Tag } from '@eosc-perf-automation/eosc-perf-client';
+import { Benchmark, Flavor, Site, Tag } from '@eosc-perf/eosc-perf-client';
 
 export function ResultSubmitForm(props: {
     onSuccess: () => void;

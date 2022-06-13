@@ -13,15 +13,9 @@ server clusters.
 
 #### To run the frontend separately:
 
-1. Set up a .npmrc file as follows:
-```
-registry=https://registry.npmjs.org/
-@eosc-perf-automation:registry=https://npm.pkg.github.com/
-//npm.pkg.github.com/:_authToken=<create a token at https://github.com/settings/tokens with read:packages>
-```
-2. (optional) Set up a `.env.local` file, overriding any values from .env
-3. Install dependencies: `npm install`
-4. 
+1. (optional) Set up a `.env.local` file, overriding any values from .env
+2. Install dependencies: `npm install`
+3. 
 - If deploying as production: Add `NEXT_PUBLIC_APP_ENV=production` to .env.local, `npm run build`, `npm run start`
 - If developing: `npm run dev`
 

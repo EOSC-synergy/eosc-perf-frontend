@@ -2,7 +2,7 @@ import React, { ChangeEvent, ReactElement, useState } from 'react';
 import { Badge, Card, Col, Form, Row } from 'react-bootstrap';
 import charts from 'components/resultSearch/diagrams';
 import { Suggestion } from './jsonSchema';
-import { Benchmark, Result } from '@eosc-perf-automation/eosc-perf-client';
+import { Benchmark, Result } from '@eosc-perf/eosc-perf-client';
 
 export function DiagramCard(props: {
     results: Result[];
