@@ -8,7 +8,6 @@ RUN npm install --development
 COPY [".env", ".env.loca[l]", "./"]
 COPY public public
 COPY styles styles
-COPY model model
 COPY pages pages
 COPY components components
 
