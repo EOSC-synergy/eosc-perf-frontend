@@ -10,6 +10,7 @@ COPY public public
 COPY styles styles
 COPY pages pages
 COPY components components
+COPY utils utils
 
 FROM base as production
 ENV NODE_ENV=production
