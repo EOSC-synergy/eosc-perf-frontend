@@ -14,7 +14,7 @@ import Head from 'next/head';
 const oidcConfig: AuthProviderProps = {
     authority:
         process.env.NODE_ENV === 'development'
-            ? 'https://aai-dev.egi.eu/oidc/'
+            ? 'https://aai-dev.egi.eu/auth/realms/egi/'
             : 'https://aai.egi.eu/oidc/',
     client_id: process.env.NEXT_PUBLIC_OIDC_CLIENT_ID ?? 'eosc-performance',
     redirect_uri:
