@@ -81,7 +81,7 @@ export function NavHeader(): ReactElement {
                                         Logout
                                     </NavDropdown.Item>
                                     {!auth.registered && (
-                                        <NavDropdown.Item href="/register">
+                                        <NavDropdown.Item href="/registration">
                                             Register
                                         </NavDropdown.Item>
                                     )}
