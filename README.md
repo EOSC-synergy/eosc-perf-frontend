@@ -14,12 +14,12 @@ server clusters.
 #### To run the frontend separately:
 
 1. (optional) Set up a `.env.local` file, overriding any values from .env
-   Available fields: 
+   Available fields to overwrite: 
    ```
-   NEXT_PUBLIC_OAUTH_AUTHORITY=https://aai.egi.eu/oidc/
-   NEXT_PUBLIC_OIDC_CLIENT_ID=eosc-performance
-   NEXT_PUBLIC_API_ROUTE=development
-   NEXT_PUBLIC_OIDC_REDIRECT_HOST=https://aai-dev.egi.eu/auth/realms/egi/
+   NEXT_PUBLIC_OAUTH_AUTHORITY=<any url>
+   NEXT_PUBLIC_OIDC_CLIENT_ID=<any oauth client id registered on the authority>
+   NEXT_PUBLIC_API_ROUTE=development | production | <any url>
+   NEXT_PUBLIC_OIDC_REDIRECT_HOST=<any url>
    ```
 3. Install dependencies: `npm install`
 4. 
