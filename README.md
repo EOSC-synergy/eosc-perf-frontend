@@ -21,10 +21,9 @@ server clusters.
    NEXT_PUBLIC_API_ROUTE=development | production | <any url>
    NEXT_PUBLIC_OIDC_REDIRECT_HOST=<any url>
    ```
-3. Install dependencies: `npm install`
-4. 
-- If deploying as production: `npm run build`, `npm run start`
-- If developing: `npm run dev`
+2. Install dependencies: `npm install`
+3. - If deploying as production: `npm run build`, `npm run start`
+   - If developing: `npm run dev`
 
 #### To run the whole EOSC Performance Platform
 
