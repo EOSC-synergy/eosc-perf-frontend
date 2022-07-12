@@ -14,9 +14,16 @@ server clusters.
 #### To run the frontend separately:
 
 1. (optional) Set up a `.env.local` file, overriding any values from .env
-2. Install dependencies: `npm install`
-3. 
-- If deploying as production: Add `NEXT_PUBLIC_APP_ENV=production` to .env.local, `npm run build`, `npm run start`
+   Available fields: 
+   ```
+   NEXT_PUBLIC_OAUTH_AUTHORITY=https://aai.egi.eu/oidc/
+   NEXT_PUBLIC_OIDC_CLIENT_ID=eosc-performance
+   NEXT_PUBLIC_API_ROUTE=development
+   NEXT_PUBLIC_OIDC_REDIRECT_HOST=https://aai-dev.egi.eu/auth/realms/egi/
+   ```
+3. Install dependencies: `npm install`
+4. 
+- If deploying as production: `npm run build`, `npm run start`
 - If developing: `npm run dev`
 
 #### To run the whole EOSC Performance Platform
