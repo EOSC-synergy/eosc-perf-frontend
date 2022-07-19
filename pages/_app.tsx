@@ -35,6 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Head>
                 <title>EOSC Performance</title>
                 <link rel="shortcut icon" href="/images/eosc-perf-logo.5.png" />
+                <meta name="theme-color" content="#f8f9fa" />
             </Head>
             <SSRProvider>
                 <QueryClientWrapper>
