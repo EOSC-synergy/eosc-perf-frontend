@@ -20,7 +20,7 @@ import { BenchmarkSearchSelect } from 'components/searchSelectors/benchmarkSearc
 import { FlavorSearchSelect } from 'components/searchSelectors/flavorSearchSelect';
 import { Sorting, SortMode } from 'components/resultSearch/sorting';
 import { useRouter } from 'next/router';
-import { Funnel, Save2 } from 'react-bootstrap-icons';
+import { Funnel, Save2, X } from 'react-bootstrap-icons';
 import { fetchSubkey, Json } from '../../components/resultSearch/jsonKeyHelpers';
 import { Benchmark, Flavor, Result, Site } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
@@ -357,6 +357,12 @@ function ResultSearch(): ReactElement {
                                     <Col />
                                     <Col md="auto">
                                         <Stack direction="horizontal" gap={2}>
+                                            <Button
+                                                variant="secondary"
+                                                onClick={() => setSelectedResults([])}
+                                            >
+                                                <X /> Clear selection
+                                            </Button>
                                             <Button
                                                 variant="secondary"
                                                 disabled={selectedResults.length === 0}
