@@ -26,7 +26,11 @@ export function Footer() {
                             Email Support
                         </a>
                     </li>
-                    <li className="list-inline-item mx-5 text-muted">{generatedGitInfo.gitTag}</li>
+                </ul>
+                <ul className="list-unstyled list-inline my-0">
+                    <li className="list-inline-item mx-5 text-muted">
+                        <small>{generatedGitInfo.gitTag}</small>
+                    </li>
                 </ul>
             </div>
         </footer>
