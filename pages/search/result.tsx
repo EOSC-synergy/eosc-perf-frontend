@@ -360,6 +360,7 @@ function ResultSearch(): ReactElement {
                                             <Button
                                                 variant="secondary"
                                                 onClick={() => setSelectedResults([])}
+                                                disabled={selectedResults.length == 0}
                                             >
                                                 <X /> Clear selection
                                             </Button>
