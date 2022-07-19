@@ -42,6 +42,13 @@ export function NavHeader(): ReactElement {
                             <Link href="/code-guidelines" passHref>
                                 <NavDropdown.Item>Code guidelines</NavDropdown.Item>
                             </Link>
+                            <NavDropdown.Item href="https://perf.readthedocs.io/">
+                                Service Documentation
+                            </NavDropdown.Item>
+                            <NavDropdown.Item href="https://perf-api.readthedocs.io/">
+                                API Documentation
+                            </NavDropdown.Item>
+                            <NavDropdown.Item href="/api/v1/">API Reference</NavDropdown.Item>
                         </NavDropdown>
                         <Link
                             href="https://appsgrycap.i3m.upv.es:31443/im-dashboard/login"
