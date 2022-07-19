@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import generatedGitInfo from 'utils/generatedGitInfo.json';
 
 /**
  * Static footer component rendered at the bottom of every page
@@ -25,6 +26,7 @@ export function Footer() {
                             Email Support
                         </a>
                     </li>
+                    <li className="list-inline-item mx-5 text-muted">{generatedGitInfo.gitTag}</li>
                 </ul>
             </div>
         </footer>
