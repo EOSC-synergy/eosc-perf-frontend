@@ -45,11 +45,13 @@ function MyApp({ Component, pageProps }: AppProps) {
                         }}
                     >
                         <UserContextWrapper>
-                            <NavHeader />
-                            <div className="my-2">
-                                <Component {...pageProps} />
+                            <div className="d-flex flex-column min-vh-100">
+                                <NavHeader />
+                                <div className="my-2 flex-grow-1">
+                                    <Component {...pageProps} />
+                                </div>
+                                <Footer />
                             </div>
-                            <Footer />
                         </UserContextWrapper>
                     </AuthProvider>
                 </QueryClientWrapper>
