@@ -11,6 +11,9 @@ COPY styles styles
 COPY pages pages
 COPY components components
 COPY utils utils
+# needed for footer version
+# TODO: better workaround?
+COPY .git/ ./.git/
 
 FROM base as production
 ENV NODE_ENV=production
