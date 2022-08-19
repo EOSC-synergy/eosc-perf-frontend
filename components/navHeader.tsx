@@ -72,7 +72,11 @@ export function NavHeader(): ReactElement {
                             id="base-login-dropdown"
                             title={
                                 <>
-                                    {auth.loading ? 'Loading...' : auth.email ?? 'Not logged in'}{' '}
+                                    {auth.loading
+                                        ? 'Loading...'
+                                        : auth.registered
+                                        ? auth.email
+                                        : 'Not registered' ?? 'Not logged in'}{' '}
                                     {auth.admin && (
                                         <div title="Administrator" style={{ display: 'inline' }}>
                                             <Wrench style={{ color: 'red' }} />
