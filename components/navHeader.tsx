@@ -21,9 +21,9 @@ export function NavHeader(): ReactElement {
                 <Navbar.Brand href="/" className="ms-4">
                     <Image src={logo} height={36} width={66} alt="EOSC-Performance" />
                 </Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
+                <Navbar.Toggle aria-controls="basic-navbar-nav" className="me-3" />
+                <Navbar.Collapse id="basic-navbar-nav" className="mx-3">
+                    <Nav className="me-auto ">
                         <Link href="/search/result" passHref>
                             <Nav.Link>Search</Nav.Link>
                         </Link>
