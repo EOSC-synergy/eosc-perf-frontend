@@ -18,10 +18,13 @@ COPY .git/ ./.git/
 FROM base as production
 ENV NODE_ENV=production
 
-RUN npm run build
-CMD ["npm", "run", "start"]
+EXPOSE 3000
+#RUN npm run build
+# move build command into CMD to take into account run-time env vars for static pages
+CMD ["/bin/sh", "-c", "npm run build && npm run start"]
 
 FROM base as development
 ENV NODE_ENV=development
 
+EXPOSE 3000
 CMD [ "npm", "run", "dev" ]
