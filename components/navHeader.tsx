@@ -74,9 +74,9 @@ export function NavHeader(): ReactElement {
                                 <>
                                     {auth.loading
                                         ? 'Loading...'
-                                        : auth.registered
-                                        ? auth.email
-                                        : 'Not registered' ?? 'Not logged in'}{' '}
+                                        : auth.loggedIn && !auth.registered
+                                        ? 'Not registered'
+                                        : auth.email ?? 'Not logged in'}{' '}
                                     {auth.admin && (
                                         <div title="Administrator" style={{ display: 'inline' }}>
                                             <Wrench style={{ color: 'red' }} />
