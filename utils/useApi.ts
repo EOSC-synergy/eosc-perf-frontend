@@ -12,14 +12,17 @@ import getApiRoute from './getApiRoute';
 import { useMemo } from 'react';
 import qs from 'qs';
 
+export const BASE_CONFIGURATION_PARAMS = {
+    basePath: getApiRoute(),
+    baseOptions: {
+        paramsSerializer: (params: unknown) => qs.stringify(params, { arrayFormat: 'repeat' }),
+    },
+};
+
 export const useApi = (token?: string) => {
     return useMemo(() => {
         const configuration = new Configuration({
-            basePath: getApiRoute(),
-            baseOptions: {
-                paramsSerializer: (params: unknown) =>
-                    qs.stringify(params, { arrayFormat: 'repeat' }),
-            },
+            ...BASE_CONFIGURATION_PARAMS,
             accessToken: token,
         });
         return {

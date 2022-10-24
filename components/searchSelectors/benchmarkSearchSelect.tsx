@@ -1,14 +1,11 @@
 import React, { ReactElement, useState } from 'react';
 import { BenchmarkSubmissionModal } from 'components/submissionModals/benchmarkSubmissionModal';
 import { SearchingSelector } from './index';
-import { useQuery } from 'react-query';
 import { Benchmark } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
 
 type BenchmarkSearchSelectProps = {
     benchmark?: Benchmark;
-    initialBenchmarkId?: string;
-    initBenchmark?: (benchmark?: Benchmark) => void;
     setBenchmark: (benchmark?: Benchmark) => void;
 };
 
@@ -16,27 +13,6 @@ export const BenchmarkSearchSelect: React.FC<BenchmarkSearchSelectProps> = (
     props
 ): ReactElement => {
     const api = useApi();
-
-    useQuery(
-        ['initial-benchmark', props.initialBenchmarkId],
-        () => {
-            if (props.initialBenchmarkId) {
-                return api.benchmarks.getBenchmark(props.initialBenchmarkId);
-            }
-            throw 'tried to get benchmark without id';
-        },
-        {
-            enabled: props.initialBenchmarkId !== undefined,
-            refetchOnWindowFocus: false, // do not spam queries
-            onSuccess: (data) => {
-                if (props.initBenchmark) {
-                    props.initBenchmark(data.data);
-                } else {
-                    props.setBenchmark(data.data);
-                }
-            },
-        }
-    );
 
     function display(benchmark?: Benchmark) {
         return (

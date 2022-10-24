@@ -22,8 +22,20 @@ import { Sorting, SortMode } from 'components/resultSearch/sorting';
 import { useRouter } from 'next/router';
 import { Funnel, Save2, X } from 'react-bootstrap-icons';
 import { fetchSubkey, Json } from '../../components/resultSearch/jsonKeyHelpers';
-import { Benchmark, Flavor, Result, Site } from '@eosc-perf/eosc-perf-client';
-import useApi from '../../utils/useApi';
+import {
+    Benchmark,
+    BenchmarksApi,
+    Configuration,
+    Flavor,
+    FlavorsApi,
+    Result,
+    Results,
+    ResultsApi,
+    Site,
+    SitesApi,
+} from '@eosc-perf/eosc-perf-client';
+import useApi, { BASE_CONFIGURATION_PARAMS } from '../../utils/useApi';
+import { GetServerSideProps } from 'next';
 
 function saveFile(contents: string, filename: string = 'export.csv') {
     const blob = new Blob([contents], { type: 'text/plain;charset=utf-8' });
@@ -39,18 +51,28 @@ function saveFile(contents: string, filename: string = 'export.csv') {
     }, 0);
 }
 
+const DEFAULT_RESULTS_PER_PAGE = 20;
+
+type PageProps = {
+    benchmark?: Benchmark;
+    site?: Site;
+    flavor?: Flavor;
+    columns?: string[];
+    results: Results;
+};
+
 /**
  * Search page for ran benchmarks
  * @returns {React.ReactElement}
  * @constructor
  */
-function ResultSearch(): ReactElement {
+function ResultSearch(props: PageProps): ReactElement {
     const router = useRouter();
     const api = useApi();
 
-    const [benchmark, setBenchmark] = useState<Benchmark>();
-    const [site, setSite] = useState<Site>();
-    const [flavor, setFlavor] = useState<Flavor>();
+    const [benchmark, setBenchmark] = useState<Benchmark | undefined>(props.benchmark);
+    const [site, setSite] = useState<Site | undefined>(props.site);
+    const [flavor, setFlavor] = useState<Flavor | undefined>(props.flavor);
 
     const [filters, setFilters] = useState<Map<string, Filter>>(new Map());
 
@@ -96,7 +118,7 @@ function ResultSearch(): ReactElement {
 
     const suggestedFields = benchmark ? parseSuggestions(benchmark) : undefined;
 
-    const [resultsPerPage, setResultsPerPage_] = useState(20);
+    const [resultsPerPage, setResultsPerPage_] = useState(DEFAULT_RESULTS_PER_PAGE);
     const [page, setPage] = useState(1);
     // json preview modal
     const [showJSONPreview, setShowJSONPreview] = useState(false);
@@ -111,7 +133,7 @@ function ResultSearch(): ReactElement {
     const [editedResult, setEditedResult] = useState<Result>();
 
     //
-    const [customColumns, setCustomColumns] = useState<string[]>([]);
+    const [customColumns, setCustomColumns] = useState<string[]>(props.columns ?? []);
 
     function setResultsPerPage(results: number) {
         setResultsPerPage_(results);
@@ -210,6 +232,14 @@ function ResultSearch(): ReactElement {
                     : undefined
             ),
         {
+            select: (response) => response.data,
+            initialData: {
+                status: 200,
+                statusText: 'OK',
+                data: props.results,
+                headers: {},
+                config: {},
+            },
             refetchOnWindowFocus: false, // do not spam queries
         }
     );
@@ -217,11 +247,15 @@ function ResultSearch(): ReactElement {
     function refreshLocation(
         benchmark: Benchmark | undefined,
         site: Site | undefined,
-        flavor: Flavor | undefined
+        flavor: Flavor | undefined,
+        columns: string[] | undefined
     ) {
         let query = {};
         if (benchmark && benchmark.id) {
             query = { ...query, benchmarkId: benchmark.id };
+            if (columns) {
+                query = { ...query, columns: JSON.stringify(columns) };
+            }
         }
         if (site && site.id) {
             query = { ...query, siteId: site.id };
@@ -229,34 +263,33 @@ function ResultSearch(): ReactElement {
         if (flavor && flavor.id) {
             query = { ...query, flavorId: flavor.id };
         }
-        router.push(
-            {
-                pathname: '/search/result',
-                query,
-            },
-            undefined,
-            { shallow: true }
-        );
+        router.push({ pathname: '/search/result', query }, undefined, { shallow: true });
     }
 
     function updateBenchmark(benchmark?: Benchmark) {
         setBenchmark(benchmark);
         setSelectedResults([]);
+        setCustomColumns([]);
 
-        refreshLocation(benchmark, site, flavor);
+        refreshLocation(benchmark, site, flavor, customColumns);
+    }
+
+    function updateCustomColumns(columns: string[]) {
+        setCustomColumns(columns);
+        refreshLocation(benchmark, site, flavor, columns);
     }
 
     function updateSite(site?: Site) {
         setSite(site);
         setFlavor(undefined);
 
-        refreshLocation(benchmark, site, flavor);
+        refreshLocation(benchmark, site, flavor, customColumns);
     }
 
     function updateFlavor(flavor?: Flavor) {
         setFlavor(flavor);
 
-        refreshLocation(benchmark, site, flavor);
+        refreshLocation(benchmark, site, flavor, customColumns);
     }
 
     function exportResults() {
@@ -300,26 +333,13 @@ function ResultSearch(): ReactElement {
                                 <Stack gap={2}>
                                     <BenchmarkSearchSelect
                                         benchmark={benchmark}
-                                        initBenchmark={(b) => setBenchmark(b)}
                                         setBenchmark={updateBenchmark}
-                                        initialBenchmarkId={
-                                            router.query.benchmarkId as string | undefined
-                                        }
                                     />
-                                    <SiteSearchPopover
-                                        site={site}
-                                        initSite={(s) => setSite(s)}
-                                        setSite={updateSite}
-                                        initialSiteId={router.query.siteId as string | undefined}
-                                    />
+                                    <SiteSearchPopover site={site} setSite={updateSite} />
                                     <FlavorSearchSelect
                                         site={site}
                                         flavor={flavor}
-                                        initFlavor={(f) => setFlavor(f)}
                                         setFlavor={updateFlavor}
-                                        initialFlavorId={
-                                            router.query.flavorId as string | undefined
-                                        }
                                     />
                                 </Stack>
                             )}
@@ -385,26 +405,23 @@ function ResultSearch(): ReactElement {
                                 </Row>
                                 <Stack gap={2}>
                                     <div style={{ overflowX: 'auto' }}>
-                                        {results.isSuccess &&
-                                            results.data &&
-                                            results.data.data.total > 0 && (
-                                                <ResultTable
-                                                    results={results.data.data.items}
-                                                    pageOffset={
-                                                        results.data.data.per_page *
-                                                        results.data.data.page
-                                                    }
-                                                    ops={resultOps}
-                                                    suggestions={suggestedFields}
-                                                    sorting={sorting}
-                                                    setSorting={(sort) => {
-                                                        setSorting(sort);
-                                                    }}
-                                                    customColumns={customColumns}
-                                                    setCustomColumns={setCustomColumns}
-                                                />
-                                            )}
-                                        {results.isSuccess && results.data.data.total === 0 && (
+                                        {results.isSuccess && results && results.data.total > 0 && (
+                                            <ResultTable
+                                                results={results.data.items}
+                                                pageOffset={
+                                                    results.data.per_page * results.data.page
+                                                }
+                                                ops={resultOps}
+                                                suggestions={suggestedFields}
+                                                sorting={sorting}
+                                                setSorting={(sort) => {
+                                                    setSorting(sort);
+                                                }}
+                                                customColumns={customColumns}
+                                                setCustomColumns={updateCustomColumns}
+                                            />
+                                        )}
+                                        {results.isSuccess && results.data.total === 0 && (
                                             <div className="text-muted m-2">
                                                 No results found! :(
                                             </div>
@@ -423,7 +440,7 @@ function ResultSearch(): ReactElement {
                                             <Col />
                                             <Col sm={true} md="auto">
                                                 <Paginator
-                                                    pagination={results.data.data}
+                                                    pagination={results.data}
                                                     navigateTo={setPage}
                                                 />
                                             </Col>
@@ -466,5 +483,71 @@ function ResultSearch(): ReactElement {
         </>
     );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const configuration = new Configuration(BASE_CONFIGURATION_PARAMS);
+    let props: Partial<PageProps> = {};
+    if (context.query.benchmarkId && !Array.isArray(context.query.benchmarkId)) {
+        await new BenchmarksApi(configuration)
+            .getBenchmark(context.query.benchmarkId)
+            .then((response) => {
+                props.benchmark = response.data;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+        if (context.query.columns && !Array.isArray(context.query.columns)) {
+            props.columns = JSON.parse(context.query.columns);
+        }
+    }
+    if (context.query.siteId && !Array.isArray(context.query.siteId)) {
+        await new SitesApi(configuration)
+            .getSite(context.query.siteId)
+            .then((response) => {
+                props.site = response.data;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+        if (context.query.flavorId && !Array.isArray(context.query.flavorId)) {
+            await new FlavorsApi(configuration)
+                .getFlavor(context.query.flavorId)
+                .then((response) => {
+                    props.flavor = response.data;
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }
+
+    await new ResultsApi(configuration)
+        .listResults(
+            undefined,
+            undefined,
+            DEFAULT_RESULTS_PER_PAGE,
+            1,
+            undefined,
+            undefined,
+            Array.isArray(context.query.benchmarkId) ? undefined : context.query.benchmarkId,
+            Array.isArray(context.query.siteId) ? undefined : context.query.siteId,
+            Array.isArray(context.query.siteId) || Array.isArray(context.query.flavorId)
+                ? undefined
+                : context.query.siteId && context.query.flavorId,
+            undefined,
+            [],
+            undefined
+        )
+        .then((response) => {
+            props.results = response.data;
+        })
+        .catch((error) => console.error(error));
+
+    return {
+        props,
+    };
+};
 
 export default ResultSearch;

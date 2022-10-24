@@ -1,40 +1,16 @@
 import React, { ReactElement, useState } from 'react';
 import { SiteSubmissionModal } from 'components/submissionModals/siteSubmissionModal';
 import { SearchingSelector } from './index';
-import { useQuery } from 'react-query';
 import useApi from '../../utils/useApi';
 import { Site } from '@eosc-perf/eosc-perf-client';
 
 type SiteSearchPopoverProps = {
     site?: Site;
-    initialSiteId?: string;
-    initSite?: (site?: Site) => void;
     setSite: (site?: Site) => void;
 };
 
 export const SiteSearchPopover: React.FC<SiteSearchPopoverProps> = (props): ReactElement => {
     const api = useApi();
-
-    useQuery(
-        ['initial-site', props.initialSiteId],
-        () => {
-            if (props.initialSiteId) {
-                return api.sites.getSite(props.initialSiteId);
-            }
-            throw 'tried to get side with no id';
-        },
-        {
-            enabled: props.initialSiteId !== undefined,
-            refetchOnWindowFocus: false, // do not spam queries
-            onSuccess: (data) => {
-                if (props.initSite) {
-                    props.initSite(data.data);
-                } else {
-                    props.setSite(data.data);
-                }
-            },
-        }
-    );
 
     function display(site?: Site) {
         return (
