@@ -255,13 +255,15 @@ function ResultSearch(props: PageProps): ReactElement {
             ),
         {
             select: (response) => response.data,
-            initialData: {
-                status: 200,
-                statusText: 'OK',
-                data: props.results,
-                headers: {},
-                config: {},
-            },
+            initialData: props.results
+                ? {
+                      status: 200,
+                      statusText: 'OK',
+                      data: props.results,
+                      headers: {},
+                      config: {},
+                  }
+                : undefined,
             refetchOnWindowFocus: false, // do not spam queries
         }
     );
