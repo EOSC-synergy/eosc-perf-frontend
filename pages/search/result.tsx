@@ -51,6 +51,28 @@ function saveFile(contents: string, filename: string = 'export.csv') {
     }, 0);
 }
 
+const getStoredColumns = (benchmarkId: string) => {
+    const benchmarkColumnsJson = localStorage.getItem('benchmarkColumns');
+    if (benchmarkColumnsJson != null) {
+        const benchmarkColumns = JSON.parse(benchmarkColumnsJson);
+        if (benchmarkId in benchmarkColumns) {
+            return benchmarkColumns[benchmarkId];
+        }
+    }
+
+    return [];
+};
+
+const storeBenchmarkColumns = (benchmarkId: string, columns: string[]) => {
+    const benchmarkColumnsJson = localStorage.getItem('benchmarkColumns');
+    let benchmarkColumns: Record<string, string[]> = {};
+    if (benchmarkColumnsJson != null) {
+        benchmarkColumns = JSON.parse(benchmarkColumnsJson);
+    }
+    benchmarkColumns[benchmarkId] = columns;
+    localStorage.setItem('benchmarkColumns', JSON.stringify(benchmarkColumns));
+};
+
 const DEFAULT_RESULTS_PER_PAGE = 20;
 
 type PageProps = {
@@ -269,7 +291,11 @@ function ResultSearch(props: PageProps): ReactElement {
     function updateBenchmark(benchmark?: Benchmark) {
         setBenchmark(benchmark);
         setSelectedResults([]);
-        setCustomColumns([]);
+        if (benchmark) {
+            setCustomColumns(getStoredColumns(benchmark.id));
+        } else {
+            setCustomColumns([]);
+        }
 
         refreshLocation(benchmark, site, flavor, customColumns);
     }
@@ -277,6 +303,9 @@ function ResultSearch(props: PageProps): ReactElement {
     function updateCustomColumns(columns: string[]) {
         setCustomColumns(columns);
         refreshLocation(benchmark, site, flavor, columns);
+        if (benchmark) {
+            storeBenchmarkColumns(benchmark.id, columns);
+        }
     }
 
     function updateSite(site?: Site) {
