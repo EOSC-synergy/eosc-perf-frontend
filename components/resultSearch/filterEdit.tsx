@@ -24,6 +24,7 @@ export function FilterEdit(props: {
                         props.setFilter(props.filter.id, e, mode, value);
                     }}
                     placeholder="JSON Key"
+                    value={key}
                 >
                     <Form.Select
                         value={mode}

@@ -8,8 +8,9 @@ export function InputWithSuggestions(props: {
     suggestions?: Suggestion[];
     placeholder?: string;
     children?: ReactNode;
+    value?: string;
 }): ReactElement {
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState(props.value);
 
     function updateInput(input: string) {
         setInput(input);

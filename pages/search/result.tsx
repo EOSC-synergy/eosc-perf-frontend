@@ -73,6 +73,39 @@ const storeBenchmarkColumns = (benchmarkId: string, columns: string[]) => {
     localStorage.setItem('benchmarkColumns', JSON.stringify(benchmarkColumns));
 };
 
+const serializeFilters = (filters: Map<string, Filter>): string[] =>
+    [...filters.keys()].flatMap((k) => {
+        const filter = filters.get(k);
+        if (filter === undefined || filter.key.length === 0 || filter.value.length === 0) {
+            return [];
+        }
+        return [filter.key + ' ' + filter.mode + ' ' + filter.value];
+    });
+
+const deserializeFilters = (serialized: string | string[] | undefined): Map<string, Filter> => {
+    if (serialized == undefined) {
+        return new Map<string, Filter>();
+    }
+
+    if (!Array.isArray(serialized)) {
+        serialized = [serialized];
+    }
+
+    const filters = new Map<string, Filter>();
+    serialized.forEach((filter) => {
+        const parts = filter.split(' ');
+        const id = uuidv4();
+        filters.set(id, {
+            id,
+            key: parts[0],
+            mode: parts[1],
+            value: parts[2],
+        });
+    });
+
+    return filters;
+};
+
 const DEFAULT_RESULTS_PER_PAGE = 20;
 
 type PageProps = {
@@ -104,6 +137,12 @@ function ResultSearch(props: PageProps): ReactElement {
         setBrowserLoaded(true);
     }, []);
 
+    useEffect(() => {
+        if (router.isReady) {
+            setFilters(deserializeFilters(router.query.filters));
+        }
+    }, [router.isReady]);
+
     const [sorting, setSorting] = useState<Sorting>({
         mode: SortMode.Disabled,
         key: '',
@@ -118,7 +157,7 @@ function ResultSearch(props: PageProps): ReactElement {
             mode: '>',
             value: '',
         });
-        setFilters(newMap);
+        updateFilters(newMap);
     }
 
     function setFilter(id: string, key: string, mode: string, value: string) {
@@ -129,13 +168,13 @@ function ResultSearch(props: PageProps): ReactElement {
             mode,
             value,
         });
-        setFilters(newMap);
+        updateFilters(newMap);
     }
 
     function deleteFilter(id: string) {
         const newMap = new Map(filters); // shallow copy
         newMap.delete(id);
-        setFilters(newMap);
+        updateFilters(newMap);
     }
 
     const suggestedFields = benchmark ? parseSuggestions(benchmark) : undefined;
@@ -223,6 +262,7 @@ function ResultSearch(props: PageProps): ReactElement {
                 : sorting.mode === SortMode.Descending
                 ? '-' + sorting.key
                 : undefined,
+            serializeFilters(filters),
         ],
         () =>
             api.results.listResults(
@@ -236,17 +276,7 @@ function ResultSearch(props: PageProps): ReactElement {
                 site?.id,
                 site !== undefined ? flavor?.id : undefined,
                 undefined,
-                [...filters.keys()].flatMap((k) => {
-                    const filter = filters.get(k);
-                    if (
-                        filter === undefined ||
-                        filter.key.length === 0 ||
-                        filter.value.length === 0
-                    ) {
-                        return [];
-                    }
-                    return [filter.key + ' ' + filter.mode + ' ' + filter.value];
-                }),
+                serializeFilters(filters),
                 sorting.mode === SortMode.Ascending
                     ? '+' + sorting.key
                     : sorting.mode === SortMode.Descending
@@ -272,7 +302,8 @@ function ResultSearch(props: PageProps): ReactElement {
         benchmark: Benchmark | undefined,
         site: Site | undefined,
         flavor: Flavor | undefined,
-        columns: string[] | undefined
+        columns: string[] | undefined,
+        filters: Map<string, Filter>
     ) {
         let query = {};
         if (benchmark && benchmark.id) {
@@ -287,6 +318,12 @@ function ResultSearch(props: PageProps): ReactElement {
         if (flavor && flavor.id) {
             query = { ...query, flavorId: flavor.id };
         }
+        if (filters.size) {
+            query = {
+                ...query,
+                filters: serializeFilters(filters),
+            };
+        }
         router.push({ pathname: '/search/result', query }, undefined, { shallow: true });
     }
 
@@ -299,12 +336,12 @@ function ResultSearch(props: PageProps): ReactElement {
             setCustomColumns([]);
         }
 
-        refreshLocation(benchmark, site, flavor, customColumns);
+        refreshLocation(benchmark, site, flavor, customColumns, filters);
     }
 
     function updateCustomColumns(columns: string[]) {
         setCustomColumns(columns);
-        refreshLocation(benchmark, site, flavor, columns);
+        refreshLocation(benchmark, site, flavor, columns, filters);
         if (benchmark) {
             storeBenchmarkColumns(benchmark.id, columns);
         }
@@ -314,13 +351,18 @@ function ResultSearch(props: PageProps): ReactElement {
         setSite(site);
         setFlavor(undefined);
 
-        refreshLocation(benchmark, site, flavor, customColumns);
+        refreshLocation(benchmark, site, flavor, customColumns, filters);
     }
 
     function updateFlavor(flavor?: Flavor) {
         setFlavor(flavor);
 
-        refreshLocation(benchmark, site, flavor, customColumns);
+        refreshLocation(benchmark, site, flavor, customColumns, filters);
+    }
+
+    function updateFilters(filters: Map<string, Filter>) {
+        setFilters(filters);
+        refreshLocation(benchmark, site, flavor, customColumns, filters);
     }
 
     function exportResults() {
