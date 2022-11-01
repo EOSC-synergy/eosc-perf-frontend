@@ -2,10 +2,10 @@ import React, { ReactElement, useContext } from 'react';
 import { UserContext } from 'components/userContext';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import logo from '../public/images/eosc-perf-logo.4.svg';
-import { useAuth } from 'react-oidc-context';
 import { Wrench } from 'react-bootstrap-icons';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useOidc } from '@axa-fr/react-oidc';
 
 /**
  * Navigation header rendered at the top of every page
@@ -13,7 +13,7 @@ import Image from 'next/image';
  */
 export function NavHeader(): ReactElement {
     const auth = useContext(UserContext);
-    const authentication = useAuth();
+    const { login, logout } = useOidc();
 
     return (
         <header>
@@ -88,7 +88,7 @@ export function NavHeader(): ReactElement {
                         >
                             {!auth.loading && auth.loggedIn && (
                                 <>
-                                    <NavDropdown.Item onClick={() => authentication.removeUser()}>
+                                    <NavDropdown.Item onClick={() => logout()}>
                                         Logout
                                     </NavDropdown.Item>
                                     {!auth.registered && (
@@ -100,7 +100,7 @@ export function NavHeader(): ReactElement {
                             )}
                             {auth.loading && (
                                 <NavDropdown.Item
-                                    onClick={() => authentication.signinRedirect()}
+                                    onClick={() => login()}
                                     className="text-muted"
                                     disabled
                                 >
@@ -109,9 +109,7 @@ export function NavHeader(): ReactElement {
                             )}
 
                             {!auth.loading && !auth.loggedIn && (
-                                <NavDropdown.Item onClick={() => authentication.signinRedirect()}>
-                                    Login
-                                </NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => login()}>Login</NavDropdown.Item>
                             )}
                         </NavDropdown>
                     </Nav>

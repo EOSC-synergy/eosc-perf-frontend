@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import { useQuery } from 'react-query';
 import { emptyUser, UserContext } from 'components/userContext';
-import { useAuth } from 'react-oidc-context';
 import useApi from '../utils/useApi';
+import { OidcUserStatus, useOidc, useOidcAccessToken, useOidcUser } from '@axa-fr/react-oidc';
 
 /**
  * Wrapper to provide authentication info about the current user, such as email or token
@@ -10,41 +10,39 @@ import useApi from '../utils/useApi';
  * @constructor
  */
 export function UserContextWrapper({ children }: { children: ReactNode }) {
-    const authentication = useAuth();
-    const api = useApi(authentication.user?.access_token);
+    const { login, logout, isAuthenticated } = useOidc();
+    const { accessToken } = useOidcAccessToken();
+    const { oidcUser, oidcUserLoadingState } = useOidcUser();
+    const api = useApi(accessToken);
 
     const amIRegistered = useQuery('registered', () => api.users.getSelf(), {
         retry: false,
-        enabled: authentication.isAuthenticated,
+        enabled: isAuthenticated,
     });
 
     const amIAdmin = useQuery('is_admin', () => api.users.tryAdmin(), {
         retry: false,
-        enabled: authentication.user != null,
+        enabled: amIRegistered.isSuccess,
     });
 
     const callbacks = {
-        login: () => authentication.signinRedirect(),
-        logout: () => authentication.removeUser(),
+        login,
+        logout,
     };
 
     return (
         <UserContext.Provider
             value={
-                authentication.isAuthenticated && authentication.user
-                    ? {
-                          token: authentication.user.access_token,
-                          email: amIRegistered.data?.data.email,
-                          registered: amIRegistered.isSuccess,
-                          admin: amIAdmin.isSuccess,
-                          loggedIn: true,
-                          loading:
-                              authentication.isLoading ||
-                              amIRegistered.isLoading ||
-                              amIAdmin.isLoading,
-                          ...callbacks,
-                      }
-                    : { ...emptyUser, ...callbacks }
+                (isAuthenticated &&
+                    oidcUserLoadingState == OidcUserStatus.Loaded && {
+                        token: accessToken,
+                        email: amIRegistered.data?.data.email,
+                        registered: amIRegistered.isSuccess,
+                        admin: amIAdmin.isSuccess,
+                        loggedIn: true,
+                        loading: amIRegistered.isLoading || amIAdmin.isLoading,
+                        ...callbacks,
+                    }) || { ...emptyUser, ...callbacks }
             }
         >
             {children}
