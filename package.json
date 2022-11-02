@@ -16,7 +16,6 @@
     "test:coverage": "jest --coverage --watchAll=false --coverageDirectory=coverage --collectCoverageFrom=**/*.{js,jsx,tsx} --verbose "
   },
   "dependencies": {
-    "@axa-fr/react-oidc": "^6.10.9",
     "@eosc-perf/eosc-perf-client": "1.0.0-SNAPSHOT.202205171441",
     "@popperjs/core": "^2.10.2",
     "axios": "^0.26.0",
@@ -27,6 +26,7 @@
     "echarts-stat": "^1.2.0",
     "next": "^12.1.4",
     "next-transpile-modules": "^9.0.0",
+    "oidc-client-ts": "^2.1.0",
     "prismjs": "^1.27.0",
     "qs": "^6.10.2",
     "react": "^18.2.0",
@@ -36,6 +36,7 @@
     "react-datepicker": "^4.5.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.29.0",
+    "react-oidc-context": "^2.2.0",
     "react-query": "^3.34.19",
     "uuid": "^8.3.2"
   },
