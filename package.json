@@ -16,7 +16,7 @@
     "test:coverage": "jest --coverage --watchAll=false --coverageDirectory=coverage --collectCoverageFrom=**/*.{js,jsx,tsx} --verbose "
   },
   "dependencies": {
-    "@eosc-perf/eosc-perf-client": "1.0.0-SNAPSHOT.202205171441",
+    "@eosc-perf/eosc-perf-client": "1.0.0-SNAPSHOT.202210201417",
     "@popperjs/core": "^2.10.2",
     "axios": "^0.26.0",
     "bootstrap": "^5.1.3",

@@ -18,6 +18,7 @@ type FormContents = {
     dockerTag: string;
     description: string;
     template: string;
+    url: string;
 };
 
 export function BenchmarkSubmitForm(props: {
@@ -57,6 +58,14 @@ export function BenchmarkSubmitForm(props: {
         },
         defaultValue: 'latest',
     });
+    const urlInput = useController({
+        name: 'url',
+        control,
+        rules: {
+            required: 'Must contain a link to a website',
+        },
+        defaultValue: '',
+    });
     const templateInput = useController({
         name: 'template',
         control,
@@ -92,6 +101,7 @@ export function BenchmarkSubmitForm(props: {
         mutate({
             docker_image: data.dockerName,
             docker_tag: data.dockerTag,
+            url: data.url,
             description: data.description.length ? data.description : undefined,
             json_schema: templateJson ? JSON.parse(templateJson) : undefined,
         });
@@ -139,6 +149,19 @@ export function BenchmarkSubmitForm(props: {
                         </Form.Group>
                     </Col>
                 </Row>
+
+                <Form.Group className="mb-3" controlId="url">
+                    <Form.Label>Link to website / source / project page:</Form.Label>
+                    <Form.Control
+                        placeholder="Link to a page about your benchmark"
+                        aria-label="Add a link to a page where users can find out more about your benchmark!"
+                        onBlur={urlInput.field.onBlur}
+                        onChange={urlInput.field.onChange}
+                        ref={urlInput.field.ref}
+                        value={urlInput.field.value}
+                        isInvalid={urlInput.fieldState.invalid}
+                    />
+                </Form.Group>
 
                 <Form.Group className="mb-3" controlId="description">
                     <Form.Label>Benchmark description (optional):</Form.Label>

@@ -1009,10 +1009,10 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@eosc-perf/eosc-perf-client@1.0.0-SNAPSHOT.202205171441":
-  version "1.0.0-SNAPSHOT.202205171441"
-  resolved "https://registry.yarnpkg.com/@eosc-perf/eosc-perf-client/-/eosc-perf-client-1.0.0-SNAPSHOT.202205171441.tgz#707eb158d5d312f3d53e0a76b6c0ef9fe9889964"
-  integrity sha512-bq/gqaG/zf0olx4NtGO/bm4/ROOY6NuHKU8PQUbXSGbPQw1ToJAUX6VqqySSB72t8uATh7UbUX9e2Gry6ZGJzw==
+"@eosc-perf/eosc-perf-client@1.0.0-SNAPSHOT.202210201417":
+  version "1.0.0-SNAPSHOT.202210201417"
+  resolved "https://registry.yarnpkg.com/@eosc-perf/eosc-perf-client/-/eosc-perf-client-1.0.0-SNAPSHOT.202210201417.tgz#a653495f934c0a2763b12fae9ac00a8603742a7d"
+  integrity sha512-Zvwl/nz7hVdbowpPMAddMnIqwl6MN378EtHpiJh/giuhoPb/wjSsaXg0OfveCFQlKihF3YjZt0Q8DEQOC39z9w==
   dependencies:
     axios "^0.26.1"
 
