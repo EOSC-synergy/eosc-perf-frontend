@@ -1,7 +1,7 @@
 {
   "name": "frontend-app",
   "private": true,
-  "version": "1.1.5",
+  "version": "1.2.0",
   "scripts": {
     "git-info": "node utils/gitInfo.js",
     "dev": "next dev",
