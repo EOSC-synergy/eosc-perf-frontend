@@ -16,11 +16,13 @@ export function UserContextWrapper({ children }: { children: ReactNode }) {
     const amIRegistered = useQuery('registered', () => api.users.getSelf(), {
         retry: false,
         enabled: authentication.isAuthenticated,
+        refetchOnWindowFocus: false,
     });
 
     const amIAdmin = useQuery('is_admin', () => api.users.tryAdmin(), {
         retry: false,
         enabled: authentication.user != null,
+        refetchOnWindowFocus: false,
     });
 
     const callbacks = {
