@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="109.35977mm"
+   height="55.868103mm"
+   viewBox="0 0 109.35977 55.868104"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="eosc-perf-logo.v6-2.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.6794594"
+     inkscape:cx="232.5153"
+     inkscape:cy="125.63567"
+     inkscape:window-width="1888"
+     inkscape:window-height="1022"
+     inkscape:window-x="32"
+     inkscape:window-y="29"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     fit-margin-top="0.7"
+     fit-margin-left="0.7"
+     fit-margin-right="0.7"
+     fit-margin-bottom="0.7" />
+  <defs
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="marker2361"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Send"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path2359" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Send"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Send"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path1271" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path1265" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker2335"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path2333" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker2084"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path2082" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Mend"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path1247" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lend"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path1241" />
+    </marker>
+    <rect
+       x="131.4968"
+       y="250.97549"
+       width="393.53708"
+       height="54.162037"
+       id="rect7319" />
+    <marker
+       style="overflow:visible"
+       id="marker2084-5"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path2082-3" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-40.590681,-18.727302)">
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path31-2"
+       sodipodi:type="arc"
+       sodipodi:cx="125.25156"
+       sodipodi:cy="63.919529"
+       sodipodi:rx="22.749199"
+       sodipodi:ry="22.749199"
+       sodipodi:start="4.9637837"
+       sodipodi:end="0.42868531"
+       sodipodi:arc-type="arc"
+       d="m 130.91054,41.885419 a 22.749199,22.749199 0 0 1 14.87118,12.234185 22.749199,22.749199 0 0 1 0.16053,19.256208"
+       sodipodi:open="true"
+       inkscape:export-filename="/home/valentin/OneDrive/Documents/m-team/eosc-perf/figures/logo/eosc-perf-logo.v6.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path31-4"
+       sodipodi:type="arc"
+       sodipodi:cx="117.94186"
+       sodipodi:cy="54.672993"
+       sodipodi:rx="22.749199"
+       sodipodi:ry="22.749199"
+       sodipodi:start="4.4952272"
+       sodipodi:end="5.8789981"
+       sodipodi:arc-type="arc"
+       d="m 113.04034,32.458106 a 22.749199,22.749199 0 0 1 25.81764,13.268273"
+       sodipodi:open="true"
+       inkscape:export-filename="/home/valentin/OneDrive/Documents/m-team/eosc-perf/figures/logo/eosc-perf-logo.v6.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path31-4-6"
+       sodipodi:type="arc"
+       sodipodi:cx="93.748566"
+       sodipodi:cy="43.42625"
+       sodipodi:rx="22.749199"
+       sodipodi:ry="22.749199"
+       sodipodi:start="4.2617799"
+       sodipodi:end="5.9996438"
+       sodipodi:arc-type="arc"
+       sodipodi:open="true"
+       inkscape:export-filename="/home/valentin/OneDrive/Documents/m-team/eosc-perf/figures/logo/eosc-perf-logo.v6.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       d="M 83.840973,22.947831 A 22.749199,22.749199 0 0 1 102.98994,22.63868 22.749199,22.749199 0 0 1 115.5894,37.061992" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.5763;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1660"
+       width="54.463699"
+       height="3.4781597"
+       x="41.892715"
+       y="55.962666"
+       inkscape:export-filename="/home/valentin/OneDrive/Documents/m-team/eosc-perf/figures/logo/eosc-perf-logo.v6.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.583063;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1660-5"
+       width="46.501938"
+       height="3.464649"
+       x="49.848095"
+       y="48.252216"
+       inkscape:export-filename="/home/valentin/OneDrive/Documents/m-team/eosc-perf/figures/logo/eosc-perf-logo.v6.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.593017;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1660-8"
+       width="38.537983"
+       height="3.4421811"
+       x="57.800072"
+       y="40.546246"
+       inkscape:export-filename="/home/valentin/OneDrive/Documents/m-team/eosc-perf/figures/logo/eosc-perf-logo.v6.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.63986;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1660-7"
+       width="22.556139"
+       height="3.2933881"
+       x="73.707497"
+       y="25.186216"
+       inkscape:export-filename="/home/valentin/OneDrive/Documents/m-team/eosc-perf/figures/logo/eosc-perf-logo.v6.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.60915;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1660-0"
+       width="30.566851"
+       height="3.3997025"
+       x="65.750137"
+       y="32.850269"
+       inkscape:export-filename="/home/valentin/OneDrive/Documents/m-team/eosc-perf/figures/logo/eosc-perf-logo.v6.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,6.4725485,-4.1067715)"
+       id="text7317"
+       style="font-style:normal;font-weight:normal;font-size:48px;line-height:1.1;font-family:sans-serif;text-align:start;letter-spacing:0px;white-space:pre;shape-inside:url(#rect7319);fill:#000000;fill-opacity:1;stroke:none"
+       x="0"
+       y="0"
+       inkscape:export-filename="/home/valentin/OneDrive/Documents/m-team/eosc-perf/figures/logo/eosc-perf-logo.v6.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="131.49609"
+         y="293.37461"
+         id="tspan47823"><tspan
+           style="font-style:italic;font-weight:600;font-stretch:semi-condensed;font-family:'Barlow Semi Condensed';-inkscape-font-specification:'Barlow Semi Condensed,  Semi-Bold Italic Semi-Condensed'"
+           id="tspan47821">EOSC PERFORMANCE</tspan></tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.5017;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Send)"
+       d="M 106.01956,59.945963 V 39.056852"
+       id="path1991" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2361)"
+       d="m 106.01956,59.194428 h 22.53188"
+       id="path1991-5" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.425;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 106.54661,58.673908 18.24362,-16.92074"
+       id="path2161" />
+  </g>
+</svg>
