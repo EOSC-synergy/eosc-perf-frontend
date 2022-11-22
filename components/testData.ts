@@ -19,4 +19,5 @@ export const benchmark: Benchmark = {
     id: '42069',
     json_schema: {},
     upload_datetime: '',
+    url: 'https://example.com',
 };

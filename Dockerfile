@@ -1,21 +1,21 @@
-FROM node:17 as git-version
+FROM node:18 as git-version
 
 WORKDIR /app
 COPY utils utils
-COPY ["package.json", "package-lock.json", "next.config.js", "next-env.d.ts", "tsconfig.json", ".eslintrc.json", ".prettierrc", "./"]
+COPY ["package.json", "yarn.lock", "next.config.js", "next-env.d.ts", "tsconfig.json", ".eslintrc.json", ".prettierrc", "./"]
 
 # determine footer version
 COPY .git/ ./.git/
-RUN npm run git-info
+RUN yarn git-info
 
-FROM node:17 as base
+FROM node:18 as base
 # new base because we don't want .git
 
 WORKDIR /app
 
-COPY ["package.json", "package-lock.json", "next.config.js", "next-env.d.ts", "tsconfig.json", ".eslintrc.json", ".prettierrc", "./"]
+COPY ["package.json", "yarn.lock", "next.config.js", "next-env.d.ts", "tsconfig.json", ".eslintrc.json", ".prettierrc", "./"]
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm install --development
+RUN yarn install
 # copy necessary files
 COPY [".env", "./"]
 COPY public public
@@ -32,10 +32,10 @@ ENV NODE_ENV=production
 EXPOSE 3000
 #RUN npm run build
 # move build command into CMD to take into account run-time env vars for static pages
-CMD ["/bin/sh", "-c", "npm run build && npm run start"]
+CMD ["/bin/sh", "-c", "yarn build && yarn start"]
 
 FROM base as development
 ENV NODE_ENV=development
 
 EXPOSE 3000
-CMD [ "npm", "run", "dev" ]
+CMD [ "yarn", "dev" ]
