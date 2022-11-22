@@ -477,7 +477,13 @@ function ResultSearch(props: PageProps): ReactElement {
                                     </Col>
                                 </Row>
                                 <Stack gap={2}>
-                                    <div style={{ overflowX: 'auto' }}>
+                                    <div
+                                        className="position-relative"
+                                        style={{ overflowX: 'auto' }}
+                                    >
+                                        {(results.isLoading ||
+                                            results.isFetching ||
+                                            results.isRefetching) && <LoadingOverlay />}
                                         {results.isSuccess && results && results.data.total > 0 && (
                                             <ResultTable
                                                 results={results.data.items}
