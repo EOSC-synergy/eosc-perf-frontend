@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row, Stack } from 'react-bootstrap';
 import { LoadingOverlay } from 'components/loadingOverlay';
 import { useQuery } from 'react-query';
@@ -38,6 +38,8 @@ import {
 import useApi, { BASE_CONFIGURATION_PARAMS } from '../../utils/useApi';
 import { GetServerSideProps } from 'next';
 import TagSelector from '../../components/tagSelector';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function saveFile(contents: string, filename: string = 'export.csv') {
     const blob = new Blob([contents], { type: 'text/plain;charset=utf-8' });
@@ -108,6 +110,26 @@ const deserializeFilters = (serialized: string | string[] | undefined): Map<stri
     return filters;
 };
 
+function noFuture(d: Date) {
+    return d < new Date();
+}
+
+/**
+ * Read localtime date and return as if it would be if read as UTC time
+ * @param d date
+ */
+function readLocalDateAsUtc(d: Date): Date {
+    return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDay()));
+}
+
+/**
+ * Return ISO date part only (no time)
+ * @param d date
+ */
+function formatIsoDate(d: Date): string {
+    return d.toISOString().split('T')[0];
+}
+
 const DEFAULT_RESULTS_PER_PAGE = 20;
 
 type PageProps = {
@@ -123,7 +145,7 @@ type PageProps = {
  * @returns {React.ReactElement}
  * @constructor
  */
-function ResultSearch(props: PageProps): ReactElement {
+const ResultSearch: FC<PageProps> = (props: PageProps) => {
     const router = useRouter();
     const api = useApi();
 
@@ -197,6 +219,9 @@ function ResultSearch(props: PageProps): ReactElement {
     const [reportedResult, setReportedResult] = useState<Result>();
     const [editedResult, setEditedResult] = useState<Result>();
 
+    const [beforeDate, setBeforeDate] = useState<Date | undefined>(undefined);
+    const [afterDate, setAfterDate] = useState<Date | undefined>(undefined);
+
     //
     const [customColumns, setCustomColumns] = useState<string[]>(props.columns ?? []);
 
@@ -268,6 +293,8 @@ function ResultSearch(props: PageProps): ReactElement {
                 : undefined,
             tags,
             serializeFilters(filters),
+            beforeDate,
+            afterDate,
         ],
         () =>
             api.results.listResults(
@@ -275,8 +302,8 @@ function ResultSearch(props: PageProps): ReactElement {
                 undefined,
                 resultsPerPage,
                 page,
-                undefined,
-                undefined,
+                beforeDate ? formatIsoDate(readLocalDateAsUtc(beforeDate)) : undefined,
+                afterDate ? formatIsoDate(readLocalDateAsUtc(afterDate)) : undefined,
                 benchmark?.id,
                 site?.id,
                 site !== undefined ? flavor?.id : undefined,
@@ -424,6 +451,42 @@ function ResultSearch(props: PageProps): ReactElement {
                                                 flavor={flavor}
                                                 setFlavor={updateFlavor}
                                             />
+                                            <Row>
+                                                <Col>
+                                                    <Row>
+                                                        <Col xs="auto">After:</Col>
+                                                        <Col xs="auto">
+                                                            <DatePicker
+                                                                selected={afterDate}
+                                                                onChange={(date: Date | null) =>
+                                                                    setAfterDate(date ?? undefined)
+                                                                }
+                                                                dateFormat="MMMM d, yyyy"
+                                                                filterDate={noFuture}
+                                                                isClearable
+                                                            />
+                                                        </Col>
+                                                        <Col />
+                                                    </Row>
+                                                </Col>
+                                                <Col>
+                                                    <Row>
+                                                        <Col xs="auto">Before:</Col>
+                                                        <Col xs="auto">
+                                                            <DatePicker
+                                                                selected={beforeDate}
+                                                                onChange={(date: Date | null) =>
+                                                                    setBeforeDate(date ?? undefined)
+                                                                }
+                                                                dateFormat="MMMM d, yyyy"
+                                                                filterDate={noFuture}
+                                                                isClearable
+                                                            />
+                                                        </Col>
+                                                        <Col />
+                                                    </Row>
+                                                </Col>
+                                            </Row>
                                         </Stack>
                                     </Col>
                                     <Col xl="auto" className="d-none d-xl-flex justify-content-end">
@@ -578,7 +641,7 @@ function ResultSearch(props: PageProps): ReactElement {
             )}
         </>
     );
-}
+};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const configuration = new Configuration(BASE_CONFIGURATION_PARAMS);

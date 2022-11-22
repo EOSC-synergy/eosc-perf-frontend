@@ -1,5 +1,6 @@
 import 'prismjs/themes/prism-dark.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '/styles/overrides.css';
 
 import type { AppProps } from 'next/app';
 import { QueryClientWrapper } from 'components/queryClientWrapper';
