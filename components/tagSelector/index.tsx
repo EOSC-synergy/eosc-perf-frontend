@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { FC, ReactElement, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Card, Col, Form, Row } from 'react-bootstrap';
 import { PlaceholderTag } from './placeholderTag';
@@ -7,8 +7,19 @@ import { SelectedTag } from './selectedTag';
 import { NewTag } from './newTag';
 import { Tag } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
+import { LoadingOverlay } from '../loadingOverlay';
 
-function Index(props: { selected: Tag[]; setSelected: (tags: Tag[]) => void }): ReactElement {
+type TagSelectorProps = {
+    selected: Tag[];
+    setSelected: (tags: Tag[]) => void;
+    addTags?: boolean;
+};
+
+const TagSelector: FC<TagSelectorProps> = ({
+    selected,
+    setSelected,
+    addTags = false,
+}: TagSelectorProps) => {
     const api = useApi();
 
     const [searchString, setSearchString] = useState<string>('');
@@ -22,14 +33,14 @@ function Index(props: { selected: Tag[]; setSelected: (tags: Tag[]) => void }): 
     );
 
     function select(newTag: Tag) {
-        if (props.selected.some((tag) => tag.id === newTag.id)) {
+        if (selected.some((tag) => tag.id === newTag.id)) {
             return;
         }
-        props.setSelected([...props.selected, newTag]);
+        setSelected([...selected, newTag]);
     }
 
     function unselect(oldTag: Tag) {
-        props.setSelected(props.selected.filter((tag) => tag.id !== oldTag.id));
+        setSelected(selected.filter((tag) => tag.id !== oldTag.id));
     }
 
     return (
@@ -51,70 +62,78 @@ function Index(props: { selected: Tag[]; setSelected: (tags: Tag[]) => void }): 
                     <Card.Body>
                         <small className="text-muted">Selected</small>
                         <div className="d-flex">
-                            {props.selected.map((tag) => (
+                            {selected.map((tag) => (
                                 <SelectedTag tag={tag} unselect={unselect} key={tag.id} />
                             ))}
                         </div>
-                        {props.selected.length === 0 && (
+                        {selected.length === 0 && (
                             <div className="text-muted" style={{ display: 'inline' }}>
                                 No tags selected
                             </div>
                         )}
                         <hr />
                         <small className="text-muted">Available</small>
-                        {tags.isPreviousData && tags.data && (
-                            <>
-                                <div className="d-flex">
-                                    {tags.data.data.items
-                                        .filter(
-                                            (tag) =>
-                                                !props.selected.some(
-                                                    (selected) => selected.id === tag.id
-                                                )
-                                        )
-                                        .map((tag) => (
-                                            <PlaceholderTag key={tag.id} />
-                                        ))}
-                                </div>
-                            </>
-                        )}
-                        {tags.isSuccess && !tags.isPreviousData && tags.data && (
-                            <>
-                                <div className="d-flex">
-                                    {tags.data.data.items
-                                        .filter(
-                                            (tag) =>
-                                                !props.selected.some(
-                                                    (selected) => selected.id === tag.id
-                                                )
-                                        )
-                                        .map((tag) => (
-                                            <UnselectedTag tag={tag} select={select} key={tag.id} />
-                                        ))}
-                                </div>
-                                {tags.data.data.total === 0 && searchString.length > 0 && (
-                                    <div className="text-muted" style={{ display: 'inline' }}>
-                                        No tags match the keywords
+                        <div className="position-relative">
+                            {tags.isFetching && tags.isPreviousData && tags.data && (
+                                <>
+                                    <div className="d-flex">
+                                        {tags.data.data.items
+                                            .filter(
+                                                (tag) =>
+                                                    !selected.some(
+                                                        (selected) => selected.id === tag.id
+                                                    )
+                                            )
+                                            .map((tag) => (
+                                                <PlaceholderTag key={tag.id} />
+                                            ))}
                                     </div>
-                                )}
-                                {tags.data.data.total === 0 && searchString.length === 0 && (
-                                    <div className="text-muted" style={{ display: 'inline' }}>
-                                        No tags available
+                                </>
+                            )}
+                            {(tags.isFetching || tags.isLoading || tags.isRefetching) &&
+                                !tags.isPreviousData && <LoadingOverlay />}
+                            {tags.isSuccess && !tags.isPreviousData && tags.data && (
+                                <>
+                                    <div className="d-flex">
+                                        {tags.data.data.items
+                                            .filter(
+                                                (tag) =>
+                                                    !selected.some(
+                                                        (selected) => selected.id === tag.id
+                                                    )
+                                            )
+                                            .map((tag) => (
+                                                <UnselectedTag
+                                                    tag={tag}
+                                                    select={select}
+                                                    key={tag.id}
+                                                />
+                                            ))}
                                     </div>
-                                )}
-                                {tags.data.data.has_next && (
-                                    <div className="text-muted">
-                                        <small>More tags hidden, use search terms</small>
-                                    </div>
-                                )}
-                            </>
-                        )}
+                                    {tags.data.data.total === 0 && searchString.length > 0 && (
+                                        <div className="text-muted" style={{ display: 'inline' }}>
+                                            No tags match the keywords
+                                        </div>
+                                    )}
+                                    {tags.data.data.total === 0 && searchString.length === 0 && (
+                                        <div className="text-muted" style={{ display: 'inline' }}>
+                                            No tags available
+                                        </div>
+                                    )}
+                                    {tags.data.data.has_next && (
+                                        <div className="text-muted">
+                                            <small>More tags hidden, use search terms</small>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </div>
                     </Card.Body>
                 </Card>
-                <NewTag onSubmit={() => tags.refetch().then(() => undefined)} />
+                {addTags && <NewTag onSubmit={() => tags.refetch().then(() => undefined)} />}
             </Card.Body>
         </Card>
     );
-}
+};
 
-export default Index;
+export default TagSelector;

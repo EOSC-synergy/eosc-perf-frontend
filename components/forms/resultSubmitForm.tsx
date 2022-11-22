@@ -132,7 +132,7 @@ export function ResultSubmitForm(props: {
 
                     <Col lg="auto">
                         <div className="mb-1">
-                            <TagSelector selected={tags} setSelected={setTags} />
+                            <TagSelector selected={tags} setSelected={setTags} addTags />
                         </div>
                     </Col>
                 </Row>

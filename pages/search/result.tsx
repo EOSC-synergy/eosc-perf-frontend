@@ -33,9 +33,11 @@ import {
     ResultsApi,
     Site,
     SitesApi,
+    Tag,
 } from '@eosc-perf/eosc-perf-client';
 import useApi, { BASE_CONFIGURATION_PARAMS } from '../../utils/useApi';
 import { GetServerSideProps } from 'next';
+import TagSelector from '../../components/tagSelector';
 
 function saveFile(contents: string, filename: string = 'export.csv') {
     const blob = new Blob([contents], { type: 'text/plain;charset=utf-8' });
@@ -128,6 +130,8 @@ function ResultSearch(props: PageProps): ReactElement {
     const [benchmark, setBenchmark] = useState<Benchmark | undefined>(props.benchmark);
     const [site, setSite] = useState<Site | undefined>(props.site);
     const [flavor, setFlavor] = useState<Flavor | undefined>(props.flavor);
+
+    const [tags, setTags] = useState<Tag[]>([]);
 
     const [filters, setFilters] = useState<Map<string, Filter>>(new Map());
 
@@ -262,6 +266,7 @@ function ResultSearch(props: PageProps): ReactElement {
                 : sorting.mode === SortMode.Descending
                 ? '-' + sorting.key
                 : undefined,
+            tags,
             serializeFilters(filters),
         ],
         () =>
@@ -275,7 +280,7 @@ function ResultSearch(props: PageProps): ReactElement {
                 benchmark?.id,
                 site?.id,
                 site !== undefined ? flavor?.id : undefined,
-                undefined,
+                tags.map((t) => t.id),
                 serializeFilters(filters),
                 sorting.mode === SortMode.Ascending
                     ? '+' + sorting.key
@@ -403,18 +408,31 @@ function ResultSearch(props: PageProps): ReactElement {
                     <Card>
                         <Card.Body>
                             {browserLoaded && router.isReady && (
-                                <Stack gap={2}>
-                                    <BenchmarkSearchSelect
-                                        benchmark={benchmark}
-                                        setBenchmark={updateBenchmark}
-                                    />
-                                    <SiteSearchPopover site={site} setSite={updateSite} />
-                                    <FlavorSearchSelect
-                                        site={site}
-                                        flavor={flavor}
-                                        setFlavor={updateFlavor}
-                                    />
-                                </Stack>
+                                <Row>
+                                    <Col md={6} xl={5}>
+                                        <Stack
+                                            gap={2}
+                                            className="mb-xl-0 mb-2 d-flex justify-content-center h-100"
+                                        >
+                                            <BenchmarkSearchSelect
+                                                benchmark={benchmark}
+                                                setBenchmark={updateBenchmark}
+                                            />
+                                            <SiteSearchPopover site={site} setSite={updateSite} />
+                                            <FlavorSearchSelect
+                                                site={site}
+                                                flavor={flavor}
+                                                setFlavor={updateFlavor}
+                                            />
+                                        </Stack>
+                                    </Col>
+                                    <Col xl={3} className="d-none d-xl-flex justify-content-end">
+                                        <div className="vr h-100" />
+                                    </Col>
+                                    <Col md={6} xl={4}>
+                                        <TagSelector selected={tags} setSelected={setTags} />
+                                    </Col>
+                                </Row>
                             )}
                             <hr />
                             <Stack gap={2}>
@@ -506,7 +524,6 @@ function ResultSearch(props: PageProps): ReactElement {
                                             </div>
                                         )}
                                         {results.isError && 'Error while loading results'}
-                                        {results.isLoading && <LoadingOverlay />}
                                     </div>
                                     {results.isSuccess && (
                                         <Row className="mx-2">
