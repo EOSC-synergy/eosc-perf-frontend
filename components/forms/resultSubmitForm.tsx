@@ -129,7 +129,9 @@ export function ResultSubmitForm(props: {
                             {/* dateFormat="Pp"*/}
                         </Form.Group>
                     </Col>
-
+                    <Col lg="auto">
+                        <div className="vr h-100" />
+                    </Col>
                     <Col lg="auto">
                         <div className="mb-1">
                             <TagSelector selected={tags} setSelected={setTags} addTags />

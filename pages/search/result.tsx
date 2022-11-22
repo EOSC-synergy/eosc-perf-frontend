@@ -409,7 +409,7 @@ function ResultSearch(props: PageProps): ReactElement {
                         <Card.Body>
                             {browserLoaded && router.isReady && (
                                 <Row>
-                                    <Col md={6} xl={5}>
+                                    <Col xl={true}>
                                         <Stack
                                             gap={2}
                                             className="mb-xl-0 mb-2 d-flex justify-content-center h-100"
@@ -426,10 +426,10 @@ function ResultSearch(props: PageProps): ReactElement {
                                             />
                                         </Stack>
                                     </Col>
-                                    <Col xl={3} className="d-none d-xl-flex justify-content-end">
+                                    <Col xl="auto" className="d-none d-xl-flex justify-content-end">
                                         <div className="vr h-100" />
                                     </Col>
-                                    <Col md={6} xl={4}>
+                                    <Col xl="auto">
                                         <TagSelector selected={tags} setSelected={setTags} />
                                     </Col>
                                 </Row>
