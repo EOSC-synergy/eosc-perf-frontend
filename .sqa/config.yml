@@ -16,7 +16,7 @@ sqa_criteria:
       eosc-perf-frontend:
         container: perf-frontend-testing
         commands:
-          - bash -c "cd /perf-testing-frontend/ && npm run git-info && npm ci --audit=false && ./node_modules/.bin/eslint ./ -f checkstyle -o eslint-codestyle.xml"
+          - bash -c "cd /perf-testing-frontend/ && npm run git-info && yarn install --frozen-lockfile && ./node_modules/.bin/eslint ./ -f checkstyle -o eslint-codestyle.xml"
 
   qc_functional:
     repos:
