@@ -454,7 +454,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                             <Row>
                                                 <Col>
                                                     <Row>
-                                                        <Col xs="auto">After:</Col>
+                                                        <Col xs="auto">Executed after:</Col>
                                                         <Col xs="auto">
                                                             <DatePicker
                                                                 selected={afterDate}
@@ -471,7 +471,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                                 </Col>
                                                 <Col>
                                                     <Row>
-                                                        <Col xs="auto">Before:</Col>
+                                                        <Col xs="auto">and before:</Col>
                                                         <Col xs="auto">
                                                             <DatePicker
                                                                 selected={beforeDate}
