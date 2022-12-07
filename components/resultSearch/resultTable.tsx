@@ -15,6 +15,7 @@ import { ColumnSelectModal } from 'components/resultSearch/columnSelectModal';
 import { Sorting, SortMode } from 'components/resultSearch/sorting';
 import { Suggestion } from './jsonSchema';
 import { Result } from '@eosc-perf/eosc-perf-client';
+import { ExecutionDateColumn } from './columns/executionDateColumn';
 
 function SortingTableHeader(props: {
     label: string;
@@ -66,6 +67,7 @@ export function ResultTable(props: {
     const [siteColumnEnabled, setSiteColumnEnabled] = useState(true);
     const [siteFlavorColumnEnabled, setSiteFlavorColumnEnabled] = useState(true);
     const [tagsColumnEnabled, setTagsColumnEnabled] = useState(true);
+    const [executionDateColumnEnabled, setExecutionDateColumnEnabled] = useState(true);
 
     // column selection modal
     const [showColumnSelection, setShowColumnSelection] = useState(false);
@@ -120,6 +122,7 @@ export function ResultTable(props: {
                             />
                         )}
                         {tagsColumnEnabled && <th>Tags</th>}
+                        {executionDateColumnEnabled && <th>Execution date</th>}
                         {/* TODO: hover */}
                         {props.customColumns.map((column) => (
                             <SortingTableHeader
@@ -144,7 +147,7 @@ export function ResultTable(props: {
                 </thead>
 
                 <tbody>
-                    {props.results.map((result, index) => {
+                    {props.results.map((result) => {
                         return (
                             <tr key={result.id}>
                                 <td>
@@ -168,6 +171,11 @@ export function ResultTable(props: {
                                 {tagsColumnEnabled && (
                                     <td>
                                         <TagsColumn result={result} />
+                                    </td>
+                                )}
+                                {executionDateColumnEnabled && (
+                                    <td>
+                                        <ExecutionDateColumn result={result} />
                                     </td>
                                 )}
                                 {props.customColumns.map((column) => (
