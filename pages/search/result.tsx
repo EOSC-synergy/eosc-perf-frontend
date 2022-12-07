@@ -493,7 +493,11 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                         <div className="vr h-100" />
                                     </Col>
                                     <Col xl="auto">
-                                        <TagSelector selected={tags} setSelected={setTags} />
+                                        <TagSelector
+                                            selected={tags}
+                                            setSelected={setTags}
+                                            label="Tags"
+                                        />
                                     </Col>
                                 </Row>
                             )}

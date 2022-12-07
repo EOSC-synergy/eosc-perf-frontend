@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Card, Col, Form, Row } from 'react-bootstrap';
 import { PlaceholderTag } from './placeholderTag';
@@ -13,12 +13,14 @@ type TagSelectorProps = {
     selected: Tag[];
     setSelected: (tags: Tag[]) => void;
     addTags?: boolean;
+    label?: ReactNode;
 };
 
 const TagSelector: FC<TagSelectorProps> = ({
     selected,
     setSelected,
     addTags = false,
+    label = 'Search',
 }: TagSelectorProps) => {
     const api = useApi();
 
@@ -47,7 +49,7 @@ const TagSelector: FC<TagSelectorProps> = ({
         <div className="d-inline-block">
             <Form.Group className="mb-1" as={Row}>
                 <Form.Label column sm={3}>
-                    Search
+                    {label}
                 </Form.Label>
                 <Col sm={9}>
                     <Form.Control
