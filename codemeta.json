@@ -1,0 +1,25 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "SoftwareSourceCode",
+    "license": "https://spdx.org/licenses/MIT",
+    "codeRepository": "git+https://github.com/EOSC-synergy/eosc-perf-frontend.git",
+    "issueTracker": "https://github.com/EOSC-synergy/eosc-perf-frontend/issues",
+    "name": "eosc-perf-frontend",
+    "description": "eosc-perf-frontend is the Frontend of the EOSC Performance service, a web service to compare computing resources.",
+    "releaseNotes": "\n\n",
+    "referencePublication": "https://doi.org/10.5281/zenodo.7366362",
+    "programmingLanguage": [
+        "typescript",
+        "javascript"
+    ],
+    "relatedLink": [
+        "https://performance.services.fedcloud.eu/"
+    ],
+    "author": [
+        {
+            "@type": "Person",
+            "givenName": "Christophe",
+            "familyName": "Laures"
+        }
+    ]
+}
