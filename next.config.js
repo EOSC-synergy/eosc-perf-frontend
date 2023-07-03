@@ -22,5 +22,6 @@ module.exports = withTM({
             },
         ];
     },
+    output: 'standalone',
     ...withBundleAnalyzer({}),
 });
