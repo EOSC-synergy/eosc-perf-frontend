@@ -107,7 +107,7 @@ export function SearchingSelector<Item extends Identifiable>(props: {
     );
 
     return (
-        <Row>
+        <Row className="align-items-center">
             <Col>{props.display(props.item)} </Col>
             <Col md="auto">
                 <OverlayTrigger

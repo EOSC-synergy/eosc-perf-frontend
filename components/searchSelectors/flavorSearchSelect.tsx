@@ -4,6 +4,7 @@ import { SearchingSelector } from './index';
 import { truthyOrNoneTag } from '../utility';
 import { Flavor, Site } from '@eosc-perf/eosc-perf-client';
 import useApi from '../../utils/useApi';
+import { Col, Row } from 'react-bootstrap';
 
 type FlavorSearchSelectProps = {
     flavor?: Flavor;
@@ -16,13 +17,17 @@ export const FlavorSearchSelect: React.FC<FlavorSearchSelectProps> = (props): Re
 
     function display(flavor?: Flavor) {
         return (
-            <>
-                Flavor:{' '}
-                {truthyOrNoneTag(
-                    flavor?.name,
-                    props.site === undefined ? 'Select a site first!' : 'None'
+            <Row>
+                <Col xs="auto">Flavor: {truthyOrNoneTag(flavor?.name, 'None')}</Col>
+                {props.site === undefined && (
+                    <>
+                        <Col />
+                        <Col xs="auto">
+                            <span className="text-muted">Select a site first.</span>
+                        </Col>
+                    </>
                 )}
-            </>
+            </Row>
         );
     }
 

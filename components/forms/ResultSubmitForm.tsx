@@ -86,7 +86,7 @@ const ResultSubmitForm: FC<ResultSubmitFormProps> = ({ onSuccess, onError }) => 
                             <JsonSelection
                                 fileContents={fileContents}
                                 setFileContents={setFileContents}
-                            />{' '}
+                            />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
