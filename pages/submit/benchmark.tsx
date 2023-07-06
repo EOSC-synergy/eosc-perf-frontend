@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import { Card, Container, Toast, ToastContainer } from 'react-bootstrap';
-import { BenchmarkSubmitForm } from 'components/forms/benchmarkSubmitForm';
+import BenchmarkSubmitForm from 'components/forms/BenchmarkSubmitForm';
 import Head from 'next/head';
 
 /**

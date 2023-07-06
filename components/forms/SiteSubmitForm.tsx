@@ -1,5 +1,5 @@
 import { Alert, Button, Form } from 'react-bootstrap';
-import React, { ReactElement, useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
 import ErrorMessage from './ErrorMessage';
@@ -16,10 +16,12 @@ type FormContents = {
     description: string;
 };
 
-export function SiteSubmitForm(props: {
+type SiteSubmitFormProps = {
     onSuccess: () => void;
     onError: () => void;
-}): ReactElement {
+};
+
+const SiteSubmitForm: FC<SiteSubmitFormProps> = ({ onSuccess, onError }) => {
     const auth = useContext(UserContext);
     const api = useApi(auth.token);
 
@@ -28,8 +30,8 @@ export function SiteSubmitForm(props: {
     const { mutate, error: mutationError } = useMutation(
         (data: CreateSite) => api.sites.createSite(data),
         {
-            onSuccess: props.onSuccess,
-            onError: props.onError,
+            onSuccess: onSuccess,
+            onError: onError,
         }
     );
 
@@ -127,4 +129,6 @@ export function SiteSubmitForm(props: {
             </Form>
         </LoadingWrapper>
     );
-}
+};
+
+export default SiteSubmitForm;

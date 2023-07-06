@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
 import { Alert, Button, Form } from 'react-bootstrap';
@@ -15,11 +15,13 @@ type FormContents = {
     description: string;
 };
 
-export function FlavorSubmitForm(props: {
+type FlavorSubmitFormProps = {
     site: Site;
     onSuccess: () => void;
     onError: () => void;
-}): ReactElement {
+};
+
+const FlavorSubmitForm: FC<FlavorSubmitFormProps> = ({ site, onSuccess, onError }) => {
     const auth = useContext(UserContext);
     const api = useApi(auth.token);
 
@@ -41,10 +43,10 @@ export function FlavorSubmitForm(props: {
     });
 
     const { mutate, error: mutationError } = useMutation(
-        (data: CreateFlavor) => api.sites.addFlavor(props.site.id, data),
+        (data: CreateFlavor) => api.sites.addFlavor(site.id, data),
         {
-            onSuccess: props.onSuccess,
-            onError: props.onError,
+            onSuccess: onSuccess,
+            onError: onError,
         }
     );
 
@@ -99,4 +101,6 @@ export function FlavorSubmitForm(props: {
             </Form>
         </LoadingWrapper>
     );
-}
+};
+
+export default FlavorSubmitForm;

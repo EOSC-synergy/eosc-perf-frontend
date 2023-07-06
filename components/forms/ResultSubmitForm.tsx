@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { FC, ReactElement, useContext, useState } from 'react';
 import { JsonSelection } from 'components/jsonSelection';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { UserContext } from 'components/userContext';
@@ -17,10 +17,12 @@ import { LoadingWrapper } from 'components/loadingOverlay';
 import useApi from 'utils/useApi';
 import { Benchmark, Flavor, Site, Tag } from '@eosc-perf/eosc-perf-client';
 
-export function ResultSubmitForm(props: {
+type ResultSubmitFormProps = {
     onSuccess: () => void;
     onError: () => void;
-}): ReactElement {
+};
+
+const ResultSubmitForm: FC<ResultSubmitFormProps> = ({ onSuccess, onError }) => {
     const auth = useContext(UserContext);
     const api = useApi(auth.token);
 
@@ -48,8 +50,8 @@ export function ResultSubmitForm(props: {
             throw 'unexpectedly missing benchmark, flavor or date';
         },
         {
-            onSuccess: props.onSuccess,
-            onError: props.onError,
+            onSuccess: onSuccess,
+            onError: onError,
         }
     );
 
@@ -146,4 +148,6 @@ export function ResultSubmitForm(props: {
             </Form>
         </LoadingWrapper>
     );
-}
+};
+
+export default ResultSubmitForm;

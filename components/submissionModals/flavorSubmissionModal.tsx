@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import { Modal, Toast } from 'react-bootstrap';
-import { FlavorSubmitForm } from 'components/forms/flavorSubmitForm';
+import FlavorSubmitForm from 'components/forms/FlavorSubmitForm';
 import { Site } from '@eosc-perf/eosc-perf-client';
 
 export function FlavorSubmissionModal(props: {

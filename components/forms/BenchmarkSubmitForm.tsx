@@ -1,5 +1,5 @@
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
-import React, { ReactElement, useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
 import ErrorMessage from './ErrorMessage';
@@ -12,6 +12,18 @@ import { SubmitHandler, useForm, useController } from 'react-hook-form';
 import useApi from 'utils/useApi';
 import { CreateBenchmark } from '@eosc-perf/eosc-perf-client';
 
+const validateTemplate = (template: string) => {
+    if (template.length === 0) {
+        return false;
+    }
+    try {
+        JSON.parse(template);
+        return true;
+    } catch (SyntaxError) {
+        return false;
+    }
+};
+
 type FormContents = {
     dockerName: string;
     dockerTag: string;
@@ -20,25 +32,15 @@ type FormContents = {
     url: string;
 };
 
-export function BenchmarkSubmitForm(props: {
+type BenchmarkSubmitForm = {
     onSuccess: () => void;
     onError: () => void;
-}): ReactElement {
+};
+
+const BenchmarkSubmitForm: FC<BenchmarkSubmitForm> = ({ onError, onSuccess }) => {
     const auth = useContext(UserContext);
     const api = useApi(auth.token);
     const { register, handleSubmit, formState, control } = useForm<FormContents>();
-
-    function validateTemplate(template: string) {
-        if (template.length === 0) {
-            return false;
-        }
-        try {
-            JSON.parse(template);
-            return true;
-        } catch (SyntaxError) {
-            return false;
-        }
-    }
 
     const dockerNameInput = useController({
         name: 'dockerName',
@@ -78,8 +80,8 @@ export function BenchmarkSubmitForm(props: {
     const { mutate, error: mutationError } = useMutation(
         (data: CreateBenchmark) => api.benchmarks.createBenchmark(data),
         {
-            onSuccess: props.onSuccess,
-            onError: props.onError,
+            onSuccess: onSuccess,
+            onError: onError,
         }
     );
 
@@ -189,4 +191,6 @@ export function BenchmarkSubmitForm(props: {
             </Form>
         </LoadingWrapper>
     );
-}
+};
+
+export default BenchmarkSubmitForm;

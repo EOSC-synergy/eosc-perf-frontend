@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import { Modal, Toast } from 'react-bootstrap';
-import { BenchmarkSubmitForm } from 'components/forms/benchmarkSubmitForm';
+import BenchmarkSubmitForm from 'components/forms/BenchmarkSubmitForm';
 
 // TODO: do not show invalid on first load
 //       use default state valid?

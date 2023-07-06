@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import { Modal, Toast } from 'react-bootstrap';
-import { SiteSubmitForm } from 'components/forms/siteSubmitForm';
+import SiteSubmitForm from 'components/forms/SiteSubmitForm';
 
 export function SiteSubmissionModal(props: { show: boolean; onHide: () => void }): ReactElement {
     const [showSuccessToast, setShowSuccessToast] = useState(false);
