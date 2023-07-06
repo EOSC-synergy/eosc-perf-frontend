@@ -1,4 +1,4 @@
-import { Alert, Button, Form } from 'react-bootstrap';
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import React, { FC, useContext } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
@@ -25,7 +25,13 @@ const SiteSubmitForm: FC<SiteSubmitFormProps> = ({ onSuccess, onError }) => {
     const auth = useContext(UserContext);
     const api = useApi(auth.token);
 
-    const { handleSubmit, control, formState } = useForm<FormContents>();
+    const { handleSubmit, formState, register } = useForm<FormContents>({
+        defaultValues: {
+            name: '',
+            address: '',
+            description: '',
+        },
+    });
 
     const { mutate, error: mutationError } = useMutation(
         (data: CreateSite) => api.sites.createSite(data),
@@ -34,30 +40,6 @@ const SiteSubmitForm: FC<SiteSubmitFormProps> = ({ onSuccess, onError }) => {
             onError: onError,
         }
     );
-
-    const nameInput = useController({
-        name: 'name',
-        control,
-        rules: {
-            required: 'A site must have a name!',
-        },
-        defaultValue: '',
-    });
-
-    const addressInput = useController({
-        name: 'address',
-        control,
-        rules: {
-            required: 'Please provide a link with more information about the site!',
-        },
-        defaultValue: '',
-    });
-
-    const descriptionInput = useController({
-        name: 'description',
-        control,
-        defaultValue: '',
-    });
 
     const onSubmit: SubmitHandler<FormContents> = (data) => {
         mutate({
@@ -74,18 +56,17 @@ const SiteSubmitForm: FC<SiteSubmitFormProps> = ({ onSuccess, onError }) => {
                     Error: <ErrorMessage error={mutationError} />
                 </Alert>
             )}
-            <LoginCheck message="You must be logged in to submit new sites!" />
+            <LoginCheck message="You must be logged in to submit new sites." />
             <RegistrationCheck />
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group controlId="siteName" className="mb-3">
                     <Form.Label>Name:</Form.Label>
                     <Form.Control
                         placeholder="KIT SCC"
-                        onBlur={nameInput.field.onBlur}
-                        onChange={nameInput.field.onChange}
-                        ref={nameInput.field.ref}
-                        value={nameInput.field.value}
-                        isInvalid={nameInput.fieldState.invalid}
+                        {...register('name', {
+                            required: 'A site must have a name!',
+                        })}
+                        isInvalid={formState.errors.name?.message !== undefined}
                     />
                     <Form.Control.Feedback type="invalid">
                         {formState.errors.name?.message}
@@ -96,11 +77,10 @@ const SiteSubmitForm: FC<SiteSubmitFormProps> = ({ onSuccess, onError }) => {
                     <Form.Label>Address</Form.Label>
                     <Form.Control
                         placeholder="https://www.scc.kit.edu/"
-                        onBlur={addressInput.field.onBlur}
-                        onChange={addressInput.field.onChange}
-                        ref={addressInput.field.ref}
-                        value={addressInput.field.value}
-                        isInvalid={addressInput.fieldState.invalid}
+                        {...register('address', {
+                            required: 'Please provide a link with more information about the site.',
+                        })}
+                        isInvalid={formState.errors.address?.message !== undefined}
                     />
                     <Form.Control.Feedback type="invalid">
                         {formState.errors.address?.message}
@@ -108,24 +88,26 @@ const SiteSubmitForm: FC<SiteSubmitFormProps> = ({ onSuccess, onError }) => {
                 </Form.Group>
 
                 <Form.Group controlId="siteDescription" className="mb-1">
-                    <Form.Label>Description (optional):</Form.Label>
+                    <Form.Label>Description:</Form.Label>
                     <Form.Control
                         placeholder="Add a description here."
                         as="textarea"
-                        onBlur={descriptionInput.field.onBlur}
-                        onChange={descriptionInput.field.onChange}
-                        ref={descriptionInput.field.ref}
-                        value={descriptionInput.field.value}
-                        isInvalid={descriptionInput.fieldState.invalid}
+                        {...register('description')}
                     />
                     <Form.Control.Feedback type="invalid">
                         {formState.errors.description?.message}
                     </Form.Control.Feedback>
+                    <Form.Text>(optional)</Form.Text>
                 </Form.Group>
 
-                <Button variant="success" type="submit" disabled={!auth.loggedIn}>
-                    Submit
-                </Button>
+                <Row>
+                    <Col />
+                    <Col xs="auto">
+                        <Button variant="success" type="submit" disabled={!auth.loggedIn}>
+                            Submit
+                        </Button>
+                    </Col>
+                </Row>
             </Form>
         </LoadingWrapper>
     );

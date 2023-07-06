@@ -40,41 +40,14 @@ type BenchmarkSubmitForm = {
 const BenchmarkSubmitForm: FC<BenchmarkSubmitForm> = ({ onError, onSuccess }) => {
     const auth = useContext(UserContext);
     const api = useApi(auth.token);
-    const { register, handleSubmit, formState, control } = useForm<FormContents>();
-
-    const dockerNameInput = useController({
-        name: 'dockerName',
-        control,
-        rules: {
-            required: 'Must be a valid docker image name',
-            pattern: /[^/]+\/[^/]+/,
+    const { register, handleSubmit, formState } = useForm<FormContents>({
+        defaultValues: {
+            dockerName: '',
+            dockerTag: 'latest',
+            description: '',
+            template: '',
+            url: '',
         },
-        defaultValue: '',
-    });
-    const dockerTagInput = useController({
-        name: 'dockerTag',
-        control,
-        rules: {
-            required: 'Must be a valid docker tag',
-        },
-        defaultValue: 'latest',
-    });
-    const urlInput = useController({
-        name: 'url',
-        control,
-        rules: {
-            required: 'Must contain a link to a website',
-        },
-        defaultValue: '',
-    });
-    const templateInput = useController({
-        name: 'template',
-        control,
-        rules: {
-            required: 'Must be a valid JSON schema',
-            validate: validateTemplate,
-        },
-        defaultValue: '',
     });
 
     const { mutate, error: mutationError } = useMutation(
@@ -103,7 +76,7 @@ const BenchmarkSubmitForm: FC<BenchmarkSubmitForm> = ({ onError, onSuccess }) =>
                     Error: <ErrorMessage error={mutationError} />
                 </Alert>
             )}
-            <LoginCheck message="You must be logged in to submit new benchmarks!" />
+            <LoginCheck message="You must be logged in to submit new benchmarks." />
             <RegistrationCheck />
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Row>
@@ -113,11 +86,11 @@ const BenchmarkSubmitForm: FC<BenchmarkSubmitForm> = ({ onError, onSuccess }) =>
                             <Form.Control
                                 placeholder="user/image"
                                 aria-label="Docker image name including username"
-                                onBlur={dockerNameInput.field.onBlur}
-                                onChange={dockerNameInput.field.onChange}
-                                ref={dockerNameInput.field.ref}
-                                value={dockerNameInput.field.value}
-                                isInvalid={dockerNameInput.fieldState.invalid}
+                                {...register('dockerName', {
+                                    required: 'Must be a valid docker image name',
+                                    pattern: /[^/]+\/[^/]+/,
+                                })}
+                                isInvalid={formState.errors.dockerName?.message !== undefined}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {formState.errors.dockerName?.message}
@@ -130,11 +103,10 @@ const BenchmarkSubmitForm: FC<BenchmarkSubmitForm> = ({ onError, onSuccess }) =>
                             <Form.Control
                                 placeholder="tag"
                                 aria-label="Tag or version of the docker image to use"
-                                onBlur={dockerTagInput.field.onBlur}
-                                onChange={dockerTagInput.field.onChange}
-                                ref={dockerTagInput.field.ref}
-                                value={dockerTagInput.field.value}
-                                isInvalid={dockerTagInput.fieldState.invalid}
+                                {...register('dockerTag', {
+                                    required: 'Must be a valid docker tag',
+                                })}
+                                isInvalid={formState.errors.dockerTag?.message !== undefined}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {formState.errors.dockerTag?.message}
@@ -148,21 +120,25 @@ const BenchmarkSubmitForm: FC<BenchmarkSubmitForm> = ({ onError, onSuccess }) =>
                     <Form.Control
                         placeholder="Link to a page about your benchmark"
                         aria-label="Add a link to a page where users can find out more about your benchmark!"
-                        onBlur={urlInput.field.onBlur}
-                        onChange={urlInput.field.onChange}
-                        ref={urlInput.field.ref}
-                        value={urlInput.field.value}
-                        isInvalid={urlInput.fieldState.invalid}
+                        {...register('url', {
+                            required: 'Must contain a link to a website',
+                        })}
+                        isInvalid={formState.errors.url?.message !== undefined}
                     />
+                    <Form.Control.Feedback type="invalid">
+                        {formState.errors.url?.message}
+                    </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="description">
-                    <Form.Label>Benchmark description (optional):</Form.Label>
+                    <Form.Label>Benchmark description:</Form.Label>
                     <Form.Control
                         placeholder="Enter a description of the new benchmark here."
                         as="textarea"
+                        rows={4}
                         {...register('description')}
                     />
+                    <Form.Text>(optional)</Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="template">
@@ -174,20 +150,31 @@ const BenchmarkSubmitForm: FC<BenchmarkSubmitForm> = ({ onError, onSuccess }) =>
                     <Form.Control
                         placeholder={JSON.stringify(benchmarkJsonSchema, null, 4)}
                         as="textarea"
-                        onBlur={templateInput.field.onBlur}
-                        onChange={templateInput.field.onChange}
-                        ref={templateInput.field.ref}
-                        value={templateInput.field.value}
-                        isInvalid={templateInput.fieldState.invalid}
+                        rows={4}
+                        {...register('template', {
+                            required: 'Must be a valid JSON schema',
+                            validate: validateTemplate,
+                        })}
+                        isInvalid={formState.errors.template?.message !== undefined}
                     />
                     <Form.Control.Feedback type="invalid">
                         {formState.errors.template?.message}
                     </Form.Control.Feedback>
                 </Form.Group>
 
-                <Button variant="success" type="submit" className="mt-1" disabled={!auth.loggedIn}>
-                    Submit
-                </Button>
+                <Row>
+                    <Col />
+                    <Col xs="auto">
+                        <Button
+                            variant="success"
+                            type="submit"
+                            className="mt-1"
+                            disabled={!auth.loggedIn}
+                        >
+                            Submit
+                        </Button>
+                    </Col>
+                </Row>
             </Form>
         </LoadingWrapper>
     );

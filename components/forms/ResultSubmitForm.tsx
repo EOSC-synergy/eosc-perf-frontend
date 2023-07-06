@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useContext, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { JsonSelection } from 'components/jsonSelection';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { UserContext } from 'components/userContext';
@@ -16,6 +16,8 @@ import { LoginCheck } from 'components/loginCheck';
 import { LoadingWrapper } from 'components/loadingOverlay';
 import useApi from 'utils/useApi';
 import { Benchmark, Flavor, Site, Tag } from '@eosc-perf/eosc-perf-client';
+
+const filterFuture = (d: Date) => d < new Date();
 
 type ResultSubmitFormProps = {
     onSuccess: () => void;
@@ -55,22 +57,18 @@ const ResultSubmitForm: FC<ResultSubmitFormProps> = ({ onSuccess, onError }) => 
         }
     );
 
-    function isFormValid() {
+    const isFormValid = () => {
         return benchmark && site && flavor && fileContents && auth.token !== undefined;
-    }
+    };
 
-    function submit() {
+    const submit = () => {
         if (!isFormValid()) {
             return;
         }
         if (fileContents !== undefined) {
             mutate(JSON.parse(fileContents));
         }
-    }
-
-    function noFuture(d: Date) {
-        return d < new Date();
-    }
+    };
 
     return (
         <LoadingWrapper isLoading={auth.loading}>
@@ -79,7 +77,7 @@ const ResultSubmitForm: FC<ResultSubmitFormProps> = ({ onSuccess, onError }) => 
                     Error: <ErrorMessage error={mutationError} />
                 </Alert>
             )}
-            <LoginCheck message={'You must be logged in to submit new results!'} />
+            <LoginCheck message="You must be logged in to submit new results." />
             <RegistrationCheck />
             <Form>
                 <Row>
@@ -119,8 +117,8 @@ const ResultSubmitForm: FC<ResultSubmitFormProps> = ({ onSuccess, onError }) => 
                                         timeIntervals={15}
                                         dateFormat="MMMM d, yyyy HH:mm"
                                         timeFormat="HH:mm"
-                                        filterDate={noFuture}
-                                        filterTime={noFuture}
+                                        filterDate={filterFuture}
+                                        filterTime={filterFuture}
                                     />
                                 </Col>
                             </Row>

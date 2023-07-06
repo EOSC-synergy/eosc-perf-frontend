@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
-import { Alert, Button, Form } from 'react-bootstrap';
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import { RegistrationCheck } from 'components/registrationCheck';
 import { LoadingWrapper } from 'components/loadingOverlay';
@@ -25,21 +25,11 @@ const FlavorSubmitForm: FC<FlavorSubmitFormProps> = ({ site, onSuccess, onError 
     const auth = useContext(UserContext);
     const api = useApi(auth.token);
 
-    const { handleSubmit, control, formState } = useForm<FormContents>();
-
-    const nameInput = useController({
-        name: 'name',
-        control,
-        rules: {
-            required: 'A flavor must have a name!',
+    const { handleSubmit, control, formState, register } = useForm<FormContents>({
+        defaultValues: {
+            name: '',
+            description: '',
         },
-        defaultValue: '',
-    });
-
-    const descriptionInput = useController({
-        name: 'description',
-        control,
-        defaultValue: '',
     });
 
     const { mutate, error: mutationError } = useMutation(
@@ -64,18 +54,17 @@ const FlavorSubmitForm: FC<FlavorSubmitFormProps> = ({ site, onSuccess, onError 
                     Error: <ErrorMessage error={mutationError} />
                 </Alert>
             )}
-            <LoginCheck message="You must be logged in to submit new site flavors!" />
+            <LoginCheck message="You must be logged in to submit new site flavors." />
             <RegistrationCheck />
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group className="mb-3">
                     <Form.Label>Name:</Form.Label>
                     <Form.Control
                         placeholder="standard-medium"
-                        onBlur={nameInput.field.onBlur}
-                        onChange={nameInput.field.onChange}
-                        ref={nameInput.field.ref}
-                        value={nameInput.field.value}
-                        isInvalid={nameInput.fieldState.invalid}
+                        {...register('name', {
+                            required: 'A flavor must have a name!',
+                        })}
+                        isInvalid={formState.errors.name?.message !== undefined}
                     />
                     <Form.Control.Feedback type="invalid">
                         {formState.errors.name?.message}
@@ -87,17 +76,23 @@ const FlavorSubmitForm: FC<FlavorSubmitFormProps> = ({ site, onSuccess, onError 
                     <Form.Control
                         placeholder="Add a description here."
                         as="textarea"
-                        onBlur={descriptionInput.field.onBlur}
-                        onChange={descriptionInput.field.onChange}
-                        ref={descriptionInput.field.ref}
-                        value={descriptionInput.field.value}
-                        isInvalid={descriptionInput.fieldState.invalid}
+                        {...register('description')}
                     />
                 </Form.Group>
 
-                <Button variant="success" type="submit" disabled={!auth.loggedIn} className="mt-1">
-                    Submit
-                </Button>
+                <Row>
+                    <Col />
+                    <Col xs="auto">
+                        <Button
+                            variant="success"
+                            type="submit"
+                            disabled={!auth.loggedIn}
+                            className="mt-1"
+                        >
+                            Submit
+                        </Button>
+                    </Col>
+                </Row>
             </Form>
         </LoadingWrapper>
     );
