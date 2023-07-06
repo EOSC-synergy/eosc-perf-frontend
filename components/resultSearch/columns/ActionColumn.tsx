@@ -1,12 +1,13 @@
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { Button, Dropdown, Modal, SplitButton } from 'react-bootstrap';
 import { ResultCallbacks } from 'components/resultSearch/resultCallbacks';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
 import { Result } from '@eosc-perf/eosc-perf-client';
-import useApi from '../../../utils/useApi';
+import useApi from 'utils/useApi';
 
-function ResultDeleter({ result, onDelete }: { result: Result; onDelete: () => void }) {
+type ResultDeleterProps = { result: Result; onDelete: () => void };
+const ResultDeleter: FC<ResultDeleterProps> = ({ result, onDelete }) => {
     const auth = useContext(UserContext);
     const api = useApi(auth.token);
 
@@ -51,22 +52,18 @@ function ResultDeleter({ result, onDelete }: { result: Result; onDelete: () => v
             </Modal>
         </>
     );
-}
+};
 
-/**
- * Column with buttons to interact with result
- * @param {Result} result
- * @param {ResultCallbacks} callbacks Callbacks for the operations
- * @returns {React.ReactElement}
- * @constructor
- */
-export function ActionColumn({
-    result,
-    callbacks,
-}: {
+type ActionColumnProps = {
     result: Result;
     callbacks: ResultCallbacks;
-}): ReactElement {
+};
+/**
+ * Column with buttons to interact with result
+ * @param result
+ * @param callbacks Callbacks for the operations
+ */
+const ActionColumn: FC<ActionColumnProps> = ({ result, callbacks }) => {
     // TODO: CSS: figure out why button group taller than it should be
     const auth = useContext(UserContext);
 
@@ -94,16 +91,13 @@ export function ActionColumn({
             {auth.loggedIn && auth.admin && (
                 <>
                     <ResultDeleter result={result} onDelete={callbacks.reload} />
-                    <Dropdown.Item
-                        as="button"
-                        onClick={() => {
-                            callbacks.edit(result);
-                        }}
-                    >
+                    <Dropdown.Item as="button" onClick={() => callbacks.edit(result)}>
                         Edit
                     </Dropdown.Item>
                 </>
             )}
         </SplitButton>
     );
-}
+};
+
+export default ActionColumn;

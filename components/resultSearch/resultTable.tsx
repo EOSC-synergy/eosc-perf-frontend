@@ -15,7 +15,7 @@ import { ColumnSelectModal } from 'components/resultSearch/columnSelectModal';
 import { Sorting, SortMode } from 'components/resultSearch/sorting';
 import { Suggestion } from './jsonSchema';
 import { Result } from '@eosc-perf/eosc-perf-client';
-import { ExecutionDateColumn } from './columns/executionDateColumn';
+import ExecutionDateColumn from './columns/ExecutionDateColumn';
 
 function SortingTableHeader(props: {
     label: string;
