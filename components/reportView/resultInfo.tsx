@@ -9,9 +9,7 @@ import useApi from '../../utils/useApi';
 export function ResultInfo(props: { id: string }): ReactElement {
     const api = useApi();
 
-    const result = useQuery(['result', props.id], () => api.results.getResult(props.id), {
-        refetchOnWindowFocus: false, // do not spam queries
-    });
+    const result = useQuery(['result', props.id], () => api.results.getResult(props.id));
 
     const [showPreview, setShowPreview] = useState(false);
 

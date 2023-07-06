@@ -32,13 +32,8 @@ function SitesEditor(): ReactElement {
         }
     }, [router, auth.admin, auth.loading]);
 
-    const sites = useQuery(
-        'sites',
-        () => api.sites.listSites(undefined, undefined, undefined, undefined, page),
-
-        {
-            refetchOnWindowFocus: false, // do not spam queries
-        }
+    const sites = useQuery('sites', () =>
+        api.sites.listSites(undefined, undefined, undefined, undefined, page)
     );
 
     const [activeSite, setActiveSite] = useState<Site | null>(null);

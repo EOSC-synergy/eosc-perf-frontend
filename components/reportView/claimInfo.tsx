@@ -23,7 +23,6 @@ export const ClaimInfo: React.FC<ClaimInfoProps> = (props): ReactElement => {
         ['claim', props.id],
         () => api.reports.getClaim(props.id ?? props.claim.id),
         {
-            refetchOnWindowFocus: false, // do not spam queries
             enabled: props.claim === undefined,
         }
     );

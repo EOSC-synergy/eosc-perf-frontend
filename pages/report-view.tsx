@@ -36,7 +36,6 @@ function ReportsView(): ReactElement {
         () => api.reports.listSubmits(undefined, undefined, undefined, submitsPage),
         {
             enabled: !!auth.token,
-            refetchOnWindowFocus: false, // do not spam queries
         }
     );
     const claims = useQuery(
@@ -44,7 +43,6 @@ function ReportsView(): ReactElement {
         () => api.reports.listClaims(undefined, undefined, undefined, undefined, claimsPage),
         {
             enabled: !!auth.token,
-            refetchOnWindowFocus: false, // do not spam queries
         }
     );
 

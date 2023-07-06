@@ -17,7 +17,6 @@ export function FlavorList(props: { site: Site }): ReactElement {
         () =>
             api.sites.listFlavors(props.site.id, undefined, undefined, undefined, undefined, page),
         {
-            refetchOnWindowFocus: false, // do not spam queries
             refetchOnMount: 'always',
         }
     );

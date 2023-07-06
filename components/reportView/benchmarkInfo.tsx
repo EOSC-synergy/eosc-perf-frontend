@@ -7,12 +7,8 @@ import useApi from '../../utils/useApi';
 export function BenchmarkInfo(props: { id: string }): ReactElement {
     const api = useApi();
 
-    const benchmark = useQuery(
-        ['benchmark', props.id],
-        () => api.benchmarks.getBenchmark(props.id),
-        {
-            refetchOnWindowFocus: false, // do not spam queries
-        }
+    const benchmark = useQuery(['benchmark', props.id], () =>
+        api.benchmarks.getBenchmark(props.id)
     );
 
     return (

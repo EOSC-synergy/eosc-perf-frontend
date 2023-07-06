@@ -29,7 +29,6 @@ const TagSelector: FC<TagSelectorProps> = ({
         ['tags', searchString],
         () => api.tags.searchTag(searchString.split(' ')),
         {
-            refetchOnWindowFocus: false, // do not spam queries
             keepPreviousData: true,
         }
     );

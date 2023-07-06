@@ -39,7 +39,6 @@ export function SearchingSelector<Item extends Identifiable>(props: {
         },
         {
             enabled: !props.disabled,
-            refetchOnWindowFocus: false, // do not spam queries
         }
     );
 

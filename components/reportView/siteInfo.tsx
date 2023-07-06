@@ -7,9 +7,7 @@ import useApi from '../../utils/useApi';
 export function SiteInfo(props: { id: string }): ReactElement {
     const api = useApi();
 
-    const site = useQuery(['site', props.id], () => api.sites.getSite(props.id), {
-        refetchOnWindowFocus: false, // do not spam queries
-    });
+    const site = useQuery(['site', props.id], () => api.sites.getSite(props.id));
 
     return (
         <>

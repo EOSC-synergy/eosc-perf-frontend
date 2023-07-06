@@ -8,12 +8,9 @@ import useApi from '../../utils/useApi';
 export function FlavorInfo(props: { id: string }): ReactElement {
     const api = useApi();
 
-    const flavor = useQuery(['flavor', props.id], () => api.flavors.getFlavor(props.id), {
-        refetchOnWindowFocus: false, // do not spam queries
-    });
+    const flavor = useQuery(['flavor', props.id], () => api.flavors.getFlavor(props.id));
 
     const site = useQuery(['site-for', props.id], () => api.flavors.getFlavorSite(props.id), {
-        refetchOnWindowFocus: false, // do not spam queries,
         enabled: flavor.isSuccess,
     });
 

@@ -326,7 +326,6 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                       config: {},
                   }
                 : undefined,
-            refetchOnWindowFocus: false, // do not spam queries
         }
     );
 
