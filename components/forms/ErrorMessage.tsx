@@ -1,8 +1,11 @@
 import axios, { AxiosError } from 'axios';
-import React, { ReactNode } from 'react';
+import React, { FC } from 'react';
 import { JsonHighlight } from 'components/jsonHighlight';
 
-export function getErrorMessage(error: Error | AxiosError): ReactNode {
+type ErrorMessageProps = {
+    error: Error | AxiosError | {};
+};
+const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
     if (axios.isAxiosError(error)) {
         if (error.response) {
             switch (error.response.status) {
@@ -31,15 +34,18 @@ export function getErrorMessage(error: Error | AxiosError): ReactNode {
                     );
             }
         } else if (error.request) {
-            return 'No response from the server';
+            return <>No response from the server</>;
         } else {
-            return error.message;
+            return <>{error.message}</>;
         }
     }
+
     return (
         <>
-            Unknown error, please check the console and open an issue at{' '}
+            Unknown error, please check the console and report the issue at{' '}
             <a href="https://github.com/EOSC-synergy/eosc-perf/issues">GitHub</a>!
         </>
     );
-}
+};
+
+export default ErrorMessage;

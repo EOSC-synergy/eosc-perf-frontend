@@ -1,15 +1,14 @@
 import { Alert, Button, Form } from 'react-bootstrap';
-import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
-import { AxiosError } from 'axios';
-import { getErrorMessage } from 'components/forms/getErrorMessage';
+import ErrorMessage from './ErrorMessage';
 import { RegistrationCheck } from 'components/registrationCheck';
 import { LoadingWrapper } from '../loadingOverlay';
 import { LoginCheck } from '../loginCheck';
 import { SubmitHandler, useController, useForm } from 'react-hook-form';
 import { CreateSite } from '@eosc-perf/eosc-perf-client';
-import useApi from '../../utils/useApi';
+import useApi from 'utils/useApi';
 
 type FormContents = {
     name: string;
@@ -24,23 +23,15 @@ export function SiteSubmitForm(props: {
     const auth = useContext(UserContext);
     const api = useApi(auth.token);
 
-    const [errorMessage, setErrorMessage] = useState<ReactNode | undefined>(undefined);
-
     const { handleSubmit, control, formState } = useForm<FormContents>();
 
-    useEffect(() => {
-        setErrorMessage(undefined);
-    }, []);
-
-    const { mutate } = useMutation((data: CreateSite) => api.sites.createSite(data), {
-        onSuccess: () => {
-            props.onSuccess();
-        },
-        onError: (error: Error | AxiosError) => {
-            setErrorMessage(getErrorMessage(error));
-            props.onError();
-        },
-    });
+    const { mutate, error: mutationError } = useMutation(
+        (data: CreateSite) => api.sites.createSite(data),
+        {
+            onSuccess: props.onSuccess,
+            onError: props.onError,
+        }
+    );
 
     const nameInput = useController({
         name: 'name',
@@ -76,7 +67,11 @@ export function SiteSubmitForm(props: {
 
     return (
         <LoadingWrapper isLoading={auth.loading}>
-            {errorMessage !== undefined && <Alert variant="danger">Error: {errorMessage}</Alert>}
+            {mutationError != null && (
+                <Alert variant="danger">
+                    Error: <ErrorMessage error={mutationError} />
+                </Alert>
+            )}
             <LoginCheck message="You must be logged in to submit new sites!" />
             <RegistrationCheck />
             <Form onSubmit={handleSubmit(onSubmit)}>

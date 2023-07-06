@@ -1,16 +1,15 @@
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
-import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
-import { AxiosError } from 'axios';
-import { getErrorMessage } from 'components/forms/getErrorMessage';
+import ErrorMessage from './ErrorMessage';
 import benchmarkJsonSchema from 'components/benchmarkJsonSchemaExample.json';
 import { RegistrationCheck } from 'components/registrationCheck';
 import Link from 'next/link';
-import { LoadingWrapper } from '../loadingOverlay';
-import { LoginCheck } from '../loginCheck';
+import { LoadingWrapper } from 'components/loadingOverlay';
+import { LoginCheck } from 'components/loginCheck';
 import { SubmitHandler, useForm, useController } from 'react-hook-form';
-import useApi from '../../utils/useApi';
+import useApi from 'utils/useApi';
 import { CreateBenchmark } from '@eosc-perf/eosc-perf-client';
 
 type FormContents = {
@@ -76,23 +75,11 @@ export function BenchmarkSubmitForm(props: {
         defaultValue: '',
     });
 
-    const [errorMessage, setErrorMessage] = useState<ReactNode | undefined>(undefined);
-
-    // clear error message on load
-    useEffect(() => {
-        setErrorMessage(undefined);
-    }, []);
-
-    const { mutate } = useMutation(
+    const { mutate, error: mutationError } = useMutation(
         (data: CreateBenchmark) => api.benchmarks.createBenchmark(data),
         {
-            onSuccess: () => {
-                props.onSuccess();
-            },
-            onError: (error: Error | AxiosError) => {
-                setErrorMessage(getErrorMessage(error));
-                props.onError();
-            },
+            onSuccess: props.onSuccess,
+            onError: props.onError,
         }
     );
 
@@ -109,7 +96,11 @@ export function BenchmarkSubmitForm(props: {
 
     return (
         <LoadingWrapper isLoading={auth.loading}>
-            {errorMessage !== undefined && <Alert variant="danger">Error: {errorMessage}</Alert>}
+            {mutationError != null && (
+                <Alert variant="danger">
+                    Error: <ErrorMessage error={mutationError} />
+                </Alert>
+            )}
             <LoginCheck message="You must be logged in to submit new benchmarks!" />
             <RegistrationCheck />
             <Form onSubmit={handleSubmit(onSubmit)}>

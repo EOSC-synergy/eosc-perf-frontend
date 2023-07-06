@@ -1,21 +1,20 @@
-import React, { ReactElement, ReactNode, useContext, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import { JsonSelection } from 'components/jsonSelection';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
-import { AxiosError } from 'axios';
 import { SiteSearchPopover } from 'components/searchSelectors/siteSearchPopover';
 import { BenchmarkSearchSelect } from 'components/searchSelectors/benchmarkSearchSelect';
 import { FlavorSearchSelect } from 'components/searchSelectors/flavorSearchSelect';
-import { getErrorMessage } from 'components/forms/getErrorMessage';
+import ErrorMessage from './ErrorMessage';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { RegistrationCheck } from 'components/registrationCheck';
 import TagSelector from 'components/tagSelector';
-import { LoginCheck } from '../loginCheck';
-import { LoadingWrapper } from '../loadingOverlay';
-import useApi from '../../utils/useApi';
+import { LoginCheck } from 'components/loginCheck';
+import { LoadingWrapper } from 'components/loadingOverlay';
+import useApi from 'utils/useApi';
 import { Benchmark, Flavor, Site, Tag } from '@eosc-perf/eosc-perf-client';
 
 export function ResultSubmitForm(props: {
@@ -34,9 +33,7 @@ export function ResultSubmitForm(props: {
 
     const [execDate, setExecDate] = useState<Date | undefined>(new Date());
 
-    const [errorMessage, setErrorMessage] = useState<ReactNode>();
-
-    const { mutate } = useMutation(
+    const { mutate, error: mutationError } = useMutation(
         [],
         (data: any) => {
             if (benchmark && flavor && execDate) {
@@ -51,13 +48,8 @@ export function ResultSubmitForm(props: {
             throw 'unexpectedly missing benchmark, flavor or date';
         },
         {
-            onSuccess: () => {
-                props.onSuccess();
-            },
-            onError: (error: Error | AxiosError) => {
-                setErrorMessage(getErrorMessage(error));
-                props.onError();
-            },
+            onSuccess: props.onSuccess,
+            onError: props.onError,
         }
     );
 
@@ -80,7 +72,11 @@ export function ResultSubmitForm(props: {
 
     return (
         <LoadingWrapper isLoading={auth.loading}>
-            {errorMessage !== undefined && <Alert variant="danger">Error: {errorMessage}</Alert>}
+            {mutationError != null && (
+                <Alert variant="danger">
+                    Error: <ErrorMessage error={mutationError} />
+                </Alert>
+            )}
             <LoginCheck message={'You must be logged in to submit new results!'} />
             <RegistrationCheck />
             <Form>
