@@ -1,17 +1,15 @@
-import React, { ReactElement, useState } from 'react';
+import { useState } from 'react';
 import { Card, Container, Toast, ToastContainer } from 'react-bootstrap';
 import SiteSubmitForm from 'components/forms/SiteSubmitForm';
 import Head from 'next/head';
+import { type NextPage } from 'next';
 
 /**
  * Page allowing users to submit new sites.
  *
  * This is essentially just a page wrapper around SiteSubmitForm.
- *
- * @returns {React.ReactElement}
- * @constructor
  */
-function SiteSubmission(): ReactElement {
+const SiteSubmission: NextPage = () => {
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
     return (
@@ -47,6 +45,6 @@ function SiteSubmission(): ReactElement {
             </Container>
         </>
     );
-}
+};
 
 export default SiteSubmission;

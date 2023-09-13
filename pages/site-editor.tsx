@@ -1,26 +1,24 @@
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import { useQuery } from 'react-query';
 import { LoadingOverlay } from 'components/loadingOverlay';
-import { SiteEditor } from 'components/siteEditor/siteEditor';
-import { Paginator } from '../components/pagination';
+import SiteEditor from 'components/site-editor/SiteEditor';
+import Paginator from 'components/Paginator';
 import Head from 'next/head';
-import { UserContext } from '../components/userContext';
 import { useRouter } from 'next/router';
-import { SiteSelect } from '../components/siteEditor/siteSelect';
-import useApi from '../utils/useApi';
-import { Site } from '@eosc-perf/eosc-perf-client';
+import SiteSelect from 'components/site-editor/SiteSelect';
+import useApi from 'lib/useApi';
+import { type Site } from '@eosc-perf/eosc-perf-client';
+import { type NextPage } from 'next';
+import useUser from 'lib/useUser';
 
 /**
  * Admin-only page to edit sites in the database and add flavors.
- *
- * @returns {React.ReactElement}
- * @constructor
  */
-function SitesEditor(): ReactElement {
+const SitesEditor: NextPage = () => {
     const router = useRouter();
 
-    const auth = useContext(UserContext);
+    const auth = useUser();
     const api = useApi(auth.token);
 
     const [page, setPage] = useState(1);
@@ -43,17 +41,13 @@ function SitesEditor(): ReactElement {
             <>
                 <ListGroup>
                     {sites.isLoading && <LoadingOverlay />}
+                    {sites.isSuccess && sites.data.data.items.length === 0 && 'No sites found!'}
                     {sites.isSuccess &&
-                        sites.data &&
-                        sites.data.data.items.length === 0 &&
-                        'No sites found!'}
-                    {sites.isSuccess &&
-                        sites.data &&
                         sites.data.data.items.map((site: Site) => (
                             <SiteSelect site={site} setActiveSite={setActiveSite} key={site.id} />
                         ))}
                 </ListGroup>
-                {sites.isSuccess && sites.data && sites.data.data.pages > 0 && (
+                {sites.isSuccess && sites.data.data.pages > 0 && (
                     <div className="mt-2">
                         <Paginator pagination={sites.data.data} navigateTo={(p) => setPage(p)} />
                     </div>
@@ -83,6 +77,6 @@ function SitesEditor(): ReactElement {
             </Container>
         </>
     );
-}
+};
 
 export default SitesEditor;

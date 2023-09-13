@@ -1,14 +1,14 @@
-import React, { FC, useContext } from 'react';
-import { UserContext } from 'components/userContext';
+import { type FC } from 'react';
 import { useMutation } from 'react-query';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
-import { RegistrationCheck } from 'components/registrationCheck';
+import RegistrationCheck from 'components/RegistrationCheck';
 import { LoadingWrapper } from 'components/loadingOverlay';
-import { LoginCheck } from 'components/loginCheck';
-import { SubmitHandler, useController, useForm } from 'react-hook-form';
-import { CreateFlavor, Site } from '@eosc-perf/eosc-perf-client';
-import useApi from 'utils/useApi';
+import LoginCheck from 'components/LoginCheck';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import { type CreateFlavor, type Site } from '@eosc-perf/eosc-perf-client';
+import useApi from 'lib/useApi';
+import useUser from 'lib/useUser';
 
 type FormContents = {
     name: string;
@@ -22,10 +22,10 @@ type FlavorSubmitFormProps = {
 };
 
 const FlavorSubmitForm: FC<FlavorSubmitFormProps> = ({ site, onSuccess, onError }) => {
-    const auth = useContext(UserContext);
+    const auth = useUser();
     const api = useApi(auth.token);
 
-    const { handleSubmit, control, formState, register } = useForm<FormContents>({
+    const { handleSubmit, formState, register } = useForm<FormContents>({
         defaultValues: {
             name: '',
             description: '',
@@ -35,8 +35,8 @@ const FlavorSubmitForm: FC<FlavorSubmitFormProps> = ({ site, onSuccess, onError 
     const { mutate, error: mutationError } = useMutation(
         (data: CreateFlavor) => api.sites.addFlavor(site.id, data),
         {
-            onSuccess: onSuccess,
-            onError: onError,
+            onSuccess,
+            onError,
         }
     );
 

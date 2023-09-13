@@ -1,6 +1,6 @@
 import { benchmarkLinkDisplay, truthyOrNoneTag } from './utility';
 import { render, screen } from '@testing-library/react';
-import { benchmark } from './testData';
+import { benchmark } from 'lib/testData';
 
 describe('truthy or none tag', () => {
     test('truthy', () => {

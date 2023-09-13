@@ -1,16 +1,13 @@
-import React, { ReactElement } from 'react';
 import { Container } from 'react-bootstrap';
 import template from 'components/benchmarkJsonSchemaExample.json';
-import { JsonHighlight } from 'components/jsonHighlight';
+import JsonHighlight from 'components/JsonHighlight';
 import Head from 'next/head';
+import { type NextPage } from 'next';
 
 /**
  * Guidelines page for developers creating and submitting new benchmarks to the site.
- *
- * @returns {React.ReactElement}
- * @constructor
  */
-function CodeGuidelines(): ReactElement {
+const CodeGuidelines: NextPage = () => {
     return (
         <>
             <Head>
@@ -57,6 +54,6 @@ function CodeGuidelines(): ReactElement {
             </Container>
         </>
     );
-}
+};
 
 export default CodeGuidelines;

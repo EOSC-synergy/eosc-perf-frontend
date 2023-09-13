@@ -1,21 +1,21 @@
-import React, { FC, useContext, useState } from 'react';
-import { JsonSelection } from 'components/jsonSelection';
+import { type FC, useState } from 'react';
+import JsonSelection from 'components/JsonSelection';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
-import { UserContext } from 'components/userContext';
 import { useMutation } from 'react-query';
-import { SiteSearchPopover } from 'components/searchSelectors/siteSearchPopover';
-import { BenchmarkSearchSelect } from 'components/searchSelectors/benchmarkSearchSelect';
-import { FlavorSearchSelect } from 'components/searchSelectors/flavorSearchSelect';
+import SiteSearchPopover from 'components/searchSelectors/SiteSearchPopover';
+import BenchmarkSearchSelect from 'components/searchSelectors/BenchmarkSearchSelect';
+import FlavorSearchSelect from 'components/searchSelectors/FlavorSearchSelect';
 import ErrorMessage from './ErrorMessage';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { RegistrationCheck } from 'components/registrationCheck';
-import TagSelector from 'components/tagSelector';
-import { LoginCheck } from 'components/loginCheck';
+import RegistrationCheck from 'components/RegistrationCheck';
+import TagSelector from 'components/TagSelector';
+import LoginCheck from 'components/LoginCheck';
 import { LoadingWrapper } from 'components/loadingOverlay';
-import useApi from 'utils/useApi';
-import { Benchmark, Flavor, Site, Tag } from '@eosc-perf/eosc-perf-client';
+import useApi from 'lib/useApi';
+import { type Benchmark, type Flavor, type Site, type Tag } from '@eosc-perf/eosc-perf-client';
+import useUser from 'lib/useUser';
 
 const filterFuture = (d: Date) => d < new Date();
 
@@ -25,7 +25,7 @@ type ResultSubmitFormProps = {
 };
 
 const ResultSubmitForm: FC<ResultSubmitFormProps> = ({ onSuccess, onError }) => {
-    const auth = useContext(UserContext);
+    const auth = useUser();
     const api = useApi(auth.token);
 
     const [benchmark, setBenchmark] = useState<Benchmark>();
@@ -39,7 +39,7 @@ const ResultSubmitForm: FC<ResultSubmitFormProps> = ({ onSuccess, onError }) => 
 
     const { mutate, error: mutationError } = useMutation(
         [],
-        (data: any) => {
+        (data: Record<string, unknown>) => {
             if (benchmark && flavor && execDate) {
                 return api.results.createResult(
                     execDate.toISOString(),
@@ -49,7 +49,7 @@ const ResultSubmitForm: FC<ResultSubmitFormProps> = ({ onSuccess, onError }) => 
                     tags.map((tag) => tag.id)
                 );
             }
-            throw 'unexpectedly missing benchmark, flavor or date';
+            throw new Error('unexpectedly missing benchmark, flavor or date');
         },
         {
             onSuccess: onSuccess,
@@ -81,7 +81,7 @@ const ResultSubmitForm: FC<ResultSubmitFormProps> = ({ onSuccess, onError }) => 
             <RegistrationCheck />
             <Form>
                 <Row>
-                    <Col lg={true}>
+                    <Col lg>
                         <Form.Group className="mb-3">
                             <JsonSelection
                                 fileContents={fileContents}

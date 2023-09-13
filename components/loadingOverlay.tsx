@@ -1,33 +1,25 @@
-import React, { ReactElement, ReactNode } from 'react';
+import { type FC, type PropsWithChildren } from 'react';
 
-import style from 'styles/loadingOverlay.module.css';
+import styles from 'styles/loadingOverlay.module.css';
 
 /**
  * Space filling loading overlay including a spinner or equivalent
- * @constructor
  */
-export function LoadingOverlay(): ReactElement {
-    return (
-        <div className={style.loading}>
-            <div className={style.ldsEllipsis}>
-                <div />
-                <div />
-                <div />
-                <div />
-            </div>
+export const LoadingOverlay: FC = () => (
+    <div className={styles['loading']}>
+        <div className={styles['ldsEllipsis']}>
+            <div />
+            <div />
+            <div />
+            <div />
         </div>
-    );
-}
+    </div>
+);
 
-export function LoadingWrapper({
+type LoadingWrapperProps = {
+    isLoading: boolean;
+};
+export const LoadingWrapper: FC<PropsWithChildren<LoadingWrapperProps>> = ({
     isLoading,
     children,
-}: {
-    isLoading: boolean;
-    children: ReactNode;
-}) {
-    if (isLoading) {
-        return <LoadingOverlay />;
-    }
-    return <>{children}</>;
-}
+}) => (isLoading ? <LoadingOverlay /> : <>{children}</>);

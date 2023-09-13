@@ -1,49 +1,50 @@
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row, Stack } from 'react-bootstrap';
 import { LoadingOverlay } from 'components/loadingOverlay';
 import { useQuery } from 'react-query';
-import { JsonPreviewModal } from 'components/jsonPreviewModal';
-import { ResultsPerPageSelection } from 'components/resultsPerPageSelection';
+import JsonPreviewModal from 'components/JsonPreviewModal';
+import ResultsPerPageSelection from 'components/ResultsPerPageSelection';
 import Head from 'next/head';
-import { ResultTable } from 'components/resultSearch/resultTable';
-import { Paginator } from 'components/pagination';
-import { DiagramCard } from 'components/resultSearch/diagramCard';
-import { ResultReportModal } from 'components/resultReportModal';
-import { ResultEditModal } from 'components/resultEditModal';
+import ResultTable from 'components/result-search/ResultTable';
+import Paginator from 'components/Paginator';
+import DiagramCard from 'components/result-search/DiagramCard';
+import ResultReportModal from 'components/ResultReportModal';
+import ResultEditModal from 'components/ResultEditModal';
 import { v4 as uuidv4 } from 'uuid';
-import { Filter } from 'components/resultSearch/filter';
-import { FilterEdit } from 'components/resultSearch/filterEdit';
+import type Filter from 'components/result-search/Filter';
+import FilterEdit from 'components/result-search/FilterEdit';
 
-import { parseSuggestions } from 'components/resultSearch/jsonSchema';
-import { SiteSearchPopover } from 'components/searchSelectors/siteSearchPopover';
-import { BenchmarkSearchSelect } from 'components/searchSelectors/benchmarkSearchSelect';
-import { FlavorSearchSelect } from 'components/searchSelectors/flavorSearchSelect';
-import { Sorting, SortMode } from 'components/resultSearch/sorting';
+import { parseSuggestions } from 'components/result-search/jsonSchema';
+import SiteSearchPopover from 'components/searchSelectors/SiteSearchPopover';
+import BenchmarkSearchSelect from 'components/searchSelectors/BenchmarkSearchSelect';
+import FlavorSearchSelect from 'components/searchSelectors/FlavorSearchSelect';
+import { type Sorting, SortMode } from 'components/result-search/sorting';
 import { useRouter } from 'next/router';
 import { Funnel, Save2, X } from 'react-bootstrap-icons';
-import { fetchSubkey, Json } from '../../components/resultSearch/jsonKeyHelpers';
+import { fetchSubkey, type Json } from 'components/result-search/jsonKeyHelpers';
 import {
-    Benchmark,
+    type Benchmark,
     BenchmarksApi,
     Configuration,
-    Flavor,
+    type Flavor,
     FlavorsApi,
-    Result,
-    Results,
+    type Result,
+    type Results,
     ResultsApi,
-    Site,
+    type Site,
     SitesApi,
-    Tag,
+    type Tag,
 } from '@eosc-perf/eosc-perf-client';
-import useApi, { BASE_CONFIGURATION_PARAMS } from '../../utils/useApi';
-import { GetServerSideProps } from 'next';
-import TagSelector from '../../components/tagSelector';
+import useApi, { BASE_CONFIGURATION_PARAMS } from 'lib/useApi';
+import { type GetServerSideProps } from 'next';
+import TagSelector from 'components/TagSelector';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import type ResultCallbacks from 'components/result-search/ResultCallbacks';
 
-function saveFile(contents: string, filename: string = 'export.csv') {
+const saveFile = (contents: string, filename = 'export.csv') => {
     const blob = new Blob([contents], { type: 'text/plain;charset=utf-8' });
-    let a = document.createElement('a'),
+    const a = document.createElement('a'),
         url = URL.createObjectURL(blob);
     a.href = url;
     a.download = filename;
@@ -53,7 +54,7 @@ function saveFile(contents: string, filename: string = 'export.csv') {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
     }, 0);
-}
+};
 
 const getStoredColumns = (benchmarkId: string) => {
     const benchmarkColumnsJson = localStorage.getItem('benchmarkColumns');
@@ -83,11 +84,11 @@ const serializeFilters = (filters: Map<string, Filter>): string[] =>
         if (filter === undefined || filter.key.length === 0 || filter.value.length === 0) {
             return [];
         }
-        return [filter.key + ' ' + filter.mode + ' ' + filter.value];
+        return [`${filter.key} ${filter.mode} ${filter.value}`];
     });
 
 const deserializeFilters = (serialized: string | string[] | undefined): Map<string, Filter> => {
-    if (serialized == undefined) {
+    if (serialized === undefined) {
         return new Map<string, Filter>();
     }
 
@@ -110,25 +111,20 @@ const deserializeFilters = (serialized: string | string[] | undefined): Map<stri
     return filters;
 };
 
-function noFuture(d: Date) {
-    return d < new Date();
-}
+const noFuture = (d: Date) => d < new Date();
 
 /**
  * Read localtime date and return as if it would be if read as UTC time
  * @param d date
  */
-function readLocalDateAsUtc(d: Date): Date {
-    return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDay()));
-}
+const readLocalDateAsUtc = (d: Date): Date =>
+    new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDay()));
 
 /**
  * Return ISO date part only (no time)
  * @param d date
  */
-function formatIsoDate(d: Date): string {
-    return d.toISOString().split('T')[0];
-}
+const formatIsoDate = (d: Date) => d.toISOString().split('T')[0];
 
 const DEFAULT_RESULTS_PER_PAGE = 20;
 
@@ -142,8 +138,6 @@ type PageProps = {
 
 /**
  * Search page for ran benchmarks
- * @returns {React.ReactElement}
- * @constructor
  */
 const ResultSearch: FC<PageProps> = (props: PageProps) => {
     const router = useRouter();
@@ -165,7 +159,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
 
     useEffect(() => {
         if (router.isReady) {
-            setFilters(deserializeFilters(router.query.filters));
+            setFilters(deserializeFilters(router.query['filters']));
         }
     }, [router.isReady]);
 
@@ -174,7 +168,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
         key: '',
     });
 
-    function addFilter() {
+    const addFilter = () => {
         const newMap = new Map(filters); // shallow copy
         const id = uuidv4();
         newMap.set(id, {
@@ -184,9 +178,9 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
             value: '',
         });
         updateFilters(newMap);
-    }
+    };
 
-    function setFilter(id: string, key: string, mode: string, value: string) {
+    const setFilter = (id: string, key: string, mode: string, value: string) => {
         const newMap = new Map(filters); // shallow copy
         newMap.set(id, {
             id,
@@ -195,13 +189,13 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
             value,
         });
         updateFilters(newMap);
-    }
+    };
 
-    function deleteFilter(id: string) {
+    const deleteFilter = (id: string) => {
         const newMap = new Map(filters); // shallow copy
         newMap.delete(id);
         updateFilters(newMap);
-    }
+    };
 
     const suggestedFields = benchmark ? parseSuggestions(benchmark) : undefined;
 
@@ -225,13 +219,13 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
     //
     const [customColumns, setCustomColumns] = useState<string[]>(props.columns ?? []);
 
-    function setResultsPerPage(results: number) {
+    const setResultsPerPage = (results: number) => {
         setResultsPerPage_(results);
         setPage(1);
-    }
+    };
 
     // helpers for subelements
-    const resultOps = {
+    const resultOps: ResultCallbacks = {
         select: function (result: Result) {
             if (!this.isSelected(result)) {
                 // cannot call setSelectedResults directly, need to put in variable first
@@ -287,9 +281,9 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
             site?.id,
             site !== undefined ? flavor?.id : undefined,
             sorting.mode === SortMode.Ascending
-                ? '+' + sorting.key
+                ? `+${sorting.key}`
                 : sorting.mode === SortMode.Descending
-                ? '-' + sorting.key
+                ? `-${sorting.key}`
                 : undefined,
             tags,
             serializeFilters(filters),
@@ -310,9 +304,9 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                 tags.map((t) => t.id),
                 serializeFilters(filters),
                 sorting.mode === SortMode.Ascending
-                    ? '+' + sorting.key
+                    ? `+${sorting.key}`
                     : sorting.mode === SortMode.Descending
-                    ? '-' + sorting.key
+                    ? `-${sorting.key}`
                     : undefined
             ),
         {
@@ -329,75 +323,75 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
         }
     );
 
-    function refreshLocation(
-        benchmark: Benchmark | undefined,
-        site: Site | undefined,
-        flavor: Flavor | undefined,
+    const refreshLocation = (
+        newBenchmark: Benchmark | undefined,
+        newSite: Site | undefined,
+        newFlavor: Flavor | undefined,
         columns: string[] | undefined,
-        filters: Map<string, Filter>
-    ) {
+        newFilters: Map<string, Filter>
+    ) => {
         let query = {};
-        if (benchmark && benchmark.id) {
-            query = { ...query, benchmarkId: benchmark.id };
+        if (newBenchmark?.id) {
+            query = { ...query, benchmarkId: newBenchmark.id };
             if (columns) {
                 query = { ...query, columns: JSON.stringify(columns) };
             }
         }
-        if (site && site.id) {
-            query = { ...query, siteId: site.id };
+        if (newSite?.id) {
+            query = { ...query, siteId: newSite.id };
         }
-        if (flavor && flavor.id) {
-            query = { ...query, flavorId: flavor.id };
+        if (newFlavor?.id) {
+            query = { ...query, flavorId: newFlavor.id };
         }
-        if (filters.size) {
+        if (newFilters.size) {
             query = {
                 ...query,
-                filters: serializeFilters(filters),
+                filters: serializeFilters(newFilters),
             };
         }
         router.push({ pathname: '/search/result', query }, undefined, { shallow: true });
-    }
+    };
 
-    function updateBenchmark(benchmark?: Benchmark) {
-        setBenchmark(benchmark);
+    const updateBenchmark = (newBenchmark?: Benchmark) => {
+        setBenchmark(newBenchmark);
         setSelectedResults([]);
-        if (benchmark) {
-            setCustomColumns(getStoredColumns(benchmark.id));
+        if (newBenchmark) {
+            setCustomColumns(getStoredColumns(newBenchmark.id));
         } else {
             setCustomColumns([]);
         }
 
-        refreshLocation(benchmark, site, flavor, customColumns, filters);
-    }
+        refreshLocation(newBenchmark, site, flavor, customColumns, filters);
+    };
 
-    function updateCustomColumns(columns: string[]) {
+    const updateCustomColumns = (columns: string[]) => {
         setCustomColumns(columns);
         refreshLocation(benchmark, site, flavor, columns, filters);
         if (benchmark) {
             storeBenchmarkColumns(benchmark.id, columns);
         }
-    }
+    };
 
-    function updateSite(site?: Site) {
-        setSite(site);
+    const updateSite = (newSite?: Site) => {
+        setSite(newSite);
         setFlavor(undefined);
 
-        refreshLocation(benchmark, site, flavor, customColumns, filters);
-    }
+        refreshLocation(benchmark, newSite, flavor, customColumns, filters);
+    };
 
-    function updateFlavor(flavor?: Flavor) {
-        setFlavor(flavor);
+    const updateFlavor = (newFlavor?: Flavor) => {
+        setFlavor(newFlavor);
 
-        refreshLocation(benchmark, site, flavor, customColumns, filters);
-    }
+        refreshLocation(benchmark, site, newFlavor, customColumns, filters);
+    };
 
-    function updateFilters(filters: Map<string, Filter>) {
-        setFilters(filters);
-        refreshLocation(benchmark, site, flavor, customColumns, filters);
-    }
+    const updateFilters = (newFilters: Map<string, Filter>) => {
+        setFilters(newFilters);
+        refreshLocation(benchmark, site, flavor, customColumns, newFilters);
+    };
 
-    function exportResults() {
-        let lines = [];
+    const exportResults = () => {
+        const lines = [];
         let header = 'id,site,flavor,benchmark';
         if (customColumns.length !== 0) {
             header = header.concat(',', customColumns.join(','));
@@ -406,18 +400,16 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
         for (const result of selectedResults) {
             // let entry = `${result.id},${result.site.id},${result.flavor.id},${result.benchmark.id}`;
             // let entry = `${result.id}`;
-            let entry = `${result.id},${result.site.name},${result.flavor.name},${
-                result.benchmark.docker_image + ':' + result.benchmark.docker_tag
-            }`;
+            let entry = `${result.id},${result.site.name},${result.flavor.name},${result.benchmark.docker_image}:${result.benchmark.docker_tag}`;
             for (const column of customColumns) {
                 // .map.join?
-                entry = entry.concat(',' + fetchSubkey(result.json as Json, column));
+                entry = entry.concat(`,${fetchSubkey(result.json as Json, column)}`);
             }
             lines.push(entry);
         }
 
         saveFile(lines.join('\n'), 'export.csv');
-    }
+    };
 
     return (
         <>
@@ -435,7 +427,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                         <Card.Body>
                             {browserLoaded && router.isReady && (
                                 <Row>
-                                    <Col xl={true}>
+                                    <Col xl>
                                         <Stack
                                             gap={2}
                                             className="mb-xl-0 mb-2 d-flex justify-content-center h-100"
@@ -537,7 +529,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                             <Button
                                                 variant="secondary"
                                                 onClick={() => setSelectedResults([])}
-                                                disabled={selectedResults.length == 0}
+                                                disabled={selectedResults.length === 0}
                                             >
                                                 <X /> Clear selection
                                             </Button>
@@ -568,7 +560,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                         {(results.isLoading ||
                                             results.isFetching ||
                                             results.isRefetching) && <LoadingOverlay />}
-                                        {results.isSuccess && results && results.data.total > 0 && (
+                                        {results.isSuccess && results.data.total > 0 && (
                                             <ResultTable
                                                 results={results.data.items}
                                                 pageOffset={
@@ -593,14 +585,14 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                     </div>
                                     {results.isSuccess && (
                                         <Row className="mx-2">
-                                            <Col xs={true} sm={7} md={5} xl={4} xxl={3}>
+                                            <Col xs sm={7} md={5} xl={4} xxl={3}>
                                                 <ResultsPerPageSelection
                                                     onChange={setResultsPerPage}
                                                     currentSelection={resultsPerPage}
                                                 />
                                             </Col>
                                             <Col />
-                                            <Col sm={true} md="auto">
+                                            <Col sm md="auto">
                                                 <Paginator
                                                     pagination={results.data}
                                                     navigateTo={setPage}
@@ -648,10 +640,10 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const configuration = new Configuration(BASE_CONFIGURATION_PARAMS);
-    let props: Partial<PageProps> = {};
-    if (context.query.benchmarkId && !Array.isArray(context.query.benchmarkId)) {
+    const props: Partial<PageProps> = {};
+    if (context.query['benchmarkId'] && !Array.isArray(context.query['benchmarkId'])) {
         await new BenchmarksApi(configuration)
-            .getBenchmark(context.query.benchmarkId)
+            .getBenchmark(context.query['benchmarkId'])
             .then((response) => {
                 props.benchmark = response.data;
             })
@@ -659,13 +651,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 console.error(error);
             });
 
-        if (context.query.columns && !Array.isArray(context.query.columns)) {
-            props.columns = JSON.parse(context.query.columns);
+        if (context.query['columns'] && !Array.isArray(context.query['columns'])) {
+            props.columns = JSON.parse(context.query['columns']);
         }
     }
-    if (context.query.siteId && !Array.isArray(context.query.siteId)) {
+    if (context.query['siteId'] && !Array.isArray(context.query['siteId'])) {
         await new SitesApi(configuration)
-            .getSite(context.query.siteId)
+            .getSite(context.query['siteId'])
             .then((response) => {
                 props.site = response.data;
             })
@@ -673,9 +665,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 console.error(error);
             });
 
-        if (context.query.flavorId && !Array.isArray(context.query.flavorId)) {
+        if (context.query['flavorId'] && !Array.isArray(context.query['flavorId'])) {
             await new FlavorsApi(configuration)
-                .getFlavor(context.query.flavorId)
+                .getFlavor(context.query['flavorId'])
                 .then((response) => {
                     props.flavor = response.data;
                 })
@@ -693,11 +685,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             1,
             undefined,
             undefined,
-            Array.isArray(context.query.benchmarkId) ? undefined : context.query.benchmarkId,
-            Array.isArray(context.query.siteId) ? undefined : context.query.siteId,
-            Array.isArray(context.query.siteId) || Array.isArray(context.query.flavorId)
+            Array.isArray(context.query['benchmarkId']) ? undefined : context.query['benchmarkId'],
+            Array.isArray(context.query['siteId']) ? undefined : context.query['siteId'],
+            Array.isArray(context.query['siteId']) || Array.isArray(context.query['flavorId'])
                 ? undefined
-                : context.query.siteId && context.query.flavorId,
+                : context.query['siteId'] && context.query['flavorId'],
             undefined,
             [],
             undefined

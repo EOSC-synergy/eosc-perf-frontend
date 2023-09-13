@@ -1,15 +1,14 @@
-import React, { ReactElement, ReactNode, useState } from 'react';
+import { type ReactElement, type ReactNode, useState } from 'react';
 import { useQuery } from 'react-query';
-import { SearchForm } from 'components/searchSelectors/searchForm';
-import { Table } from 'components/searchSelectors/table';
+import SearchForm from './SearchForm';
+import Table from './Table';
 import { LoadingOverlay } from 'components/loadingOverlay';
-import { Paginated, Paginator } from 'components/pagination';
+import Paginator, { type Paginated } from 'components/Paginator';
 import { Button, Col, OverlayTrigger, Popover, Row } from 'react-bootstrap';
-import { Identifiable } from 'components/identifiable';
-import useApi from '../../utils/useApi';
-import { AxiosResponse } from 'axios';
+import type Identifiable from 'components/Identifiable';
+import { type AxiosResponse } from 'axios';
 
-export function SearchingSelector<Item extends Identifiable>(props: {
+type SearchingSelectorProps<Item> = {
     queryKeyPrefix: string;
     tableName: string;
     queryCallback: (terms: string[]) => Promise<AxiosResponse<Paginated<Item>>> | undefined;
@@ -19,8 +18,19 @@ export function SearchingSelector<Item extends Identifiable>(props: {
     displayRow: (item: Item) => ReactNode;
     submitNew?: () => void;
     disabled?: boolean;
-}): ReactElement {
-    const api = useApi();
+};
+
+export function SearchingSelector<Item extends Identifiable>({
+    queryKeyPrefix,
+    tableName,
+    queryCallback,
+    item,
+    setItem,
+    display,
+    displayRow,
+    submitNew,
+    disabled,
+}: SearchingSelectorProps<Item>): ReactElement {
     //const [resultsPerPage, setResultsPerPage] = useState(10);
     const [page, setPage] = useState(0);
 
@@ -29,31 +39,29 @@ export function SearchingSelector<Item extends Identifiable>(props: {
     const [show, setShow] = useState<boolean>(false);
 
     const items = useQuery(
-        [props.queryKeyPrefix, page, searchString],
+        [queryKeyPrefix, page, searchString],
         () => {
-            const response = props.queryCallback(searchString.split(' '));
+            const response = queryCallback(searchString.split(' '));
             if (response !== undefined) {
                 return response;
             }
-            throw 'no data';
+            throw new Error('no data');
         },
         {
-            enabled: !props.disabled,
+            enabled: !disabled,
         }
     );
 
-    function onToggle(show: boolean) {
-        setShow(show);
-    }
+    const onToggle = (show: boolean) => setShow(show);
 
-    function setItem(item?: Item) {
-        props.setItem(item);
+    const updateItem = (item?: Item) => {
+        setItem(item);
         setShow(false);
-    }
+    };
 
     const popover = (
         <Popover id="benchmarkSelect" style={{ maxWidth: '576px', width: 'auto' }}>
-            <Popover.Header as="h3">{props.tableName} Search</Popover.Header>
+            <Popover.Header as="h3">{tableName} Search</Popover.Header>
             <Popover.Body>
                 <SearchForm setSearchString={setSearchString} />
                 <div style={{ position: 'relative' }}>
@@ -62,10 +70,8 @@ export function SearchingSelector<Item extends Identifiable>(props: {
                             <Table<Item>
                                 setItem={() => undefined}
                                 items={[]}
-                                tableName={props.tableName}
-                                displayItem={() => {
-                                    return <></>;
-                                }}
+                                tableName={tableName}
+                                displayItem={() => null}
                             />
                             <LoadingOverlay />
                         </>
@@ -74,9 +80,9 @@ export function SearchingSelector<Item extends Identifiable>(props: {
                     {items.isSuccess && (
                         <Table<Item>
                             items={items.data.data.items}
-                            setItem={setItem}
-                            tableName={props.tableName}
-                            displayItem={props.displayRow}
+                            setItem={updateItem}
+                            tableName={tableName}
+                            displayItem={displayRow}
                         />
                     )}
                 </div>
@@ -90,13 +96,13 @@ export function SearchingSelector<Item extends Identifiable>(props: {
                         <Button
                             className="m-1"
                             variant="secondary"
-                            onClick={() => setItem(undefined)}
+                            onClick={() => updateItem(undefined)}
                         >
                             Deselect
                         </Button>
                         {/* TODO: hide popover if submit button is pressed */}
-                        {props.submitNew && (
-                            <Button className="m-1" onClick={props.submitNew}>
+                        {submitNew && (
+                            <Button className="m-1" onClick={submitNew}>
                                 + New
                             </Button>
                         )}
@@ -108,7 +114,7 @@ export function SearchingSelector<Item extends Identifiable>(props: {
 
     return (
         <Row className="align-items-center">
-            <Col>{props.display(props.item)} </Col>
+            <Col>{display(item)} </Col>
             <Col md="auto">
                 <OverlayTrigger
                     trigger="click"
@@ -118,7 +124,7 @@ export function SearchingSelector<Item extends Identifiable>(props: {
                     show={show}
                     onToggle={onToggle}
                 >
-                    <Button variant="success" size="sm" disabled={props.disabled}>
+                    <Button variant="success" size="sm" disabled={disabled}>
                         Select
                     </Button>
                 </OverlayTrigger>

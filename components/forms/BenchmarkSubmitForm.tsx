@@ -1,16 +1,16 @@
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
-import React, { FC, useContext } from 'react';
-import { UserContext } from 'components/userContext';
+import { type FC } from 'react';
 import { useMutation } from 'react-query';
 import ErrorMessage from './ErrorMessage';
 import benchmarkJsonSchema from 'components/benchmarkJsonSchemaExample.json';
-import { RegistrationCheck } from 'components/registrationCheck';
+import RegistrationCheck from 'components/RegistrationCheck';
 import Link from 'next/link';
 import { LoadingWrapper } from 'components/loadingOverlay';
-import { LoginCheck } from 'components/loginCheck';
-import { SubmitHandler, useForm, useController } from 'react-hook-form';
-import useApi from 'utils/useApi';
-import { CreateBenchmark } from '@eosc-perf/eosc-perf-client';
+import LoginCheck from 'components/LoginCheck';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import useApi from 'lib/useApi';
+import { type CreateBenchmark } from '@eosc-perf/eosc-perf-client';
+import useUser from 'lib/useUser';
 
 const validateTemplate = (template: string) => {
     if (template.length === 0) {
@@ -38,7 +38,7 @@ type BenchmarkSubmitForm = {
 };
 
 const BenchmarkSubmitForm: FC<BenchmarkSubmitForm> = ({ onError, onSuccess }) => {
-    const auth = useContext(UserContext);
+    const auth = useUser();
     const api = useApi(auth.token);
     const { register, handleSubmit, formState } = useForm<FormContents>({
         defaultValues: {

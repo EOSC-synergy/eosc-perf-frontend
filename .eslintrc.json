@@ -1,7 +1,103 @@
 {
-  "extends": [ "next/core-web-vitals", "prettier" ],
-  
-  "rules": {
-    "semi": "warn"
-  }
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "next/core-web-vitals",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/strict",
+        "plugin:sonarjs/recommended",
+        "plugin:eslint-comments/recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:cypress/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "tsconfig.json",
+        "ecmaFeatures": {
+            "jsx": true,
+            "modules": true
+        },
+        "sourceType": "module"
+    },
+    "plugins": ["@typescript-eslint", "sonarjs", "jsx-a11y", "github", "cypress", "import"],
+    "rules": {
+        "@next/next/no-img-element": "off",
+        "@typescript-eslint/ban-ts-comment": "warn",
+        "curly": "error",
+        "no-console": [
+            "warn",
+            {
+                "allow": ["warn", "error"]
+            }
+        ],
+        "quotes": [
+            "warn",
+            "single",
+            {
+                "avoidEscape": true
+            }
+        ],
+        "prefer-template": "warn",
+        "react/jsx-curly-brace-presence": [
+            "warn",
+            {
+                "props": "never"
+            }
+        ],
+        "react/jsx-boolean-value": ["error", "never"],
+        "react/jsx-no-useless-fragment": "warn",
+        "react/jsx-fragments": "warn",
+        "eqeqeq": ["warn", "smart"],
+        "no-lonely-if": "warn",
+        "no-multi-assign": "warn",
+        "@typescript-eslint/no-shadow": "warn",
+        "no-useless-return": "warn",
+        "no-useless-rename": "warn",
+        "one-var-declaration-per-line": "warn",
+        "prefer-object-spread": "warn",
+        "no-unreachable-loop": "warn",
+        "no-template-curly-in-string": "warn",
+        "default-case-last": "warn",
+        "no-array-constructor": "warn",
+        "no-else-return": "warn",
+        // disabled: too generic to really provide helpful warnings
+        //'no-negated-condition': 'warn',
+        "array-callback-return": "warn",
+        "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
+
+        // check if useful
+        //"no-secrets/no-secrets": "warn",
+
+        // based on https://github.com/github/eslint-plugin-github/blob/main/lib/configs/react.js
+        "github/a11y-no-generic-link-text": "error",
+
+        // TODO: why is this one not working?
+        //"github/role-supports-aria-props": "error",
+        // disabled for the one above
+        //"jsx-a11y/role-supports-aria-props": "off"
+
+        // maybe consider https://github.com/brendanmorrell/eslint-plugin-styled-components-a11y
+
+        "import/first": "error",
+        "import/no-absolute-path": "error",
+        // disabled: slow linting
+        /*"import/no-cycle": "error",*/
+        "import/no-duplicates": "error",
+
+        "@typescript-eslint/consistent-type-imports": [
+            "error",
+            {
+                "prefer": "type-imports",
+                "fixStyle": "inline-type-imports"
+            }
+        ],
+
+        "sonarjs/cognitive-complexity": "off",
+        // typically only triggered on more complex switch cases where introducing a variable only worsens readability
+        "sonarjs/no-duplicate-string": "off"
+    },
+    "ignorePatterns": [".eslintrc.js"]
 }

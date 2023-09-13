@@ -1,25 +1,20 @@
-import React, { ReactElement } from 'react';
 import { Container } from 'react-bootstrap';
 import Head from 'next/head';
-import { TermsOfService } from '../components/termsOfService';
+import TermsOfService from 'components/TermsOfService';
+import { type NextPage } from 'next';
 
 /**
  * Page containing our terms of service / acceptable use policy.
- *
- * @returns {React.ReactElement}
- * @constructor
  */
-function TermsOfServicePage(): ReactElement {
-    return (
-        <>
-            <Head>
-                <title>Acceptable Use Policy</title>
-            </Head>
-            <Container>
-                <TermsOfService />
-            </Container>
-        </>
-    );
-}
+const TermsOfServicePage: NextPage = () => (
+    <>
+        <Head>
+            <title>Acceptable Use Policy</title>
+        </Head>
+        <Container>
+            <TermsOfService />
+        </Container>
+    </>
+);
 
 export default TermsOfServicePage;

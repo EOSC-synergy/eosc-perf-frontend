@@ -1,9 +1,9 @@
-import axios, { AxiosError } from 'axios';
-import React, { FC } from 'react';
-import { JsonHighlight } from 'components/jsonHighlight';
+import axios, { type AxiosError } from 'axios';
+import { type FC } from 'react';
+import JsonHighlight from 'components/JsonHighlight';
 
 type ErrorMessageProps = {
-    error: Error | AxiosError | {};
+    error: Error | AxiosError | unknown;
 };
 const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
     if (axios.isAxiosError(error)) {

@@ -1,17 +1,15 @@
-import React, { ReactElement, useState } from 'react';
+import { useState } from 'react';
 import { Card, Container, Toast, ToastContainer } from 'react-bootstrap';
 import ResultSubmitForm from 'components/forms/ResultSubmitForm';
 import Head from 'next/head';
+import { type NextPage } from 'next';
 
 /**
  * Page allowing users to submit new results.
  *
  * This is essentially just a page wrapper around ResultSubmitForm.
- *
- * @returns {React.ReactElement}
- * @constructor
  */
-function ResultSubmission(): ReactElement {
+const ResultSubmission: NextPage = () => {
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
     return (
@@ -47,6 +45,6 @@ function ResultSubmission(): ReactElement {
             </Container>
         </>
     );
-}
+};
 
 export default ResultSubmission;

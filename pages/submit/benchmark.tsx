@@ -1,17 +1,15 @@
-import React, { ReactElement, useState } from 'react';
+import { useState } from 'react';
 import { Card, Container, Toast, ToastContainer } from 'react-bootstrap';
 import BenchmarkSubmitForm from 'components/forms/BenchmarkSubmitForm';
 import Head from 'next/head';
+import { type NextPage } from 'next';
 
 /**
  * Page allowing users to submit new benchmarks.
  *
  * This is essentially just a page wrapper around BenchmarkSubmitForm.
- *
- * @returns {React.ReactElement}
- * @constructor
  */
-function BenchmarkSubmission(): ReactElement {
+const BenchmarkSubmission: NextPage = () => {
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
     return (
@@ -47,6 +45,6 @@ function BenchmarkSubmission(): ReactElement {
             </Container>
         </>
     );
-}
+};
 
 export default BenchmarkSubmission;

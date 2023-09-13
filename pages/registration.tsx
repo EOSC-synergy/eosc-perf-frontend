@@ -1,23 +1,21 @@
-import React, { ReactElement, useContext, useState } from 'react';
+import { useState } from 'react';
 import { Alert, Button, Container } from 'react-bootstrap';
 import { useMutation } from 'react-query';
-import { UserContext } from 'components/userContext';
-import { JsonHighlight } from 'components/jsonHighlight';
+import JsonHighlight from 'components/JsonHighlight';
 import Head from 'next/head';
-import { TermsOfServiceCheck } from '../components/termsOfServiceCheck';
-import useApi from '../utils/useApi';
+import TermsOfServiceCheck from 'components/TermsOfServiceCheck';
+import useApi from 'lib/useApi';
+import useUser from 'lib/useUser';
+import { type NextPage } from 'next';
 
 /**
  * Page handling first-time user registration.
  *
  * Users are not automatically registered when logging in through EGI, they must register and accept our privacy policy
  * separately on this page.
- *
- * @returns {React.ReactElement}
- * @constructor
  */
-function Registration(): ReactElement {
-    const auth = useContext(UserContext);
+const Registration: NextPage = () => {
+    const auth = useUser();
     const api = useApi(auth.token);
 
     const [error, setError] = useState<unknown | undefined>(undefined);
@@ -28,9 +26,7 @@ function Registration(): ReactElement {
             // reset-redirect to refresh react-query from outside
             window.location.href = '/';
         },
-        onError: (e) => {
-            setError(e);
-        },
+        onError: (e) => setError(e),
     });
 
     return (
@@ -62,6 +58,6 @@ function Registration(): ReactElement {
             </Container>
         </>
     );
-}
+};
 
 export default Registration;
