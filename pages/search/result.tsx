@@ -496,12 +496,14 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                             </Col>
                         </Row>
                     )}
+                    <hr />
                     <DiagramCard
                         results={selectedResults}
                         benchmark={benchmark}
                         suggestions={suggestedFields}
                         className="my-2"
                     />
+                    <hr />
                     <Stack gap={2}>
                         <Stack gap={1}>
                             {[...filters.keys()].flatMap((key, index) => {
