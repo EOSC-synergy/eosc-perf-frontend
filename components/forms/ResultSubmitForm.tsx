@@ -89,20 +89,24 @@ const ResultSubmitForm: FC<ResultSubmitFormProps> = ({ onSuccess, onError }) => 
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <BenchmarkSearchSelect
-                                benchmark={benchmark}
-                                setBenchmark={setBenchmark}
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <SiteSearchPopover site={site} setSite={setSite} />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <FlavorSearchSelect site={site} flavor={flavor} setFlavor={setFlavor} />
-                        </Form.Group>
+                        <Row className="d-flex justify-content-center mb-4">
+                            <Col xl={4}>
+                                <BenchmarkSearchSelect
+                                    benchmark={benchmark}
+                                    setBenchmark={setBenchmark}
+                                />
+                            </Col>
+                            <Col xl={4}>
+                                <SiteSearchPopover site={site} setSite={setSite} />
+                            </Col>
+                            <Col xl={4}>
+                                <FlavorSearchSelect
+                                    site={site}
+                                    flavor={flavor}
+                                    setFlavor={setFlavor}
+                                />
+                            </Col>
+                        </Row>
 
                         <Form.Group className="mb-3">
                             <Row>
