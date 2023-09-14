@@ -36,6 +36,7 @@ const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
         } else if (error.request) {
             return <>No response from the server</>;
         } else {
+            // eslint-disable-next-line react/jsx-no-useless-fragment
             return <>{error.message}</>;
         }
     }

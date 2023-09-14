@@ -19,10 +19,10 @@ const FlavorSearchSelect: FC<FlavorSearchSelectProps> = ({
 }): ReactElement => {
     const api = useApi();
 
-    const displayRow = (flavor: Flavor) => (
+    const displayRow = (rowFlavor: Flavor) => (
         <>
-            {flavor.name}
-            <p>{flavor.description}</p>
+            {rowFlavor.name}
+            <p>{rowFlavor.description}</p>
         </>
     );
 

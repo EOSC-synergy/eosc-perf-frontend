@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
 
 type ResultsPerPageSelectionProps = {

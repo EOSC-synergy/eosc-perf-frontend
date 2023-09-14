@@ -17,7 +17,7 @@ const ResultInfo: FC<ResultInfoProps> = ({ id }) => {
     return (
         <>
             {result.isLoading && <LoadingOverlay />}
-            {result.isSuccess && result.data && (
+            {result.isSuccess && (
                 <>
                     Site: {result.data.data.site.name}
                     <br />

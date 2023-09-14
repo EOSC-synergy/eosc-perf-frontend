@@ -13,7 +13,7 @@ const BenchmarkInfo: FC<BenchmarkInfoProps> = ({ id }) => {
     return (
         <>
             {benchmark.isLoading && <LoadingOverlay />}
-            {benchmark.isSuccess && benchmark.data && (
+            {benchmark.isSuccess && (
                 <>
                     Image: {benchmarkLinkDisplay(benchmark.data.data)}
                     <br />

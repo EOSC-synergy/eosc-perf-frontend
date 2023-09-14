@@ -79,7 +79,7 @@ const TagSelector: FC<TagSelectorProps> = ({
                                 {tags.data.data.items
                                     .filter(
                                         (tag) =>
-                                            !selected.some((selected) => selected.id === tag.id)
+                                            !selected.some((otherTag) => otherTag.id === tag.id)
                                     )
                                     .map((tag) => (
                                         <PlaceholderTag key={tag.id} />
@@ -88,13 +88,13 @@ const TagSelector: FC<TagSelectorProps> = ({
                         )}
                         {(tags.isFetching || tags.isLoading || tags.isRefetching) &&
                             !tags.isPreviousData && <LoadingOverlay />}
-                        {tags.isSuccess && !tags.isPreviousData && tags.data && (
+                        {tags.isSuccess && !tags.isPreviousData && (
                             <>
                                 <div className="d-flex">
                                     {tags.data.data.items
                                         .filter(
                                             (tag) =>
-                                                !selected.some((selected) => selected.id === tag.id)
+                                                !selected.some((otherTag) => otherTag.id === tag.id)
                                         )
                                         .map((tag) => (
                                             <UnselectedTag tag={tag} select={select} key={tag.id} />

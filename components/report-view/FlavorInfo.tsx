@@ -20,7 +20,7 @@ const FlavorInfo: FC<FlavorInfoProps> = ({ id }) => {
     return (
         <>
             {flavor.isLoading && <LoadingOverlay />}
-            {flavor.isSuccess && flavor.data && (
+            {flavor.isSuccess && (
                 <>
                     Name: {flavor.data.data.name}
                     <br />
@@ -30,7 +30,7 @@ const FlavorInfo: FC<FlavorInfoProps> = ({ id }) => {
                     <hr />
                     Site:
                     <br />
-                    {site.isSuccess && site.data && <SiteInfo id={site.data.data.id} />}
+                    {site.isSuccess && <SiteInfo id={site.data.data.id} />}
                 </>
             )}
         </>

@@ -1,4 +1,4 @@
-import { type FC, ReactElement, useState } from 'react';
+import { type FC, useState } from 'react';
 import { Modal, Toast } from 'react-bootstrap';
 import FlavorSubmitForm from 'components/forms/FlavorSubmitForm';
 import { type Site } from '@eosc-perf/eosc-perf-client';

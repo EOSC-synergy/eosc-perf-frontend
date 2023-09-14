@@ -14,10 +14,10 @@ type BenchmarkSearchSelectProps = {
 const BenchmarkSearchSelect: FC<BenchmarkSearchSelectProps> = ({ benchmark, setBenchmark }) => {
     const api = useApi();
 
-    const displayRow = (benchmark: Benchmark) => (
+    const displayRow = (rowBenchmark: Benchmark) => (
         <>
-            {`${benchmark.docker_image}:${benchmark.docker_tag}`}
-            <p>{benchmark.description}</p>
+            {`${rowBenchmark.docker_image}:${rowBenchmark.docker_tag}`}
+            <p>{rowBenchmark.description}</p>
         </>
     );
 

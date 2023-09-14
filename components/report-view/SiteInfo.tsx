@@ -13,7 +13,7 @@ const SiteInfo: FC<SiteInfoProps> = ({ id }) => {
     return (
         <>
             {site.isLoading && <LoadingOverlay />}
-            {site.isSuccess && site.data && (
+            {site.isSuccess && (
                 <>
                     Name: {site.data.data.name}
                     <br />

@@ -17,12 +17,12 @@ const FlavorEditor: FC<FlavorEditorProps> = ({ flavor, refetch }) => {
 
     const [editing, setEditing] = useState(false);
 
-    const updateEditing = (editing: boolean) => {
-        if (editing) {
+    const updateEditing = (newEditing: boolean) => {
+        if (newEditing) {
             setName(flavor.name);
             setDesc(flavor.description ? flavor.description : '');
         }
-        setEditing(editing);
+        setEditing(newEditing);
     };
 
     const { mutate } = useMutation((data: Flavor) => api.flavors.updateFlavor(flavor.id, data), {

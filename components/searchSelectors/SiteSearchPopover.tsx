@@ -14,10 +14,10 @@ type SiteSearchPopoverProps = {
 const SiteSearchPopover: FC<SiteSearchPopoverProps> = ({ site, setSite }): ReactElement => {
     const api = useApi();
 
-    const displayRow = (site: Site) => (
+    const displayRow = (rowSite: Site) => (
         <>
-            {site.name}
-            <p>{site.description}</p>
+            {rowSite.name}
+            <p>{rowSite.description}</p>
         </>
     );
 

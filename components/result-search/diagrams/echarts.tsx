@@ -1,5 +1,5 @@
-import { type ChangeEvent, type FC, useState } from 'react';
-import { Alert, Badge, Button, Col, Form, Row } from 'react-bootstrap';
+import { type FC, useState } from 'react';
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { type Suggestion } from 'components/result-search/jsonSchema';
 import {
     type DataPoint,
@@ -54,7 +54,7 @@ enum Regression {
 
 type RegressionSelectProps = {
     setRegressionMode: (mode: Regression) => void;
-    regressionMode: string;
+    regressionMode: Regression;
     disabled: boolean;
     polyRegressionOrder: number;
     setPolyRegressionOrder: (num: number) => void;
@@ -93,7 +93,6 @@ const RegressionSelect: FC<RegressionSelectProps> = ({
                 onChange={(e) => setPolyRegressionOrder(parseInt(e.target.value))}
                 size="sm"
                 value={polyRegressionOrder}
-                disabled={regressionMode !== Regression.Polynomial}
             >
                 {/* 1 - 10 */}
                 {[...Array(10).keys()].map((n) => (
@@ -332,9 +331,10 @@ const EChartsDiagram: FC<EChartsDiagramProps> = ({ results, suggestions }) => {
             {rejected.length > 0 && (
                 <div className="my-1">
                     {datasets.length > 0 &&
-                        rejected.map((rejected) => (
-                            <Alert variant="warning" key={rejected.result.id}>
-                                Result {rejected.result.id} not displayed due to: {rejected.reason}
+                        rejected.map((rejectedResult) => (
+                            <Alert variant="warning" key={rejectedResult.result.id}>
+                                Result {rejectedResult.result.id} not displayed due to:{' '}
+                                {rejectedResult.reason}
                             </Alert>
                         ))}
                     {datasets.length === 0 && (

@@ -45,10 +45,7 @@ const ResultReportModal: FC<ResultReportModalProps> = ({ result, show, closeModa
                         />
                     </Form.Group>
                 </Form>
-                {result !== null && (
-                    <JsonHighlight>{JSON.stringify(result.json, null, 4)}</JsonHighlight>
-                )}
-                {result == null && <div className="text-muted">Loading...</div>}
+                <JsonHighlight>{JSON.stringify(result.json, null, 4)}</JsonHighlight>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="danger" onClick={submitReport}>

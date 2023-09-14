@@ -501,7 +501,6 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                         results={selectedResults}
                         benchmark={benchmark}
                         suggestions={suggestedFields}
-                        className="my-2"
                     />
                     <hr />
                     <Stack gap={2}>

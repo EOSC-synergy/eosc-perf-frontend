@@ -20,7 +20,7 @@ const ResultEditModal: FC<ResultEditModalProps> = ({ result, show, closeModal })
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
     useEffect(() => {
-        setSelectedTags(result.tags ?? []);
+        setSelectedTags(result.tags);
     }, [result]);
 
     const { mutate } = useMutation((data: TagsIds) => api.results.updateResult(result.id, data), {
@@ -43,13 +43,8 @@ const ResultEditModal: FC<ResultEditModalProps> = ({ result, show, closeModal })
             <Modal.Body>
                 <h4>Tags</h4>
                 <TagSelector selected={selectedTags} setSelected={setSelectedTags} />
-                {result !== null && (
-                    <>
-                        <h4>Data</h4>
-                        <JsonHighlight>{JSON.stringify(result.json, null, 4)}</JsonHighlight>
-                    </>
-                )}
-                {result == null && <div className="text-muted">Loading...</div>}
+                <h4>Data</h4>
+                <JsonHighlight>{JSON.stringify(result.json, null, 4)}</JsonHighlight>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="success" onClick={submitEdit}>

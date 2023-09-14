@@ -9,6 +9,7 @@ describe('pagination', () => {
         pages: 7,
         prev_num: 3,
         total: 7,
+        page: 4,
     };
 
     test('first', () => {

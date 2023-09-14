@@ -9,6 +9,9 @@ type SiteColumnProps = { result: Result };
  * @param props
  * @param props.result
  */
-const SiteColumn: FC<SiteColumnProps> = ({ result }) => <>{result.site.name}</>;
+const SiteColumn: FC<SiteColumnProps> = ({ result }) => (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    <>{result.site.name}</>
+);
 
 export default SiteColumn;

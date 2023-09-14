@@ -22,4 +22,10 @@ type LoadingWrapperProps = {
 export const LoadingWrapper: FC<PropsWithChildren<LoadingWrapperProps>> = ({
     isLoading,
     children,
-}) => (isLoading ? <LoadingOverlay /> : <>{children}</>);
+}) => {
+    if (isLoading) {
+        return <LoadingOverlay />;
+    }
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <>{children}</>;
+};

@@ -9,6 +9,9 @@ type SiteFlavorColumnProps = { result: Result };
  * @param props
  * @param props.result
  */
-const SiteFlavorColumn: FC<SiteFlavorColumnProps> = ({ result }) => <>{result.flavor.name}</>;
+const SiteFlavorColumn: FC<SiteFlavorColumnProps> = ({ result }) => (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    <>{result.flavor.name}</>
+);
 
 export default SiteFlavorColumn;

@@ -150,7 +150,7 @@ const ResultTable: FC<ResultTableProps> = ({
                             />
                         ))}
                         <th>
-                            {/* TODO: move this to hotbar above table? */}
+                            {/* TODO: move this to hot-bar above table? */}
                             <Button
                                 size="sm"
                                 variant="secondary"

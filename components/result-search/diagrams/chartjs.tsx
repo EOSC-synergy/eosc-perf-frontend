@@ -95,7 +95,7 @@ const ChartJSDiagram: FC<ChartJSDiagramProps> = ({ results, suggestions }) => {
     // generate datasets
     const datasets: ChartDataset<'line'>[] = [];
     let colorIndex = 0;
-    dataPoints.forEach(function (dataMeta, siteId, _) {
+    dataPoints.forEach((dataMeta) => {
         datasets.push({
             label: dataMeta.site.name,
             backgroundColor: BACKGROUND_COLORS[colorIndex],
@@ -128,9 +128,10 @@ const ChartJSDiagram: FC<ChartJSDiagramProps> = ({ results, suggestions }) => {
             {rejected.length > 0 && (
                 <div className="my-1">
                     {datasets.length > 0 &&
-                        rejected.map((rejected) => (
-                            <Alert variant="warning" key={rejected.result.id}>
-                                Result {rejected.result.id} not displayed due to: {rejected.reason}
+                        rejected.map((rejectedResult) => (
+                            <Alert variant="warning" key={rejectedResult.result.id}>
+                                Result {rejectedResult.result.id} not displayed due to:{' '}
+                                {rejectedResult.reason}
                             </Alert>
                         ))}
                     {datasets.length === 0 && (

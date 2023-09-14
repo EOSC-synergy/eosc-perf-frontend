@@ -1,5 +1,5 @@
-import { FC, useMemo } from 'react';
-import { Result } from '@eosc-perf/eosc-perf-client';
+import { type FC, useMemo } from 'react';
+import { type Result } from '@eosc-perf/eosc-perf-client';
 import { formatDistance } from 'date-fns';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import styles from './ExecutionDateColumn.module.scss';
@@ -24,7 +24,7 @@ const ExecutionDateColumn: FC<ExecutionDateColumnProps> = ({ result }) => {
         <span className={styles['underline']}>
             <OverlayTrigger
                 overlay={
-                    <Tooltip id={result.id + '-tooltip'}>
+                    <Tooltip id={`${result.id}-tooltip`}>
                         {executionDate.toLocaleString(undefined)}
                     </Tooltip>
                 }

@@ -11,10 +11,9 @@ type DiagramCardProps = {
     results: Result[];
     benchmark?: Benchmark;
     suggestions?: Suggestion[];
-    className?: string;
 };
 
-const DiagramCard: FC<DiagramCardProps> = ({ results, benchmark, suggestions, className }) => {
+const DiagramCard: FC<DiagramCardProps> = ({ results, benchmark, suggestions }) => {
     const [selectedDiagram, setSelectedDiagram] = useState(charts.EChartsMeta.id);
 
     return (

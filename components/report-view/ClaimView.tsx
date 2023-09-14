@@ -1,7 +1,7 @@
 import { type FC, useState } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import actionable from 'styles/actionable.module.css';
-import { ClaimInfo } from './claimInfo';
+import ClaimInfo from './ClaimInfo';
 import ClaimInteraction from './ClaimInteraction';
 import { type Claim } from '@eosc-perf/eosc-perf-client';
 
