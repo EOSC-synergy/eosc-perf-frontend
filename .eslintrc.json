@@ -8,7 +8,6 @@
         "next/core-web-vitals",
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/strict",
-        "plugin:sonarjs/recommended",
         "plugin:eslint-comments/recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:cypress/recommended"
