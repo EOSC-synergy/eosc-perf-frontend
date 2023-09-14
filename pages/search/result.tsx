@@ -570,15 +570,13 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                         ops={resultOps}
                                         suggestions={suggestedFields}
                                         sorting={sorting}
-                                        setSorting={(sort) => {
-                                            setSorting(sort);
-                                        }}
+                                        setSorting={(sort) => setSorting(sort)}
                                         customColumns={customColumns}
                                         setCustomColumns={updateCustomColumns}
                                     />
                                 )}
                                 {results.isSuccess && results.data.total === 0 && (
-                                    <div className="text-muted m-2">No results found! :(</div>
+                                    <div className="text-muted m-2">No results found.</div>
                                 )}
                                 {results.isError && 'Error while loading results'}
                             </div>
@@ -603,18 +601,14 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
             {previewResult && (
                 <JsonPreviewModal
                     show={showJSONPreview}
-                    closeModal={() => {
-                        setShowJSONPreview(false);
-                    }}
+                    closeModal={() => setShowJSONPreview(false)}
                     result={previewResult}
                 />
             )}
             {reportedResult && (
                 <ResultReportModal
                     show={showReportModal}
-                    closeModal={() => {
-                        setShowReportModal(false);
-                    }}
+                    closeModal={() => setShowReportModal(false)}
                     result={reportedResult}
                 />
             )}
