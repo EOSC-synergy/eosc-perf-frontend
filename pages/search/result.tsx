@@ -418,11 +418,6 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
             </Head>
             <Container fluid="xl">
                 <Stack gap={2}>
-                    <DiagramCard
-                        results={selectedResults}
-                        benchmark={benchmark}
-                        suggestions={suggestedFields}
-                    />
                     <Card>
                         <Card.Body>
                             {browserLoaded && router.isReady && (
@@ -508,6 +503,12 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                     </Col>
                                 </Row>
                             )}
+                            <hr />
+                            <DiagramCard
+                                results={selectedResults}
+                                benchmark={benchmark}
+                                suggestions={suggestedFields}
+                            />
                             <hr />
                             <Stack gap={2}>
                                 <Stack gap={1}>
