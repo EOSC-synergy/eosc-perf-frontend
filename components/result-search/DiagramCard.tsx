@@ -10,19 +10,22 @@ type DiagramCardProps = {
     results: Result[];
     benchmark?: Benchmark;
     suggestions?: Suggestion[];
+    className?: string;
 };
 
-const DiagramCard: FC<DiagramCardProps> = ({ results, benchmark, suggestions }) => {
+const DiagramCard: FC<DiagramCardProps> = ({ results, benchmark, suggestions, className }) => {
     const [selectedDiagram, setSelectedDiagram] = useState(charts.EChartsMeta.id);
 
     return (
-        <Card>
+        <Card className={className}>
             <Card.Header>
                 <Row>
                     <Form.Group>
                         <Row>
                             <Col className="align-self-center">
-                                <Form.Label style={{ marginBottom: 0 }}>Diagram</Form.Label>
+                                <Form.Label as="h2" style={{ marginBottom: 0 }} className="h4">
+                                    Diagram
+                                </Form.Label>
                             </Col>
                             <Col md="auto">
                                 {benchmark !== undefined && (

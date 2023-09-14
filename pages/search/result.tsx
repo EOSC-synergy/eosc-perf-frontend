@@ -419,6 +419,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
             <h1>Search</h1>
             <Card>
                 <Card.Body>
+                    <h2 className="h4">Filters</h2>
                     {browserLoaded && router.isReady && (
                         <Row>
                             <Col xl>
@@ -495,13 +496,12 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                             </Col>
                         </Row>
                     )}
-                    <hr />
                     <DiagramCard
                         results={selectedResults}
                         benchmark={benchmark}
                         suggestions={suggestedFields}
+                        className="my-2"
                     />
-                    <hr />
                     <Stack gap={2}>
                         <Stack gap={1}>
                             {[...filters.keys()].flatMap((key, index) => {
@@ -523,14 +523,14 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                         </Stack>
                         <Row>
                             <Col xs="auto" className="my-auto">
-                                <h4 className="ms-2 my-0">
+                                <h2 className="h4 ms-2 my-0">
                                     {filters.size > 0 ||
                                     benchmark !== undefined ||
                                     site !== undefined ||
                                     flavor !== undefined
                                         ? 'Results'
                                         : 'Recently uploaded results'}
-                                </h4>
+                                </h2>
                             </Col>
                             <Col />
                             <Col md="auto">
