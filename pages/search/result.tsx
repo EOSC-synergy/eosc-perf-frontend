@@ -554,9 +554,13 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                         </Row>
                         <Stack gap={2}>
                             <div className="position-relative" style={{ overflowX: 'auto' }}>
-                                {(results.isLoading ||
-                                    results.isFetching ||
-                                    results.isRefetching) && <LoadingOverlay />}
+                                <LoadingOverlay
+                                    loading={
+                                        results.isLoading ||
+                                        results.isFetching ||
+                                        results.isRefetching
+                                    }
+                                />
                                 {results.isSuccess && results.data.data.total > 0 && (
                                     <ResultTable
                                         results={resultData.items}

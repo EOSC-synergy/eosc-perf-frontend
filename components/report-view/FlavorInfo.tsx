@@ -19,7 +19,7 @@ const FlavorInfo: FC<FlavorInfoProps> = ({ id }) => {
 
     return (
         <>
-            {flavor.isLoading && <LoadingOverlay />}
+            <LoadingOverlay loading={flavor.isLoading} />
             {flavor.isSuccess && (
                 <>
                     Name: {flavor.data.data.name}

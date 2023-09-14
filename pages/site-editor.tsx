@@ -31,7 +31,7 @@ const SitesEditor: NextPage = () => {
     }, [router, auth.admin, auth.loading]);
 
     const sites = useQuery('sites', () =>
-        api.sites.listSites(undefined, undefined, undefined, undefined, page)
+        api.sites.listSites(undefined, undefined, undefined, undefined, page),
     );
 
     const [activeSite, setActiveSite] = useState<Site | null>(null);
@@ -40,7 +40,7 @@ const SitesEditor: NextPage = () => {
         return (
             <>
                 <ListGroup>
-                    {sites.isLoading && <LoadingOverlay />}
+                    <LoadingOverlay loading={sites.isLoading} />
                     {sites.isSuccess && sites.data.data.items.length === 0 && 'No sites found!'}
                     {sites.isSuccess &&
                         sites.data.data.items.map((site: Site) => (

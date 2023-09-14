@@ -47,7 +47,7 @@ export function SearchingSelector<Item extends Identifiable>({
         },
         {
             enabled: !disabled,
-        }
+        },
     );
 
     const updateItem = (item?: Item) => {
@@ -61,25 +61,26 @@ export function SearchingSelector<Item extends Identifiable>({
             <Popover.Body>
                 <SearchForm setSearchString={setSearchString} />
                 <div style={{ position: 'relative' }}>
-                    {items.isLoading && (
-                        <>
-                            <Table<Item>
-                                setItem={() => undefined}
-                                items={[]}
-                                tableName={tableName}
-                                displayItem={() => null}
-                            />
-                            <LoadingOverlay />
-                        </>
-                    )}
                     {items.isError && <div>Failed to fetch benchmarks!</div>}
-                    {items.isSuccess && (
-                        <Table<Item>
-                            items={items.data.data.items}
-                            setItem={updateItem}
-                            tableName={tableName}
-                            displayItem={displayRow}
-                        />
+                    {(items.isSuccess || items.isLoading) && (
+                        <>
+                            {items.isLoading ? (
+                                <Table<Item>
+                                    setItem={() => undefined}
+                                    items={[]}
+                                    tableName={tableName}
+                                    displayItem={() => null}
+                                />
+                            ) : (
+                                <Table<Item>
+                                    items={items.data.data.items}
+                                    setItem={updateItem}
+                                    tableName={tableName}
+                                    displayItem={displayRow}
+                                />
+                            )}
+                            <LoadingOverlay loading={items.isLoading} />
+                        </>
                     )}
                 </div>
                 <Row>

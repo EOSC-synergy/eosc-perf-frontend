@@ -30,7 +30,7 @@ const TagSelector: FC<TagSelectorProps> = ({
         () => api.tags.searchTag(searchString.split(' ')),
         {
             keepPreviousData: true,
-        }
+        },
     );
 
     const select = (newTag: Tag) => {
@@ -79,22 +79,28 @@ const TagSelector: FC<TagSelectorProps> = ({
                                 {tags.data.data.items
                                     .filter(
                                         (tag) =>
-                                            !selected.some((otherTag) => otherTag.id === tag.id)
+                                            !selected.some((otherTag) => otherTag.id === tag.id),
                                     )
                                     .map((tag) => (
                                         <PlaceholderTag key={tag.id} />
                                     ))}
                             </div>
                         )}
-                        {(tags.isFetching || tags.isLoading || tags.isRefetching) &&
-                            !tags.isPreviousData && <LoadingOverlay />}
+                        <LoadingOverlay
+                            loading={
+                                (tags.isFetching || tags.isLoading || tags.isRefetching) &&
+                                !tags.isPreviousData
+                            }
+                        />
                         {tags.isSuccess && !tags.isPreviousData && (
                             <>
                                 <div className="d-flex">
                                     {tags.data.data.items
                                         .filter(
                                             (tag) =>
-                                                !selected.some((otherTag) => otherTag.id === tag.id)
+                                                !selected.some(
+                                                    (otherTag) => otherTag.id === tag.id,
+                                                ),
                                         )
                                         .map((tag) => (
                                             <UnselectedTag tag={tag} select={select} key={tag.id} />

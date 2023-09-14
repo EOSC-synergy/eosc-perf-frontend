@@ -19,14 +19,14 @@ const FlavorList: FC<FlavorListProps> = ({ site }) => {
         () => api.sites.listFlavors(site.id, undefined, undefined, undefined, undefined, page),
         {
             refetchOnMount: 'always',
-        }
+        },
     );
 
     return (
         <Form.Group className="mb-3">
             <Form.Label>Flavors:</Form.Label>
             <Card style={{ maxHeight: '16rem' }} className="overflow-auto">
-                {flavors.isLoading && <LoadingOverlay />}
+                <LoadingOverlay loading={flavors.isLoading} />
                 {flavors.isSuccess &&
                     flavors.data.data.items.map((flavor: Flavor) => (
                         <FlavorEditor flavor={flavor} key={flavor.id} refetch={flavors.refetch} />

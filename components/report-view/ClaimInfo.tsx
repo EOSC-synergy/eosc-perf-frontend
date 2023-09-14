@@ -23,7 +23,7 @@ const ClaimInfo: FC<ClaimInfoProps> = ({ id, claim: claimCache }) => {
 
     return (
         <>
-            {claim.isLoading && <LoadingOverlay />}
+            <LoadingOverlay loading={claim.isLoading} />
             {claimData && (
                 <>
                     Message: {truthyOrNoneTag(claimData.message)} <br />
