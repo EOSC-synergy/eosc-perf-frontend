@@ -53,11 +53,12 @@ enum Regression {
 }
 
 type RegressionSelectProps = {
-    setRegressionMode: (mode: string) => void;
+    setRegressionMode: (mode: Regression) => void;
     regressionMode: string;
     disabled: boolean;
     polyRegressionOrder: number;
     setPolyRegressionOrder: (num: number) => void;
+    className?: string;
 };
 const RegressionSelect: FC<RegressionSelectProps> = ({
     setRegressionMode,
@@ -65,116 +66,91 @@ const RegressionSelect: FC<RegressionSelectProps> = ({
     disabled,
     polyRegressionOrder,
     setPolyRegressionOrder,
+    className,
 }) => (
-    <Form.Group>
-        <Row>
-            <Col sm="auto" className="align-self-center">
-                <Form.Label style={{ marginBottom: 0 }}>Regression</Form.Label>
-            </Col>
-            <Col>
-                {disabled || (
-                    <Form.Select
-                        onChange={(e) => setRegressionMode(e.target.value)}
-                        size="sm"
-                        value={regressionMode}
-                        disabled={disabled}
-                    >
-                        <option value={Regression.None} />
-                        <option value={Regression.Linear}>Linear</option>
-                        <option value={Regression.Exponential}>Exponential</option>
-                        <option value={Regression.Polynomial}>Polynomial</option>
-                        <option value={Regression.Logarithmic}>Logarithmic</option>
-                    </Form.Select>
-                )}
-                {disabled && <Badge bg="secondary">All results must be from same site</Badge>}
-            </Col>
-            {regressionMode === Regression.Polynomial && (
-                <Col md="auto">
-                    <Form.Select
-                        onChange={(e) => setPolyRegressionOrder(parseInt(e.target.value))}
-                        size="sm"
-                        value={polyRegressionOrder}
-                        disabled={regressionMode !== Regression.Polynomial}
-                    >
-                        {/* 1 - 10 */}
-                        {[...Array(10).keys()].map((n) => (
-                            <option value={n + 1} key={n + 1}>
-                                {n + 1}
-                            </option>
-                        ))}
-                    </Form.Select>
-                </Col>
-            )}
-        </Row>
+    <Form.Group className={className}>
+        <Form.Label>Regression</Form.Label>
+        {disabled || (
+            <Form.Select
+                onChange={(e) => setRegressionMode(e.target.value as Regression)}
+                value={regressionMode}
+                disabled={disabled}
+            >
+                <option value={Regression.None} />
+                <option value={Regression.Linear}>Linear</option>
+                <option value={Regression.Exponential}>Exponential</option>
+                <option value={Regression.Polynomial}>Polynomial</option>
+                <option value={Regression.Logarithmic}>Logarithmic</option>
+            </Form.Select>
+        )}
+        {disabled && (
+            <Form.Select disabled>
+                <option>All results must be from the same site</option>
+            </Form.Select>
+        )}
+        {regressionMode === Regression.Polynomial && (
+            <Form.Select
+                onChange={(e) => setPolyRegressionOrder(parseInt(e.target.value))}
+                size="sm"
+                value={polyRegressionOrder}
+                disabled={regressionMode !== Regression.Polynomial}
+            >
+                {/* 1 - 10 */}
+                {[...Array(10).keys()].map((n) => (
+                    <option value={n + 1} key={n + 1}>
+                        {n + 1}
+                    </option>
+                ))}
+            </Form.Select>
+        )}
     </Form.Group>
 );
 
-type GraphModeSelectProps = { setGraphMode: (value: string) => void; graphMode: string };
-const GraphModeSelect: FC<GraphModeSelectProps> = ({ graphMode, setGraphMode }) => (
-    <Form.Group>
-        <Row>
-            <Col sm="auto" className="align-self-center">
-                <Form.Label style={{ marginBottom: 0 }}>Graph mode</Form.Label>
-            </Col>
-            <Col>
-                <Form.Select
-                    onChange={(e) => setGraphMode(e.target.value)}
-                    size="sm"
-                    value={graphMode}
-                >
-                    <option value={GraphMode.Scatter}>Scatter</option>
-                    <option value={GraphMode.Line}>Line</option>
-                    <option value={GraphMode.Bar}>Bar</option>
-                </Form.Select>
-            </Col>
-        </Row>
+type GraphModeSelectProps = {
+    setGraphMode: (value: string) => void;
+    graphMode: string;
+    className?: string;
+};
+const GraphModeSelect: FC<GraphModeSelectProps> = ({ graphMode, setGraphMode, className }) => (
+    <Form.Group className={className}>
+        <Form.Label>Graph mode</Form.Label>
+        <Form.Select onChange={(e) => setGraphMode(e.target.value)} value={graphMode}>
+            <option value={GraphMode.Scatter}>Scatter</option>
+            <option value={GraphMode.Line}>Line</option>
+            <option value={GraphMode.Bar}>Bar</option>
+        </Form.Select>
     </Form.Group>
 );
 
-type XAxisModeSelectProps = { setXAxisMode: (value: Scale) => void; xAxisMode: Scale };
-const XAxisModeSelect: FC<XAxisModeSelectProps> = ({ xAxisMode, setXAxisMode }) => (
-    <Form.Group className="my-1">
-        <Row>
-            <Col sm="auto" className="align-self-center">
-                <Form.Label style={{ marginBottom: 0 }}>X Scale</Form.Label>
-            </Col>
-            <Col>
-                <Form.Select
-                    onChange={(e) => setXAxisMode(parseInt(e.target.value))}
-                    size="sm"
-                    value={xAxisMode}
-                >
-                    <option value={Scale.Linear}>Linear</option>
-                    <option value={Scale.Logarithmic}>Logarithmic</option>
-                </Form.Select>
-            </Col>
-        </Row>
+type XAxisModeSelectProps = {
+    setXAxisMode: (value: Scale) => void;
+    xAxisMode: Scale;
+    className?: string;
+};
+const XAxisModeSelect: FC<XAxisModeSelectProps> = ({ xAxisMode, setXAxisMode, className }) => (
+    <Form.Group className={className}>
+        <Form.Label>X Scale</Form.Label>
+        <Form.Select onChange={(e) => setXAxisMode(parseInt(e.target.value))} value={xAxisMode}>
+            <option value={Scale.Linear}>Linear</option>
+            <option value={Scale.Logarithmic}>Logarithmic</option>
+        </Form.Select>
     </Form.Group>
 );
 
-function YAxisModeSelect(props: { setYAxisMode: (value: Scale) => void; yAxisMode: Scale }) {
-    return (
-        <Form.Group className="my-1">
-            <Row>
-                <Col sm="auto" className="align-self-center">
-                    <Form.Label style={{ marginBottom: 0 }}>Y Scale</Form.Label>
-                </Col>
-                <Col>
-                    <Form.Select
-                        onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                            props.setYAxisMode(parseInt(e.target.value));
-                        }}
-                        size="sm"
-                        value={props.yAxisMode}
-                    >
-                        <option value={Scale.Linear}>Linear</option>
-                        <option value={Scale.Logarithmic}>Logarithmic</option>
-                    </Form.Select>
-                </Col>
-            </Row>
-        </Form.Group>
-    );
-}
+type YAxisModeSelectProps = {
+    setYAxisMode: (value: Scale) => void;
+    yAxisMode: Scale;
+    className?: string;
+};
+const YAxisModeSelect: FC<YAxisModeSelectProps> = ({ setYAxisMode, yAxisMode, className }) => (
+    <Form.Group className={className}>
+        <Form.Label>Y Scale</Form.Label>
+        <Form.Select onChange={(e) => setYAxisMode(parseInt(e.target.value))} value={yAxisMode}>
+            <option value={Scale.Linear}>Linear</option>
+            <option value={Scale.Logarithmic}>Logarithmic</option>
+        </Form.Select>
+    </Form.Group>
+);
 
 type EChartsDiagramProps = {
     results: Result[];
@@ -183,11 +159,13 @@ type EChartsDiagramProps = {
 
 /**
  * Chart displaying a line diagram following the results' ordering
- * @param results
- * @param suggestions List of diagram keys to suggest to user for axes
+ *
+ * @param props
+ * @param props.results results to render
+ * @param props.suggestions List of diagram keys to suggest to user for axes
  */
 const EChartsDiagram: FC<EChartsDiagramProps> = ({ results, suggestions }) => {
-    function saveDiagramAsPng(transparent = false) {
+    const saveDiagramAsPng = (transparent = false) => {
         const elements = document.getElementsByClassName('echarts-for-react');
         if (elements.length <= 0) {
             console.error('Could not find echarts-for-react div!');
@@ -218,13 +196,13 @@ const EChartsDiagram: FC<EChartsDiagramProps> = ({ results, suggestions }) => {
                 console.error('Could not create 2d canvas context!!');
             }
         }
-    }
+    };
 
     const [xAxisMode, setXAxisMode] = useState(Scale.Linear);
     const [yAxisMode, setYAxisMode] = useState(Scale.Linear);
 
     const [graphMode, setGraphMode] = useState<string>(GraphMode.Line);
-    const [regressionMode, setRegressionMode] = useState<string>(Regression.None);
+    const [regressionMode, setRegressionMode] = useState<Regression>(Regression.None);
     const [polyRegressionOrder, setPolyRegressionOrder] = useState<number>(2);
 
     const [xAxis, setXAxis] = useState('');
@@ -325,12 +303,12 @@ const EChartsDiagram: FC<EChartsDiagramProps> = ({ results, suggestions }) => {
 
     return (
         <>
-            <GraphModeSelect setGraphMode={setGraphMode} graphMode={graphMode} />
-            <Row>
-                <Col>
+            <GraphModeSelect setGraphMode={setGraphMode} graphMode={graphMode} className="mb-2" />
+            <Row className="mb-2">
+                <Col xs={12} xl={6}>
                     <XAxisModeSelect setXAxisMode={setXAxisMode} xAxisMode={xAxisMode} />
                 </Col>
-                <Col>
+                <Col xs={12} xl={6}>
                     <YAxisModeSelect setYAxisMode={setYAxisMode} yAxisMode={yAxisMode} />
                 </Col>
             </Row>
@@ -340,9 +318,16 @@ const EChartsDiagram: FC<EChartsDiagramProps> = ({ results, suggestions }) => {
                 polyRegressionOrder={polyRegressionOrder}
                 setPolyRegressionOrder={setPolyRegressionOrder}
                 disabled={siteCount !== 1}
+                className="mb-2"
             />
-            <XAxis setXAxis={setXAxis} suggestions={suggestions} />
-            <YAxis setYAxis={setYAxis} suggestions={suggestions} />
+            <Row>
+                <Col xs={12} xl={6}>
+                    <XAxis setXAxis={setXAxis} suggestions={suggestions} />
+                </Col>
+                <Col xs={12} xl={6}>
+                    <YAxis setYAxis={setYAxis} suggestions={suggestions} />
+                </Col>
+            </Row>
 
             {rejected.length > 0 && (
                 <div className="my-1">
