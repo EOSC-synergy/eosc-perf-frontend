@@ -111,7 +111,7 @@ const ChartJSDiagram: FC<ChartJSDiagramProps> = ({ results, suggestions }) => {
 
     return (
         <>
-            <Form.Group className="mb-1">
+            <Form.Group className="mb-2">
                 <Form.Label>Mode:</Form.Label>
                 <Form.Select
                     onChange={(e: ChangeEvent<HTMLSelectElement>) => {
@@ -122,7 +122,7 @@ const ChartJSDiagram: FC<ChartJSDiagramProps> = ({ results, suggestions }) => {
                     <option value={Mode.Logarithmic}>Logarithmic</option>
                 </Form.Select>
             </Form.Group>
-            <XAxis setXAxis={setXAxis} suggestions={suggestions} />
+            <XAxis setXAxis={setXAxis} suggestions={suggestions} className="mb-2" />
             <YAxis setYAxis={setYAxis} suggestions={suggestions} />
 
             {rejected.length > 0 && (

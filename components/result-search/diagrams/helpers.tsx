@@ -49,9 +49,10 @@ export const generateDataPoints = (
 type XAxisProps = {
     setXAxis: (value: ((prevState: string) => string) | string) => void;
     suggestions?: Suggestion[];
+    className?: string;
 };
-export const XAxis: FC<XAxisProps> = ({ setXAxis, suggestions }) => (
-    <Form.Group className="mb-1">
+export const XAxis: FC<XAxisProps> = ({ setXAxis, suggestions, className }) => (
+    <Form.Group className={className}>
         <Form.Label>X Axis:</Form.Label>
         <InputWithSuggestions
             placeholder="Enter a JSON path (e.g. machine.cpu.count)"
@@ -64,9 +65,10 @@ export const XAxis: FC<XAxisProps> = ({ setXAxis, suggestions }) => (
 type YAxisProps = {
     setYAxis: (value: ((prevState: string) => string) | string) => void;
     suggestions?: Suggestion[];
+    className?: string;
 };
-export const YAxis: FC<YAxisProps> = ({ setYAxis, suggestions }) => (
-    <Form.Group>
+export const YAxis: FC<YAxisProps> = ({ setYAxis, suggestions, className }) => (
+    <Form.Group className={className}>
         <Form.Label>Y Axis:</Form.Label>
         <InputWithSuggestions
             placeholder="Enter a JSON path (e.g. result.score)"
