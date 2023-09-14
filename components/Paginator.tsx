@@ -1,5 +1,6 @@
 import { type FC } from 'react';
 import { Pagination } from 'react-bootstrap';
+import { range } from 'lodash';
 
 /**
  * Representation of an OpenAPI pagination object
@@ -43,7 +44,7 @@ export type Paginatable = {
     /**
      * The current page
      */
-    page?: number;
+    readonly page: number;
 };
 
 /**
@@ -63,7 +64,7 @@ type PaginatorProps = {
  * @param props.pagination paginatable object to navigate through
  * @param props.navigateTo callback to navigate to another page in the pagination
  */
-const Paginator: FC<PaginatorProps> = ({ pagination, navigateTo }) => (
+export const Paginator: FC<PaginatorProps> = ({ pagination, navigateTo }) => (
     <Pagination className="align-items-center mb-0" data-testid="paginator">
         <Pagination.First
             disabled={pagination.pages === 0 || pagination.page === 1}
@@ -75,16 +76,64 @@ const Paginator: FC<PaginatorProps> = ({ pagination, navigateTo }) => (
             onClick={() => navigateTo(pagination.prev_num)}
             data-testid="paginator-prev"
         />
-        {/* TODO: don't show all pages, only nearby 3-5? */}
-        {[...Array(pagination.pages).keys()].map((n: number) => (
-            <Pagination.Item
-                active={pagination.page === n + 1}
-                onClick={() => navigateTo(n + 1)}
-                key={n + 1}
-            >
-                {n + 1}
-            </Pagination.Item>
-        ))}
+        {pagination.pages > 1 && pagination.pages <= 5 ? (
+            range(1, pagination.pages + 1).map((page) => (
+                <Pagination.Item
+                    active={page === pagination.page}
+                    onClick={() => navigateTo(page)}
+                    key={page}
+                >
+                    {page}
+                </Pagination.Item>
+            ))
+        ) : (
+            <>
+                <Pagination.Item
+                    active={pagination.page === 1}
+                    onClick={() => navigateTo(1)}
+                    key={1}
+                >
+                    1
+                </Pagination.Item>
+                {pagination.page > 3 && <Pagination.Ellipsis disabled />}
+                {pagination.page >= 3 && pagination.pages > 3 && (
+                    <Pagination.Item
+                        onClick={() => navigateTo(pagination.page - 1)}
+                        key={pagination.page - 1}
+                    >
+                        {pagination.page - 1}
+                    </Pagination.Item>
+                )}
+                {pagination.page !== 1 && pagination.page !== pagination.pages && (
+                    <Pagination.Item
+                        active
+                        onClick={() => navigateTo(pagination.page)}
+                        key={pagination.page}
+                    >
+                        {pagination.page}
+                    </Pagination.Item>
+                )}
+                {pagination.page <= pagination.pages - 2 && pagination.pages > 3 && (
+                    <Pagination.Item
+                        onClick={() => navigateTo(pagination.page + 1)}
+                        key={pagination.page + 1}
+                    >
+                        {pagination.page + 1}
+                    </Pagination.Item>
+                )}
+                {pagination.page < pagination.pages - 2 && <Pagination.Ellipsis disabled />}
+                {pagination.pages > 1 && (
+                    <Pagination.Item
+                        active={pagination.page === pagination.pages}
+                        onClick={() => navigateTo(pagination.pages)}
+                        key={pagination.pages}
+                    >
+                        {pagination.pages}
+                    </Pagination.Item>
+                )}
+            </>
+        )}
+
         <Pagination.Next
             disabled={!pagination.has_next}
             onClick={() => navigateTo(pagination.next_num)}
