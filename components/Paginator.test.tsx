@@ -14,11 +14,7 @@ describe('pagination', () => {
 
     test('first', () => {
         const onChange = jest.fn();
-        render(
-            <>
-                <Paginator navigateTo={onChange} pagination={pagination} />{' '}
-            </>
-        );
+        render(<Paginator navigateTo={onChange} pagination={pagination} />);
         act(() => {
             screen.getByTestId('paginator-first').click();
         });
@@ -27,11 +23,7 @@ describe('pagination', () => {
     });
     test('prev', () => {
         const onChange = jest.fn();
-        render(
-            <>
-                <Paginator navigateTo={onChange} pagination={pagination} />{' '}
-            </>
-        );
+        render(<Paginator navigateTo={onChange} pagination={pagination} />);
         act(() => {
             screen.getByTestId('paginator-prev').click();
         });
@@ -40,11 +32,7 @@ describe('pagination', () => {
     });
     test('next', () => {
         const onChange = jest.fn();
-        render(
-            <>
-                <Paginator navigateTo={onChange} pagination={pagination} />{' '}
-            </>
-        );
+        render(<Paginator navigateTo={onChange} pagination={pagination} />);
         act(() => {
             screen.getByTestId('paginator-next').click();
         });
@@ -53,11 +41,7 @@ describe('pagination', () => {
     });
     test('last', () => {
         const onChange = jest.fn();
-        render(
-            <>
-                <Paginator navigateTo={onChange} pagination={pagination} />{' '}
-            </>
-        );
+        render(<Paginator navigateTo={onChange} pagination={pagination} />);
         act(() => {
             screen.getByTestId('paginator-last').click();
         });
@@ -67,15 +51,11 @@ describe('pagination', () => {
 
     test('specific', () => {
         const onChange = jest.fn();
-        render(
-            <>
-                <Paginator navigateTo={onChange} pagination={pagination} />{' '}
-            </>
-        );
+        render(<Paginator navigateTo={onChange} pagination={pagination} />);
         act(() => {
-            screen.getByText('6').click();
+            screen.getByText('5').click();
         });
 
-        expect(onChange).toHaveBeenCalledWith(6);
+        expect(onChange).toHaveBeenCalledWith(5);
     });
 });
