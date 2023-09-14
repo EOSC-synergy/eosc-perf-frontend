@@ -32,7 +32,7 @@ const ColumnSelectModal: FC<ColumnSelectModalProps> = ({
     };
 
     return (
-        <Modal show={show} onHide={closeModal}>
+        <Modal show={show} onHide={closeModal} centered>
             <Modal.Header>
                 <Modal.Title>Choose columns to display{/*(drag &amp; drop)*/}</Modal.Title>
             </Modal.Header>
