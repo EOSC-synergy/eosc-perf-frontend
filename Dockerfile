@@ -2,7 +2,7 @@ FROM node:18 as git-version
 
 WORKDIR /app
 COPY utils utils
-COPY ["package.json", "yarn.lock", "next.config.js", "next-env.d.ts", "tsconfig.json", ".eslintrc.json", ".prettierrc", "./"]
+COPY ["package.json", "yarn.lock", "next.config.mjs", "next-env.d.ts", "tsconfig.json", ".eslintrc.json", ".prettierrc", "./"]
 
 # determine footer version
 COPY .git/ ./.git/
@@ -13,7 +13,7 @@ FROM node:18 as base
 
 WORKDIR /app
 
-COPY ["package.json", "yarn.lock", "next.config.js", "next-env.d.ts", "tsconfig.json", ".eslintrc.json", ".prettierrc", "./"]
+COPY ["package.json", "yarn.lock", "next.config.mjs", "next-env.d.ts", "tsconfig.json", ".eslintrc.json", ".prettierrc", "./"]
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN yarn install
 # copy necessary files

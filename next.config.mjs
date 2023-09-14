@@ -1,17 +1,22 @@
-let withBundleAnalyzer = undefined;
+import withBundleAnalyzer from '@next/bundle-analyzer';
+import transpileModules from 'next-transpile-modules';
+
+/** @typedef  {import('next').NextConfig} NextConfig */
+
+let bundleAnalyzer;
 try {
-    withBundleAnalyzer = require('@next/bundle-analyzer')({
+    bundleAnalyzer = withBundleAnalyzer({
         enabled: process.env.ANALYZE === 'true',
     });
 } catch (e) {
     console.log('No @next/bundle-analyzer, assuming production');
-    withBundleAnalyzer = () => {};
+    bundleAnalyzer = x => x;
 }
 
-const withTM = require('next-transpile-modules')(['echarts', 'zrender']);
+const withTM = transpileModules(['echarts', 'zrender']);
 
 /** @type {import('next').NextConfig} */
-module.exports = withTM({
+const nextConfig = bundleAnalyzer(withTM({
     reactStrictMode: true,
     async redirects() {
         return [
@@ -23,5 +28,6 @@ module.exports = withTM({
         ];
     },
     output: 'standalone',
-    ...withBundleAnalyzer({}),
-});
+}));
+
+export default nextConfig;
