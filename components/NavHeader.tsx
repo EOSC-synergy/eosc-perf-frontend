@@ -23,24 +23,24 @@ const NavHeader: FC = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" className="me-3" />
                 <Navbar.Collapse id="basic-navbar-nav" className="mx-3">
                     <Nav className="me-auto ">
-                        <Link href="/search/result" passHref>
-                            <Nav.Link>Search</Nav.Link>
-                        </Link>
+                        <Nav.Link as={Link} href="/search/result">
+                            Search
+                        </Nav.Link>
                         <NavDropdown title="Submit" id="base-submit-dropdown">
-                            <Link href="/submit/result" passHref>
-                                <NavDropdown.Item>Results</NavDropdown.Item>
-                            </Link>
-                            <Link href="/submit/benchmark" passHref>
-                                <NavDropdown.Item>Benchmarks</NavDropdown.Item>
-                            </Link>
-                            <Link href="/submit/site" passHref>
-                                <NavDropdown.Item>Sites</NavDropdown.Item>
-                            </Link>
+                            <NavDropdown.Item as={Link} href="/submit/result">
+                                Results
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} href="/submit/benchmark">
+                                Benchmarks
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} href="/submit/site">
+                                Sites
+                            </NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="Instructions" id="base-instructions-dropdown">
-                            <Link href="/code-guidelines" passHref>
-                                <NavDropdown.Item>Code guidelines</NavDropdown.Item>
-                            </Link>
+                            <NavDropdown.Item as={Link} href="/code-guidelines">
+                                Code guidelines
+                            </NavDropdown.Item>
                             <NavDropdown.Item href="https://perf.readthedocs.io/">
                                 Service Documentation
                             </NavDropdown.Item>
@@ -49,20 +49,20 @@ const NavHeader: FC = () => {
                             </NavDropdown.Item>
                             <NavDropdown.Item href="/api/v1/">API Reference</NavDropdown.Item>
                         </NavDropdown>
-                        <Link
+                        <Nav.Link
+                            as={Link}
                             href="https://appsgrycap.i3m.upv.es:31443/im-dashboard/login"
-                            passHref
                         >
-                            <Nav.Link>Infrastructure Manager</Nav.Link>
-                        </Link>
+                            Infrastructure Manager
+                        </Nav.Link>
                         {auth.admin && (
                             <NavDropdown title="Admin" id="base-admin-dropdown">
-                                <Link href="/report-view" passHref>
-                                    <NavDropdown.Item>Report view</NavDropdown.Item>
-                                </Link>
-                                <Link href="/site-editor" passHref>
-                                    <NavDropdown.Item>Site editor</NavDropdown.Item>
-                                </Link>
+                                <NavDropdown.Item as={Link} href="/report-view">
+                                    Report view
+                                </NavDropdown.Item>
+                                <NavDropdown.Item as={Link} href="/site-editor">
+                                    Site editor
+                                </NavDropdown.Item>
                             </NavDropdown>
                         )}
                     </Nav>

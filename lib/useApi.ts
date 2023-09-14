@@ -1,12 +1,12 @@
 import {
-    BenchmarksApi,
+    BenchmarksApiFactory,
     Configuration,
-    FlavorsApi,
-    ReportsApi,
-    ResultsApi,
-    SitesApi,
-    TagsApi,
-    UsersApi,
+    FlavorsApiFactory,
+    ReportsApiFactory,
+    ResultsApiFactory,
+    SitesApiFactory,
+    TagsApiFactory,
+    UsersApiFactory,
 } from '@eosc-perf/eosc-perf-client';
 import getApiRoute from './getApiRoute';
 import { useMemo } from 'react';
@@ -26,13 +26,13 @@ const useApi = (token?: string) =>
             accessToken: token,
         });
         return {
-            benchmarks: new BenchmarksApi(configuration),
-            flavors: new FlavorsApi(configuration),
-            reports: new ReportsApi(configuration),
-            results: new ResultsApi(configuration),
-            sites: new SitesApi(configuration),
-            tags: new TagsApi(configuration),
-            users: new UsersApi(configuration),
+            benchmarks: BenchmarksApiFactory(configuration),
+            flavors: FlavorsApiFactory(configuration),
+            reports: ReportsApiFactory(configuration),
+            results: ResultsApiFactory(configuration),
+            sites: SitesApiFactory(configuration),
+            tags: TagsApiFactory(configuration),
+            users: UsersApiFactory(configuration),
         };
     }, [token]);
 

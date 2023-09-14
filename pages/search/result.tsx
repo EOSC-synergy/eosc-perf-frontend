@@ -247,8 +247,8 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
         unselectMultiple: function (results: Result[]) {
             setSelectedResults(
                 selectedResults.filter(
-                    (selected) => !results.some((unselected) => unselected.id === selected.id)
-                )
+                    (selected) => !results.some((unselected) => unselected.id === selected.id),
+                ),
             );
         },
         isSelected: function (result: Result) {
@@ -307,28 +307,21 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                     ? `+${sorting.key}`
                     : sorting.mode === SortMode.Descending
                     ? `-${sorting.key}`
-                    : undefined
+                    : undefined,
             ),
         {
-            select: (response) => response.data,
-            initialData: props.results
-                ? {
-                      status: 200,
-                      statusText: 'OK',
-                      data: props.results,
-                      headers: {},
-                      config: {},
-                  }
-                : undefined,
-        }
+            keepPreviousData: true,
+        },
     );
+
+    const resultData = results.isSuccess ? results.data.data : props.results;
 
     const refreshLocation = (
         newBenchmark: Benchmark | undefined,
         newSite: Site | undefined,
         newFlavor: Flavor | undefined,
         columns: string[] | undefined,
-        newFilters: Map<string, Filter>
+        newFilters: Map<string, Filter>,
     ) => {
         let query = {};
         if (newBenchmark?.id) {
@@ -564,10 +557,10 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                 {(results.isLoading ||
                                     results.isFetching ||
                                     results.isRefetching) && <LoadingOverlay />}
-                                {results.isSuccess && results.data.total > 0 && (
+                                {results.isSuccess && results.data.data.total > 0 && (
                                     <ResultTable
-                                        results={results.data.items}
-                                        pageOffset={results.data.per_page * results.data.page}
+                                        results={resultData.items}
+                                        pageOffset={resultData.per_page * resultData.page}
                                         ops={resultOps}
                                         suggestions={suggestedFields}
                                         sorting={sorting}
@@ -576,7 +569,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                         setCustomColumns={updateCustomColumns}
                                     />
                                 )}
-                                {results.isSuccess && results.data.total === 0 && (
+                                {results.isSuccess && resultData.total === 0 && (
                                     <div className="text-muted m-2">No results found.</div>
                                 )}
                                 {results.isError && 'Error while loading results'}
@@ -591,7 +584,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                                     </Col>
                                     <Col />
                                     <Col sm md="auto">
-                                        <Paginator pagination={results.data} navigateTo={setPage} />
+                                        <Paginator pagination={resultData} navigateTo={setPage} />
                                     </Col>
                                 </Row>
                             )}
@@ -681,7 +674,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 : context.query['siteId'] && context.query['flavorId'],
             undefined,
             [],
-            undefined
+            undefined,
         )
         .then((response) => {
             props.results = response.data;

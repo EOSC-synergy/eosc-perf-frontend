@@ -10,13 +10,13 @@ const Footer: FC = () => (
         <div className="text-center">
             <ul className="list-unstyled list-inline my-0">
                 <li className="list-inline-item mx-5">
-                    <Link href="/terms-of-service" passHref>
-                        <a className="text-muted">Terms of service</a>
+                    <Link href="/terms-of-service" className="text-muted">
+                        Terms of service
                     </Link>
                 </li>
                 <li className="list-inline-item mx-5">
-                    <Link href="/privacy-policy" passHref>
-                        <a className="text-muted">Privacy policy</a>
+                    <Link href="/privacy-policy" className="text-muted">
+                        Privacy policy
                     </Link>
                 </li>
                 <li className="list-inline-item mx-5">

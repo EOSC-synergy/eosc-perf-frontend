@@ -18,7 +18,7 @@ const RegistrationCheck: FC = () => {
             <Row className="align-items-center">
                 <Col>You must register before submitting data to the services on this website!</Col>
                 <Col md="auto">
-                    <Link as="a" href="/registration" passHref>
+                    <Link href="/registration" passHref legacyBehavior>
                         <Button variant="secondary">Register</Button>
                     </Link>
                 </Col>
