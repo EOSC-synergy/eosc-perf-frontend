@@ -428,57 +428,73 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                             {browserLoaded && router.isReady && (
                                 <Row>
                                     <Col xl>
-                                        <Stack
-                                            gap={2}
-                                            className="mb-xl-0 mb-2 d-flex justify-content-center h-100"
-                                        >
-                                            <BenchmarkSearchSelect
-                                                benchmark={benchmark}
-                                                setBenchmark={updateBenchmark}
-                                            />
-                                            <SiteSearchPopover site={site} setSite={updateSite} />
-                                            <FlavorSearchSelect
-                                                site={site}
-                                                flavor={flavor}
-                                                setFlavor={updateFlavor}
-                                            />
-                                            <Row>
-                                                <Col>
-                                                    <Row>
-                                                        <Col xs="auto">Executed after:</Col>
-                                                        <Col xs="auto">
-                                                            <DatePicker
-                                                                selected={afterDate}
-                                                                onChange={(date: Date | null) =>
-                                                                    setAfterDate(date ?? undefined)
-                                                                }
-                                                                dateFormat="MMMM d, yyyy"
-                                                                filterDate={noFuture}
-                                                                isClearable
-                                                            />
-                                                        </Col>
-                                                        <Col />
-                                                    </Row>
-                                                </Col>
-                                                <Col>
-                                                    <Row>
-                                                        <Col xs="auto">and before:</Col>
-                                                        <Col xs="auto">
-                                                            <DatePicker
-                                                                selected={beforeDate}
-                                                                onChange={(date: Date | null) =>
-                                                                    setBeforeDate(date ?? undefined)
-                                                                }
-                                                                dateFormat="MMMM d, yyyy"
-                                                                filterDate={noFuture}
-                                                                isClearable
-                                                            />
-                                                        </Col>
-                                                        <Col />
-                                                    </Row>
-                                                </Col>
-                                            </Row>
-                                        </Stack>
+                                        <Row className="d-flex justify-content-center mb-4">
+                                            <Col xl={4}>
+                                                <BenchmarkSearchSelect
+                                                    benchmark={benchmark}
+                                                    setBenchmark={updateBenchmark}
+                                                />
+                                            </Col>
+                                            <Col xl={4}>
+                                                <SiteSearchPopover
+                                                    site={site}
+                                                    setSite={updateSite}
+                                                />
+                                            </Col>
+                                            <Col xl={4}>
+                                                <FlavorSearchSelect
+                                                    site={site}
+                                                    flavor={flavor}
+                                                    setFlavor={updateFlavor}
+                                                />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xl={6}>
+                                                <Row className="mb-2">
+                                                    <Col
+                                                        xs="auto"
+                                                        style={{
+                                                            minWidth: '10em',
+                                                        }}
+                                                    >
+                                                        Executed after:
+                                                    </Col>
+                                                    <Col xs={8}>
+                                                        <DatePicker
+                                                            selected={afterDate}
+                                                            onChange={(date: Date | null) =>
+                                                                setAfterDate(date ?? undefined)
+                                                            }
+                                                            dateFormat="MMMM d, yyyy"
+                                                            filterDate={noFuture}
+                                                            isClearable
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                                <Row className="mb-2">
+                                                    <Col
+                                                        xs="auto"
+                                                        style={{
+                                                            minWidth: '10em',
+                                                        }}
+                                                    >
+                                                        and before:
+                                                    </Col>
+                                                    <Col xs={8}>
+                                                        <DatePicker
+                                                            selected={beforeDate}
+                                                            onChange={(date: Date | null) =>
+                                                                setBeforeDate(date ?? undefined)
+                                                            }
+                                                            dateFormat="MMMM d, yyyy"
+                                                            filterDate={noFuture}
+                                                            isClearable
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </Row>
                                     </Col>
                                     <Col xl="auto" className="d-none d-xl-flex justify-content-end">
                                         <div className="vr h-100" />

@@ -12,24 +12,22 @@ type SearchingSelectorProps<Item> = {
     queryKeyPrefix: string;
     tableName: string;
     queryCallback: (terms: string[]) => Promise<AxiosResponse<Paginated<Item>>> | undefined;
-    item?: Item;
     setItem: (item?: Item) => void;
-    display: (item?: Item) => ReactNode;
     displayRow: (item: Item) => ReactNode;
     submitNew?: () => void;
     disabled?: boolean;
+    toggle: ReactElement;
 };
 
 export function SearchingSelector<Item extends Identifiable>({
     queryKeyPrefix,
     tableName,
     queryCallback,
-    item,
     setItem,
-    display,
     displayRow,
     submitNew,
     disabled,
+    toggle,
 }: SearchingSelectorProps<Item>): ReactElement {
     //const [resultsPerPage, setResultsPerPage] = useState(10);
     const [page, setPage] = useState(0);
@@ -51,8 +49,6 @@ export function SearchingSelector<Item extends Identifiable>({
             enabled: !disabled,
         }
     );
-
-    const onToggle = (show: boolean) => setShow(show);
 
     const updateItem = (item?: Item) => {
         setItem(item);
@@ -113,22 +109,15 @@ export function SearchingSelector<Item extends Identifiable>({
     );
 
     return (
-        <Row className="align-items-center">
-            <Col>{display(item)} </Col>
-            <Col md="auto">
-                <OverlayTrigger
-                    trigger="click"
-                    placement="bottom"
-                    overlay={popover}
-                    rootClose
-                    show={show}
-                    onToggle={onToggle}
-                >
-                    <Button variant="success" size="sm" disabled={disabled}>
-                        Select
-                    </Button>
-                </OverlayTrigger>
-            </Col>
-        </Row>
+        <OverlayTrigger
+            trigger="click"
+            placement="bottom"
+            overlay={popover}
+            rootClose
+            show={show}
+            onToggle={setShow}
+        >
+            {toggle}
+        </OverlayTrigger>
     );
 }

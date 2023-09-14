@@ -3,6 +3,8 @@ import SiteSubmissionModal from 'components/submissionModals/siteSubmissionModal
 import { SearchingSelector } from './index';
 import useApi from 'lib/useApi';
 import { type Site } from '@eosc-perf/eosc-perf-client';
+import { Button, InputGroup } from 'react-bootstrap';
+import { X } from 'react-bootstrap-icons';
 
 type SiteSearchPopoverProps = {
     site?: Site;
@@ -11,19 +13,6 @@ type SiteSearchPopoverProps = {
 
 const SiteSearchPopover: FC<SiteSearchPopoverProps> = ({ site, setSite }): ReactElement => {
     const api = useApi();
-
-    const display = (site?: Site) => (
-        <>
-            Site:{' '}
-            {site ? (
-                site.name
-            ) : (
-                <div className="text-muted" style={{ display: 'inline-block' }}>
-                    None
-                </div>
-            )}
-        </>
-    );
 
     const displayRow = (site: Site) => (
         <>
@@ -35,19 +24,33 @@ const SiteSearchPopover: FC<SiteSearchPopoverProps> = ({ site, setSite }): React
     const [showSubmitModal, setShowSubmitModal] = useState(false);
 
     return (
-        <>
-            <SearchingSelector<Site>
-                queryKeyPrefix="site"
-                tableName="Site"
-                queryCallback={(terms) => api.sites.searchSites(terms)}
-                item={site}
-                setItem={setSite}
-                display={display}
-                displayRow={displayRow}
-                submitNew={() => setShowSubmitModal(true)}
-            />
+        <div>
+            Site:
+            <InputGroup className="w-100 flex-nowrap">
+                <SearchingSelector<Site>
+                    queryKeyPrefix="site"
+                    tableName="Site"
+                    queryCallback={(terms) => api.sites.searchSites(terms)}
+                    setItem={setSite}
+                    displayRow={displayRow}
+                    submitNew={() => setShowSubmitModal(true)}
+                    toggle={
+                        <Button
+                            variant={site ? 'primary' : 'outline-primary'}
+                            className="d-block flex-grow-1"
+                        >
+                            {site ? site.name : 'None'}
+                        </Button>
+                    }
+                />
+                {site && (
+                    <Button variant="secondary" onClick={() => setSite(undefined)}>
+                        <X />
+                    </Button>
+                )}
+            </InputGroup>
             <SiteSubmissionModal show={showSubmitModal} onHide={() => setShowSubmitModal(false)} />
-        </>
+        </div>
     );
 };
 

@@ -3,6 +3,8 @@ import BenchmarkSubmissionModal from 'components/submissionModals/BenchmarkSubmi
 import { SearchingSelector } from './index';
 import { type Benchmark } from '@eosc-perf/eosc-perf-client';
 import useApi from 'lib/useApi';
+import { Button, InputGroup } from 'react-bootstrap';
+import { X } from 'react-bootstrap-icons';
 
 type BenchmarkSearchSelectProps = {
     benchmark?: Benchmark;
@@ -11,21 +13,6 @@ type BenchmarkSearchSelectProps = {
 
 const BenchmarkSearchSelect: FC<BenchmarkSearchSelectProps> = ({ benchmark, setBenchmark }) => {
     const api = useApi();
-
-    const display = (benchmark?: Benchmark) => (
-        <>
-            Benchmark:{' '}
-            {benchmark ? (
-                <a href={`https://hub.docker.com/r/${benchmark.docker_image}`}>
-                    {`${benchmark.docker_image}:${benchmark.docker_tag}`}
-                </a>
-            ) : (
-                <div className="text-muted" style={{ display: 'inline-block' }}>
-                    None
-                </div>
-            )}
-        </>
-    );
 
     const displayRow = (benchmark: Benchmark) => (
         <>
@@ -37,22 +24,46 @@ const BenchmarkSearchSelect: FC<BenchmarkSearchSelectProps> = ({ benchmark, setB
     const [showSubmitModal, setShowSubmitModal] = useState(false);
 
     return (
-        <>
-            <SearchingSelector<Benchmark>
-                queryKeyPrefix="benchmark"
-                tableName="Benchmark"
-                queryCallback={(terms) => api.benchmarks.searchBenchmarks(terms)}
-                item={benchmark}
-                setItem={setBenchmark}
-                display={display}
-                displayRow={displayRow}
-                submitNew={() => setShowSubmitModal(true)}
-            />
+        <div>
+            Benchmark:{' '}
+            {benchmark && (
+                <a
+                    href={`https://hub.docker.com/r/${benchmark.docker_image}`}
+                    className="float-end"
+                >
+                    website
+                </a>
+            )}
+            <InputGroup className="w-100 flex-nowrap">
+                <SearchingSelector<Benchmark>
+                    queryKeyPrefix="benchmark"
+                    tableName="Benchmark"
+                    queryCallback={(terms) => api.benchmarks.searchBenchmarks(terms)}
+                    setItem={setBenchmark}
+                    displayRow={displayRow}
+                    submitNew={() => setShowSubmitModal(true)}
+                    toggle={
+                        <Button
+                            variant={benchmark ? 'primary' : 'outline-primary'}
+                            className="d-block flex-grow-1"
+                        >
+                            {benchmark
+                                ? `${benchmark.docker_image}:${benchmark.docker_tag}`
+                                : 'None'}
+                        </Button>
+                    }
+                />
+                {benchmark && (
+                    <Button variant="secondary" onClick={() => setBenchmark(undefined)}>
+                        <X />
+                    </Button>
+                )}
+            </InputGroup>
             <BenchmarkSubmissionModal
                 show={showSubmitModal}
                 onHide={() => setShowSubmitModal(false)}
             />
-        </>
+        </div>
     );
 };
 

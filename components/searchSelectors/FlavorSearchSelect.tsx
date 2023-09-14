@@ -1,10 +1,10 @@
-import { type FC, type ReactElement, useState } from 'react';
+import React, { type FC, type ReactElement, useState } from 'react';
 import FlavorSubmissionModal from 'components/submissionModals/FlavorSubmissionModal';
 import { SearchingSelector } from './index';
-import { truthyOrNoneTag } from 'components/utility';
 import { type Flavor, type Site } from '@eosc-perf/eosc-perf-client';
 import useApi from 'lib/useApi';
-import { Col, Row } from 'react-bootstrap';
+import { Button, InputGroup } from 'react-bootstrap';
+import { X } from 'react-bootstrap-icons';
 
 type FlavorSearchSelectProps = {
     flavor?: Flavor;
@@ -12,22 +12,12 @@ type FlavorSearchSelectProps = {
     setFlavor: (flavor?: Flavor) => void;
 };
 
-const FlavorSearchSelect: FC<FlavorSearchSelectProps> = (props): ReactElement => {
+const FlavorSearchSelect: FC<FlavorSearchSelectProps> = ({
+    flavor,
+    site,
+    setFlavor,
+}): ReactElement => {
     const api = useApi();
-
-    const display = (flavor?: Flavor) => (
-        <Row>
-            <Col xs="auto">Flavor: {truthyOrNoneTag(flavor?.name, 'None')}</Col>
-            {props.site === undefined && (
-                <>
-                    <Col />
-                    <Col xs="auto">
-                        <span className="text-muted">Select a site first.</span>
-                    </Col>
-                </>
-            )}
-        </Row>
-    );
 
     const displayRow = (flavor: Flavor) => (
         <>
@@ -39,28 +29,43 @@ const FlavorSearchSelect: FC<FlavorSearchSelectProps> = (props): ReactElement =>
     const [showSubmitModal, setShowSubmitModal] = useState(false);
 
     return (
-        <>
-            <SearchingSelector<Flavor>
-                queryKeyPrefix={`flavor-for-${props.site?.id}`}
-                tableName="Flavor"
-                queryCallback={(terms) =>
-                    props.site?.id ? api.sites.searchFlavor(props.site.id, terms) : undefined
-                }
-                item={props.flavor}
-                setItem={props.setFlavor}
-                display={display}
-                displayRow={displayRow}
-                submitNew={() => setShowSubmitModal(true)}
-                disabled={props.site === undefined}
-            />
-            {props.site !== undefined && (
+        <div>
+            Flavor:
+            <InputGroup className="w-100 flex-nowrap">
+                <SearchingSelector<Flavor>
+                    queryKeyPrefix={`flavor-for-${site?.id}`}
+                    tableName="Flavor"
+                    queryCallback={(terms) =>
+                        site?.id ? api.sites.searchFlavor(site.id, terms) : undefined
+                    }
+                    setItem={setFlavor}
+                    displayRow={displayRow}
+                    submitNew={() => setShowSubmitModal(true)}
+                    disabled={site === undefined}
+                    toggle={
+                        <Button
+                            variant={flavor ? 'primary' : 'outline-primary'}
+                            className="d-block flex-grow-1"
+                            disabled={site === undefined}
+                        >
+                            {flavor ? flavor.name : site ? 'None' : 'Select site first'}
+                        </Button>
+                    }
+                />
+                {flavor && (
+                    <Button variant="secondary" onClick={() => setFlavor(undefined)}>
+                        <X />
+                    </Button>
+                )}
+            </InputGroup>
+            {site !== undefined && (
                 <FlavorSubmissionModal
                     show={showSubmitModal}
                     onHide={() => setShowSubmitModal(false)}
-                    site={props.site}
+                    site={site}
                 />
             )}
-        </>
+        </div>
     );
 };
 
