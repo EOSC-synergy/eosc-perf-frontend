@@ -25,12 +25,7 @@ const InputWithSuggestions: FC<PropsWithChildren<InputWithSuggestionsProps>> = (
     };
 
     return (
-        <Dropdown
-            as={InputGroup}
-            onSelect={(k) => {
-                updateInput(k ?? '');
-            }}
-        >
+        <Dropdown as={InputGroup} onSelect={(k) => updateInput(k ?? '')} align="end">
             <FormControl
                 placeholder={placeholder}
                 aria-label={placeholder ?? 'Input field with suggestions'}
