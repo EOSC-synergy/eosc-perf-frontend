@@ -1,8 +1,10 @@
-import { type ChangeEvent, type FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import { Badge, Card, Col, Form, Row } from 'react-bootstrap';
 import charts from './diagrams';
 import { type Suggestion } from './jsonSchema';
 import { type Benchmark, type Result } from '@eosc-perf/eosc-perf-client';
+
+const NO_CHART = 'NO_CHART_SELECTED';
 
 type DiagramCardProps = {
     results: Result[];
@@ -25,14 +27,14 @@ const DiagramCard: FC<DiagramCardProps> = ({ results, benchmark, suggestions }) 
                             <Col md="auto">
                                 {benchmark !== undefined && (
                                     <Form.Select
-                                        onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                                        onChange={(e) => {
                                             setSelectedDiagram(e.target.value);
                                         }}
                                         className="custom-select"
                                         size="sm"
                                         value={selectedDiagram}
                                     >
-                                        <option>None</option>
+                                        <option value={NO_CHART}>None</option>
                                         {charts.all.map((chart) => (
                                             <option value={chart.id} key={chart.id}>
                                                 {chart.name}
@@ -48,7 +50,7 @@ const DiagramCard: FC<DiagramCardProps> = ({ results, benchmark, suggestions }) 
                     </Form.Group>
                 </Row>
             </Card.Header>
-            {benchmark !== undefined && (
+            {benchmark !== undefined && selectedDiagram !== NO_CHART && (
                 <Card.Body>
                     {charts.all.map((chart) => (
                         <div key={chart.id}>
