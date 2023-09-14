@@ -412,218 +412,194 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
     };
 
     return (
-        <>
+        <Container fluid="xl">
             <Head>
                 <title>Search</title>
             </Head>
-            <Container fluid="xl">
-                <h1>Search</h1>
-                <Stack gap={2}>
-                    <Card>
-                        <Card.Body>
-                            {browserLoaded && router.isReady && (
-                                <Row>
-                                    <Col xl>
-                                        <Row className="d-flex justify-content-center mb-4">
-                                            <Col xl={4}>
-                                                <BenchmarkSearchSelect
-                                                    benchmark={benchmark}
-                                                    setBenchmark={updateBenchmark}
-                                                />
-                                            </Col>
-                                            <Col xl={4}>
-                                                <SiteSearchPopover
-                                                    site={site}
-                                                    setSite={updateSite}
-                                                />
-                                            </Col>
-                                            <Col xl={4}>
-                                                <FlavorSearchSelect
-                                                    site={site}
-                                                    flavor={flavor}
-                                                    setFlavor={updateFlavor}
-                                                />
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col xl={6}>
-                                                <Row className="mb-2">
-                                                    <Col
-                                                        xs="auto"
-                                                        style={{
-                                                            minWidth: '10em',
-                                                        }}
-                                                    >
-                                                        Executed after:
-                                                    </Col>
-                                                    <Col xs={8}>
-                                                        <DatePicker
-                                                            selected={afterDate}
-                                                            onChange={(date: Date | null) =>
-                                                                setAfterDate(date ?? undefined)
-                                                            }
-                                                            dateFormat="MMMM d, yyyy"
-                                                            filterDate={noFuture}
-                                                            isClearable
-                                                        />
-                                                    </Col>
-                                                </Row>
-                                                <Row className="mb-2">
-                                                    <Col
-                                                        xs="auto"
-                                                        style={{
-                                                            minWidth: '10em',
-                                                        }}
-                                                    >
-                                                        and before:
-                                                    </Col>
-                                                    <Col xs={8}>
-                                                        <DatePicker
-                                                            selected={beforeDate}
-                                                            onChange={(date: Date | null) =>
-                                                                setBeforeDate(date ?? undefined)
-                                                            }
-                                                            dateFormat="MMMM d, yyyy"
-                                                            filterDate={noFuture}
-                                                            isClearable
-                                                        />
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
+            <h1>Search</h1>
+            <Card>
+                <Card.Body>
+                    {browserLoaded && router.isReady && (
+                        <Row>
+                            <Col xl>
+                                <Row className="d-flex justify-content-center mb-4">
+                                    <Col xl={4}>
+                                        <BenchmarkSearchSelect
+                                            benchmark={benchmark}
+                                            setBenchmark={updateBenchmark}
+                                        />
                                     </Col>
-                                    <Col xl="auto" className="d-none d-xl-flex justify-content-end">
-                                        <div className="vr h-100" />
+                                    <Col xl={4}>
+                                        <SiteSearchPopover site={site} setSite={updateSite} />
                                     </Col>
-                                    <Col xl="auto">
-                                        <TagSelector
-                                            selected={tags}
-                                            setSelected={setTags}
-                                            label="Tags"
+                                    <Col xl={4}>
+                                        <FlavorSearchSelect
+                                            site={site}
+                                            flavor={flavor}
+                                            setFlavor={updateFlavor}
                                         />
                                     </Col>
                                 </Row>
-                            )}
-                            <hr />
-                            <DiagramCard
-                                results={selectedResults}
-                                benchmark={benchmark}
-                                suggestions={suggestedFields}
-                            />
-                            <hr />
-                            <Stack gap={2}>
-                                <Stack gap={1}>
-                                    {[...filters.keys()].flatMap((key, index) => {
-                                        const filter = filters.get(key);
-                                        if (filter === undefined) {
-                                            return [];
-                                        }
-
-                                        return [
-                                            <FilterEdit
-                                                key={index}
-                                                filter={filter}
-                                                setFilter={setFilter}
-                                                deleteFilter={deleteFilter}
-                                                suggestions={suggestedFields}
-                                            />,
-                                        ];
-                                    })}
-                                </Stack>
                                 <Row>
-                                    <Col xs="auto" className="my-auto">
-                                        <h4 className="ms-2 my-0">
-                                            {filters.size > 0 ||
-                                            benchmark !== undefined ||
-                                            site !== undefined ||
-                                            flavor !== undefined
-                                                ? 'Results'
-                                                : 'Recently uploaded results'}
-                                        </h4>
-                                    </Col>
-                                    <Col />
-                                    <Col md="auto">
-                                        <Stack direction="horizontal" gap={2}>
-                                            <Button
-                                                variant="secondary"
-                                                onClick={() => setSelectedResults([])}
-                                                disabled={selectedResults.length === 0}
-                                            >
-                                                <X /> Clear selection
-                                            </Button>
-                                            <Button
-                                                variant="secondary"
-                                                disabled={selectedResults.length === 0}
-                                                onClick={exportResults}
-                                            >
-                                                <Save2 /> Export
-                                            </Button>
-                                            <Button variant="success" onClick={addFilter}>
-                                                + Add filter
-                                            </Button>
-                                            <Button
-                                                variant="warning"
-                                                onClick={() => results.refetch()}
-                                            >
-                                                <Funnel /> Apply Filters
-                                            </Button>
-                                        </Stack>
-                                    </Col>
-                                </Row>
-                                <Stack gap={2}>
-                                    <div
-                                        className="position-relative"
-                                        style={{ overflowX: 'auto' }}
-                                    >
-                                        {(results.isLoading ||
-                                            results.isFetching ||
-                                            results.isRefetching) && <LoadingOverlay />}
-                                        {results.isSuccess && results.data.total > 0 && (
-                                            <ResultTable
-                                                results={results.data.items}
-                                                pageOffset={
-                                                    results.data.per_page * results.data.page
-                                                }
-                                                ops={resultOps}
-                                                suggestions={suggestedFields}
-                                                sorting={sorting}
-                                                setSorting={(sort) => {
-                                                    setSorting(sort);
+                                    <Col xl={6}>
+                                        <Row className="mb-2">
+                                            <Col
+                                                xs="auto"
+                                                style={{
+                                                    minWidth: '10em',
                                                 }}
-                                                customColumns={customColumns}
-                                                setCustomColumns={updateCustomColumns}
-                                            />
-                                        )}
-                                        {results.isSuccess && results.data.total === 0 && (
-                                            <div className="text-muted m-2">
-                                                No results found! :(
-                                            </div>
-                                        )}
-                                        {results.isError && 'Error while loading results'}
-                                    </div>
-                                    {results.isSuccess && (
-                                        <Row className="mx-2">
-                                            <Col xs sm={7} md={5} xl={4} xxl={3}>
-                                                <ResultsPerPageSelection
-                                                    onChange={setResultsPerPage}
-                                                    currentSelection={resultsPerPage}
-                                                />
+                                            >
+                                                Executed after:
                                             </Col>
-                                            <Col />
-                                            <Col sm md="auto">
-                                                <Paginator
-                                                    pagination={results.data}
-                                                    navigateTo={setPage}
+                                            <Col xs={8}>
+                                                <DatePicker
+                                                    selected={afterDate}
+                                                    onChange={(date: Date | null) =>
+                                                        setAfterDate(date ?? undefined)
+                                                    }
+                                                    dateFormat="MMMM d, yyyy"
+                                                    filterDate={noFuture}
+                                                    isClearable
                                                 />
                                             </Col>
                                         </Row>
-                                    )}
+                                        <Row className="mb-2">
+                                            <Col
+                                                xs="auto"
+                                                style={{
+                                                    minWidth: '10em',
+                                                }}
+                                            >
+                                                and before:
+                                            </Col>
+                                            <Col xs={8}>
+                                                <DatePicker
+                                                    selected={beforeDate}
+                                                    onChange={(date: Date | null) =>
+                                                        setBeforeDate(date ?? undefined)
+                                                    }
+                                                    dateFormat="MMMM d, yyyy"
+                                                    filterDate={noFuture}
+                                                    isClearable
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xl="auto" className="d-none d-xl-flex justify-content-end">
+                                <div className="vr h-100" />
+                            </Col>
+                            <Col xl="auto">
+                                <TagSelector selected={tags} setSelected={setTags} label="Tags" />
+                            </Col>
+                        </Row>
+                    )}
+                    <hr />
+                    <DiagramCard
+                        results={selectedResults}
+                        benchmark={benchmark}
+                        suggestions={suggestedFields}
+                    />
+                    <hr />
+                    <Stack gap={2}>
+                        <Stack gap={1}>
+                            {[...filters.keys()].flatMap((key, index) => {
+                                const filter = filters.get(key);
+                                if (filter === undefined) {
+                                    return [];
+                                }
+
+                                return [
+                                    <FilterEdit
+                                        key={index}
+                                        filter={filter}
+                                        setFilter={setFilter}
+                                        deleteFilter={deleteFilter}
+                                        suggestions={suggestedFields}
+                                    />,
+                                ];
+                            })}
+                        </Stack>
+                        <Row>
+                            <Col xs="auto" className="my-auto">
+                                <h4 className="ms-2 my-0">
+                                    {filters.size > 0 ||
+                                    benchmark !== undefined ||
+                                    site !== undefined ||
+                                    flavor !== undefined
+                                        ? 'Results'
+                                        : 'Recently uploaded results'}
+                                </h4>
+                            </Col>
+                            <Col />
+                            <Col md="auto">
+                                <Stack direction="horizontal" gap={2}>
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => setSelectedResults([])}
+                                        disabled={selectedResults.length === 0}
+                                    >
+                                        <X /> Clear selection
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        disabled={selectedResults.length === 0}
+                                        onClick={exportResults}
+                                    >
+                                        <Save2 /> Export
+                                    </Button>
+                                    <Button variant="success" onClick={addFilter}>
+                                        + Add filter
+                                    </Button>
+                                    <Button variant="warning" onClick={() => results.refetch()}>
+                                        <Funnel /> Apply Filters
+                                    </Button>
                                 </Stack>
-                            </Stack>
-                        </Card.Body>
-                    </Card>
-                </Stack>
-            </Container>
+                            </Col>
+                        </Row>
+                        <Stack gap={2}>
+                            <div className="position-relative" style={{ overflowX: 'auto' }}>
+                                {(results.isLoading ||
+                                    results.isFetching ||
+                                    results.isRefetching) && <LoadingOverlay />}
+                                {results.isSuccess && results.data.total > 0 && (
+                                    <ResultTable
+                                        results={results.data.items}
+                                        pageOffset={results.data.per_page * results.data.page}
+                                        ops={resultOps}
+                                        suggestions={suggestedFields}
+                                        sorting={sorting}
+                                        setSorting={(sort) => {
+                                            setSorting(sort);
+                                        }}
+                                        customColumns={customColumns}
+                                        setCustomColumns={updateCustomColumns}
+                                    />
+                                )}
+                                {results.isSuccess && results.data.total === 0 && (
+                                    <div className="text-muted m-2">No results found! :(</div>
+                                )}
+                                {results.isError && 'Error while loading results'}
+                            </div>
+                            {results.isSuccess && (
+                                <Row className="mx-2">
+                                    <Col xs sm={7} md={5} xl={4} xxl={3}>
+                                        <ResultsPerPageSelection
+                                            onChange={setResultsPerPage}
+                                            currentSelection={resultsPerPage}
+                                        />
+                                    </Col>
+                                    <Col />
+                                    <Col sm md="auto">
+                                        <Paginator pagination={results.data} navigateTo={setPage} />
+                                    </Col>
+                                </Row>
+                            )}
+                        </Stack>
+                    </Stack>
+                </Card.Body>
+            </Card>
             {previewResult && (
                 <JsonPreviewModal
                     show={showJSONPreview}
@@ -652,7 +628,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                     result={editedResult}
                 />
             )}
-        </>
+        </Container>
     );
 };
 
