@@ -417,6 +417,7 @@ const ResultSearch: FC<PageProps> = (props: PageProps) => {
                 <title>Search</title>
             </Head>
             <Container fluid="xl">
+                <h1>Search</h1>
                 <Stack gap={2}>
                     <Card>
                         <Card.Body>
