@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { X } from 'react-bootstrap-icons';
-import actionable from 'styles/actionable.module.css';
+import styles from './InlineCloseButton.module.scss';
 import clsx from 'clsx';
 
 type InlineCloseButtonProps = { onClose: () => void };
@@ -14,13 +14,13 @@ type InlineCloseButtonProps = { onClose: () => void };
  * @param props.onClose callback to call when button is pressed
  */
 const InlineCloseButton: FC<InlineCloseButtonProps> = ({ onClose }) => (
-    <div
+    <button
         onClick={() => onClose()}
-        className={clsx('d-inline-block', actionable['actionable'])}
-        role="button"
+        className={clsx('d-inline-block', styles['unstyledButton'])}
+        type="button"
     >
         <X />
-    </div>
+    </button>
 );
 
 export default InlineCloseButton;
