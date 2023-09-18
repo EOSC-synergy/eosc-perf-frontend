@@ -4,7 +4,7 @@
     "version": "1.4.0",
     "scripts": {
         "release": "commit-and-tag-version",
-        "git-info": "node utils/gitInfo.js",
+        "git-info": "node lib/gitInfo.js",
         "dev": "next dev",
         "build": "next build",
         "start": "next start",

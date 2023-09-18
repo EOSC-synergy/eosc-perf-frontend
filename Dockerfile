@@ -1,7 +1,7 @@
 FROM node:18 as git-version
 
 WORKDIR /app
-COPY utils utils
+COPY lib lib
 COPY ["package.json", "yarn.lock", "next.config.mjs", "next-env.d.ts", "tsconfig.json", ".eslintrc.json", ".prettierrc", "./"]
 
 # determine footer version
@@ -22,9 +22,9 @@ COPY public public
 COPY styles styles
 COPY pages pages
 COPY components components
-COPY utils utils
+COPY lib lib
 
-COPY --from=git-version /app/utils/generatedGitInfo.json utils/generatedGitInfo.json
+COPY --from=git-version /app/lib/generatedGitInfo.json lib/generatedGitInfo.json
 
 # regular public image that allows changing env variables at run-time
 FROM base as production
