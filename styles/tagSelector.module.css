@@ -1,10 +1,9 @@
-
 .tagBadge {
     border: solid 0.1em;
     border-radius: 4px;
+    background-color: unset;
 }
 
 .tagBadge:not(:last-child) {
     margin-right: 2px;
 }
-
