@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.4.1](https://github.com/EOSC-synergy/eosc-perf-frontend/compare/v1.4.0...v1.4.1) (2023-09-18)
+
 ## [1.4.0](https://github.com/EOSC-synergy/eosc-perf-frontend/compare/v1.3.0...v1.4.0) (2023-09-18)
 
 
