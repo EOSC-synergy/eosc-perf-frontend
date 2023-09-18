@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.4.2](https://github.com/EOSC-synergy/eosc-perf-frontend/compare/v1.4.1...v1.4.2) (2023-09-18)
+
+
+### Bug Fixes
+
+* **InlineCloseButton:** use semantic button ([4bbc078](https://github.com/EOSC-synergy/eosc-perf-frontend/commit/4bbc078122b00c4c1ef7fe104a3d0da61aec335e))
+* **LoadingOverlay:** add missing clickthrough when not loading ([2392655](https://github.com/EOSC-synergy/eosc-perf-frontend/commit/2392655c6ad3c6da71d911d1f5c8c44a7832ce13))
+* **UnselectedTag:** use semantic button ([1fa2c6b](https://github.com/EOSC-synergy/eosc-perf-frontend/commit/1fa2c6bfe183cff7aa2dc797711b14d8c6b7a62b))
+
 ## [1.4.1](https://github.com/EOSC-synergy/eosc-perf-frontend/compare/v1.4.0...v1.4.1) (2023-09-18)
 
 ## [1.4.0](https://github.com/EOSC-synergy/eosc-perf-frontend/compare/v1.3.0...v1.4.0) (2023-09-18)
