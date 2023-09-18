@@ -98,5 +98,5 @@
         // typically only triggered on more complex switch cases where introducing a variable only worsens readability
         "sonarjs/no-duplicate-string": "off"
     },
-    "ignorePatterns": [".eslintrc.js"]
+    "ignorePatterns": [".eslintrc.js", "lib/gitInfo.js"]
 }
