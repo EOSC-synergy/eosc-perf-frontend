@@ -27,7 +27,6 @@ const nextConfig = bundleAnalyzer(withTM({
             },
         ];
     },
-    output: 'standalone',
 }));
 
 export default nextConfig;
