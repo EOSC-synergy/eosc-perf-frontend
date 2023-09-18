@@ -21,7 +21,7 @@
         },
         "sourceType": "module"
     },
-    "plugins": ["@typescript-eslint", "sonarjs", "jsx-a11y", "github", "cypress", "import"],
+    "plugins": ["@typescript-eslint", "jsx-a11y", "github", "cypress", "import"],
     "rules": {
         "@next/next/no-img-element": "off",
         "@typescript-eslint/ban-ts-comment": "warn",
