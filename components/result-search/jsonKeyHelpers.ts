@@ -11,10 +11,7 @@ export const fetchSubkey = (obj: Json, keyPath: string): unknown => {
     const keys = keyPath.split('.');
     let sub_item: Json = obj;
     for (const sub_key of keys) {
-        if (sub_item === 'undefined' || sub_item === null) {
-            return undefined;
-        }
-        if (typeof sub_item !== 'object') {
+        if (sub_item == null || typeof sub_item !== 'object') {
             return undefined;
         }
         sub_item = (sub_item as Record<string, Json>)[sub_key];
