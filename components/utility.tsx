@@ -8,7 +8,7 @@ import { type Benchmark } from '@eosc-perf/eosc-perf-client';
  * @returns Either a div with gray None text or the original string.
  */
 export const truthyOrNoneTag = (value: string | undefined | null, altText = 'None') => {
-    if (!value) {
+    if (!value && value !== 0) {
         return (
             <div className="text-muted" style={{ display: 'inline' }}>
                 {altText}
